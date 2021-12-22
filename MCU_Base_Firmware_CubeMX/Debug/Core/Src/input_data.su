@@ -1,0 +1,5 @@
+input_data.c:14:6:set_dido	24	static
+input_data.c:24:6:set_aido	24	static
+input_data.c:33:6:set_diao	24	static
+input_data.c:43:6:set_aiao	24	static
+input_data.c:49:6:set_data	4	static

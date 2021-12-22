@@ -1,0 +1,14 @@
+{
+	"INSTRUCTION":"SET_PERIPHERALS",
+	"COMMAND":
+			{
+				"TYPE":"DIGITAL",
+				"SET":"[0,1,1,0,0,0,0,1]"
+			},
+	"TIME":"1122334455"     
+}
+
+
+char *json[] = "{\"INSTRUCTION\":\"SET_PERIPHERALS\",\"COMMAND\":{\"TYPE\":\"DIGITAL\",\"SET\":\"[0,0,1,1,0,0,1,1]\"},\"TIME\":\"1122334455\"}";
+//Отправка со стороны сервера(по крайней мере через netcat111):
+string json = $"{"INSTRUCTION":"SET_PERIPHERALS","COMMAND":{"TYPE":"DIGITAL","SET":"[0,0,1,1,0,0,1,1]"},"TIME":"1122334455"}";

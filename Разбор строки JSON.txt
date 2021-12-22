@@ -1,0 +1,81 @@
+char json[] = "{"
+			  "\"id\":\"ADCD0123456789\","
+			  "\"state\":"
+				  	  "{"
+						  "\"inputs\":\"[0,1,0,0,0,1,1,0]\","
+						  "\"analog_inputs\":\"[125,255,12,25,100,12,0,255]\","
+						  "\"relays\":\"[0,1,0,0,0,1,1,0]\","
+						  "\"analog_outputs\":\"[125,255,12,25,100,12,0,255]\","
+						  "\"temp_sensors\":\"[55,45,0]\""
+					  "},"
+			  "\"command_result\":\"success\","
+			  "\"firmware_id\":\"0.0.1\","
+			  "\"time\":\"11.22.33\""
+			  "}";
+
+char * id;
+char * inputs;
+char * analog_inputs;
+char * relays;
+char * analog_outputs;
+char * temp_sensors;
+char * command_result;
+char * firmware_id;
+char * time;
+
+//Функция разбора полученной строки
+void json_input(char *text)
+{
+	cJSON *json = cJSON_Parse(text);
+
+	cJSON * s1 = cJSON_GetObjectItem(json, "id");
+	cJSON * s2 = cJSON_GetObjectItem(cJSON_GetObjectItem(json, "state"), "inputs");
+	cJSON * s3 = cJSON_GetObjectItem(cJSON_GetObjectItem(json, "state"), "analog_inputs");
+	cJSON * s4 = cJSON_GetObjectItem(cJSON_GetObjectItem(json, "state"), "relays");
+	cJSON * s5 = cJSON_GetObjectItem(cJSON_GetObjectItem(json, "state"), "analog_outputs");
+	cJSON * s6 = cJSON_GetObjectItem(cJSON_GetObjectItem(json, "state"), "temp_sensors");
+	cJSON * s7 = cJSON_GetObjectItem(json, "command_result");
+	cJSON * s8 = cJSON_GetObjectItem(json, "firmware_id");
+	cJSON * s9 = cJSON_GetObjectItem(json, "time");
+
+	id = s1->valuestring;
+	inputs = s2->valuestring;
+	analog_inputs = s3->valuestring;
+	relays = s4->valuestring;
+	analog_outputs = s5->valuestring;
+	temp_sensors = s6->valuestring;
+	command_result = s7->valuestring;
+	firmware_id = s8->valuestring;
+	time = s9->valuestring;
+
+	SEND_str("\n");
+	SEND_str(id);
+	SEND_str("\n");
+	SEND_str(inputs);
+	SEND_str("\n");
+	SEND_str(analog_inputs);
+	SEND_str("\n");
+	SEND_str(relays);
+	SEND_str("\n");
+	SEND_str(analog_outputs);
+	SEND_str("\n");
+	SEND_str(temp_sensors);
+	SEND_str("\n");
+	SEND_str(command_result);
+	SEND_str("\n");
+	SEND_str(firmware_id);
+	SEND_str("\n");
+	SEND_str(time);
+	SEND_str("\n");
+
+	cJSON_Delete(json);
+	free(s1);
+	free(s2);
+	free(s3);
+	free(s4);
+	free(s5);
+	free(s6);
+	free(s7);
+	free(s8);
+	free(s9);
+}

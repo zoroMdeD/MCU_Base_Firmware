@@ -1,0 +1,7 @@
+usart_ring.c:16:9:gsm_available	4	static
+usart_ring.c:21:9:gsm_read	16	static
+usart_ring.c:40:9:dbg_available	4	static
+usart_ring.c:45:9:dbg_read	16	static
+usart_ring.c:64:9:rs485_available	4	static
+usart_ring.c:69:9:rs485_read	16	static
+usart_ring.c:83:6:EN_Interrupt	4	static
