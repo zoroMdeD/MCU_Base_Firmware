@@ -49,6 +49,7 @@ extern "C" {
 #include "logic_func.h"
 #include "cJSON.h"
 #include "input_JSON.h"
+#include "input_data.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -124,28 +125,20 @@ void Error_Handler(void);
 #define SCK_M_GPIO_Port GPIOB
 #define IN7_Pin GPIO_PIN_8
 #define IN7_GPIO_Port GPIOD
-#define IN7_EXTI_IRQn EXTI9_5_IRQn
 #define IN6_Pin GPIO_PIN_9
 #define IN6_GPIO_Port GPIOD
-#define IN6_EXTI_IRQn EXTI9_5_IRQn
 #define IN5_Pin GPIO_PIN_10
 #define IN5_GPIO_Port GPIOD
-#define IN5_EXTI_IRQn EXTI15_10_IRQn
 #define IN4_Pin GPIO_PIN_11
 #define IN4_GPIO_Port GPIOD
-#define IN4_EXTI_IRQn EXTI15_10_IRQn
 #define IN3_Pin GPIO_PIN_12
 #define IN3_GPIO_Port GPIOD
-#define IN3_EXTI_IRQn EXTI15_10_IRQn
 #define IN2_Pin GPIO_PIN_13
 #define IN2_GPIO_Port GPIOD
-#define IN2_EXTI_IRQn EXTI15_10_IRQn
 #define IN1_Pin GPIO_PIN_14
 #define IN1_GPIO_Port GPIOD
-#define IN1_EXTI_IRQn EXTI15_10_IRQn
 #define IN0_Pin GPIO_PIN_15
 #define IN0_GPIO_Port GPIOD
-#define IN0_EXTI_IRQn EXTI15_10_IRQn
 #define PWM0_Pin GPIO_PIN_6
 #define PWM0_GPIO_Port GPIOC
 #define PWM1_Pin GPIO_PIN_7

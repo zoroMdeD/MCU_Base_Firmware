@@ -38,8 +38,8 @@ Core/Src/stm32f4xx_it.o: ../Core/Src/stm32f4xx_it.c ../Core/Inc/main.h \
  ../Core/Inc/gsm.h ../Core/Inc/com.h ../Core/Inc/rs485.h \
  ../Core/Inc/analog.h ../Core/Inc/digital.h ../Core/Inc/spi_interface.h \
  ../Core/Inc/usart_ring.h ../Core/Inc/logic_func.h ../Core/Inc/cJSON.h \
- ../Core/Inc/input_JSON.h ../Core/Inc/stm32f4xx_it.h \
- ../Core/Inc/usart_ring.h ../Core/Inc/rs485.h
+ ../Core/Inc/input_JSON.h ../Core/Inc/input_data.h \
+ ../Core/Inc/stm32f4xx_it.h ../Core/Inc/usart_ring.h ../Core/Inc/rs485.h
 
 ../Core/Inc/main.h:
 
@@ -144,6 +144,8 @@ Core/Src/stm32f4xx_it.o: ../Core/Src/stm32f4xx_it.c ../Core/Inc/main.h \
 ../Core/Inc/cJSON.h:
 
 ../Core/Inc/input_JSON.h:
+
+../Core/Inc/input_data.h:
 
 ../Core/Inc/stm32f4xx_it.h:
 

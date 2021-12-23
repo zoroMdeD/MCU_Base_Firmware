@@ -69,8 +69,8 @@ all: main-build
 main-build: MCU_Base_Firmware_CubeMX.elf secondary-outputs
 
 # Tool invocations
-MCU_Base_Firmware_CubeMX.elf: $(OBJS) $(USER_OBJS) D:\YandexDisk\YandexDisk\BasicControlAutomated\MCU_Base_Firmware_CubeMX\MCU_Base_Firmware_CubeMX\STM32F407VGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "MCU_Base_Firmware_CubeMX.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"D:\YandexDisk\YandexDisk\BasicControlAutomated\MCU_Base_Firmware_CubeMX\MCU_Base_Firmware_CubeMX\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="MCU_Base_Firmware_CubeMX.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+MCU_Base_Firmware_CubeMX.elf: $(OBJS) $(USER_OBJS) D:\YandexDisk\YandexDisk\BasicControlAutomated\MCU_Base_Firmware_CubeMX\MCU_Base_Firmware\MCU_Base_Firmware_CubeMX\STM32F407VGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "MCU_Base_Firmware_CubeMX.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"D:\YandexDisk\YandexDisk\BasicControlAutomated\MCU_Base_Firmware_CubeMX\MCU_Base_Firmware\MCU_Base_Firmware_CubeMX\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="MCU_Base_Firmware_CubeMX.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

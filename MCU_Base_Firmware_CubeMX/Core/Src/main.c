@@ -53,7 +53,6 @@ extern char str_ethernet[104];
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-extern DINn_ptr DINn;
 extern uint8_t flag_iput_spi2;
 extern uint8_t SPI_rx_buf[1];
 extern uint8_t SPI_tx_buf[1];
@@ -119,7 +118,7 @@ int main(void)
 
 	HAL_Delay(5000);
 
-	//EN_Interrupt();	//Для дебага по USART3
+	EN_Interrupt();	//Для дебага по USART3
 
 	/*
 	//----------------GSM_test----------------
@@ -131,7 +130,7 @@ int main(void)
 
 	///*
 	//----------------ETH_test----------------
-	net_ini();
+//	net_ini();
 	//----------------------------------------
 	//*/
 	//Для организации обмена данными по ethernet нужно включить:
@@ -143,14 +142,13 @@ int main(void)
 	//----------------------------------------
 	*/
 
-	HAL_UART_Receive_IT(&huart3,(uint8_t*)str_ethernet,1);								//Настройка прерывания COM для отладки ETH (!?)
+//	HAL_UART_Receive_IT(&huart3,(uint8_t*)str_ethernet,1);								//Настройка прерывания COM для отладки ETH (!?)
 
 	HAL_SPI_TransmitReceive_IT(&hspi2, (uint8_t *)SPI_tx_buf, (uint8_t *)SPI_rx_buf, 1);	//Настройка прерывания по spi для МК
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-
 	while (1)
 	{
 		/*
@@ -182,7 +180,7 @@ int main(void)
 
 		///*
 		//----------------ETH_test----------------
-		MX_LWIP_Process();			//Обработчик передачи данных по ETH
+//		MX_LWIP_Process();			//Обработчик передачи данных по ETH
 		//----------------------------------------
 		//*/
 
@@ -209,7 +207,7 @@ int main(void)
 
 
 		//------------------DEBUG-----------------
-		//DEBUG_main();
+		DEBUG_main();
 		//----------------------------------------
 
 
@@ -285,15 +283,15 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 //	}
 
 //Нужно для отладки Ethernet по USART
-	if(huart == &huart3)	//COM interrupt
-	{
-		UART3_RxCpltCallback();
-	}
+//	if(huart == &huart3)	//COM interrupt
+//	{
+//		UART3_RxCpltCallback();
+//	}
 }
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-{
-	DINn_Callback(GPIO_Pin);
-}
+//void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+//{
+//	DINn_Callback(GPIO_Pin);
+//}
 void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 {
 

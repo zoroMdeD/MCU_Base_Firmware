@@ -14,3 +14,20 @@
 
 
 char *json[] = "{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_AIDO\",\"A_IN\":\"VHOD1\",\"RANGE_LOW\":\"0\",\"RANGE_HIGH\":\"0\",\"D_OUT\":\"VIHOD3\",\"VAR_OUT\":\"1\"},\"TIME\":\"1122334455\"}";
+
+
+{
+	"INSTRUCTION":"SET_PROGRAMM",
+	"COMMAND":
+			{
+				"TYPE":"SET_DIDO",
+				"D_IN":"VHOD1",
+				"VAR_IN":"0",
+				"D_OUT":"VIHOD3",
+				"VAR_OUT":"1"
+			},
+	"TIME":"1122334455"     
+}
+
+
+char *json[] = "{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_DIDO\",\"D_IN\":\"VHOD1\",\"VAR_IN\":\"0\",\"D_OUT\":\"VIHOD3\",\"VAR_OUT\":\"1\"},\"TIME\":\"1122334455\"}";

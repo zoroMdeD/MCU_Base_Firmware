@@ -7,8 +7,6 @@
 
 #include "main.h"
 
-extern DINn_ptr DINn;
-
 uint8_t LOGIC_function(uint8_t DINn_rising, uint8_t DINn_faling)
 {
 	if((!DINn_rising) && (DINn_faling))

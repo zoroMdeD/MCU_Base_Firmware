@@ -90,6 +90,9 @@ void json_input(char *text)
 				D_OUT = s3->valuestring;
 				VAR_OUT = s4->valuestring;
 
+
+				set_dido(D_IN, (VAR_IN - 0x30), D_OUT, (VAR_OUT - 0x30));
+
 				SEND_str("\n");
 				SEND_str(TYPE);
 				SEND_str("\n");
