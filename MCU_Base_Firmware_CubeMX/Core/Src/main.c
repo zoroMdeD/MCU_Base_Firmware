@@ -30,10 +30,6 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "net.h"
-
-extern struct netif gnetif;
-extern char str_ethernet[104];
-
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -53,11 +49,22 @@ extern char str_ethernet[104];
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+extern struct netif gnetif;
+extern char str_ethernet[104];
+
 extern uint8_t flag_iput_spi2;
 extern uint8_t SPI_rx_buf[1];
 extern uint8_t SPI_tx_buf[1];
 
+uint8_t ReInitFlag = 0;
+
 char Buff[32];
+
+
+extern char a[32];
+extern char b[32];
+extern char c[32];
+extern char d[32];
 
 //RTC_TimeTypeDef sTime = {0};
 //RTC_DateTypeDef DateToUpdate = {0};
@@ -210,6 +217,17 @@ int main(void)
 		DEBUG_main();
 		//----------------------------------------
 
+		//--------------ReINIT_GPIO---------------
+		if(ReInitFlag)
+		{
+			ReInitFlag = 0;
+			set_dido(a, (b - 0x30), c, (d - 0x30));
+			SEND_str("interrupt...");
+			SEND_str("\n");
+		}
+		//----------------------------------------
+
+
 
     /* USER CODE END WHILE */
 
@@ -288,10 +306,16 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 //		UART3_RxCpltCallback();
 //	}
 }
-//void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-//{
-//	DINn_Callback(GPIO_Pin);
-//}
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+	//DINn_Callback(GPIO_Pin);
+	if(!ReInitFlag)
+		ReInitFlag = 1;
+	else
+	{
+		__NOP();
+	}
+}
 void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 {
 

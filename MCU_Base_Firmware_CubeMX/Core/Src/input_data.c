@@ -36,18 +36,16 @@ void set_dido(char *d_vhod, uint8_t data_a, char *d_vihod, uint8_t data_b)
 	else if(strcmp(d_vihod, "VIHOD7") == 0){varPortOUT = VIHOD7; varPinOUT = O6_Pin;}
 	else if(strcmp(d_vihod, "VIHOD8") == 0){varPortOUT = VIHOD8; varPinOUT = O7_Pin;}
 
-
-
-	if(HAL_GPIO_ReadPin(varPortIN, varPinIN) == 0)
+	if(HAL_GPIO_ReadPin(varPortIN, varPinIN) == !data_a)	//(Если Вход1 == 0 то Выход3 = 1) Инверсная логика на входах оптопар
 	{
 		HAL_GPIO_WritePin(varPortOUT, varPinOUT, data_b);
-		SEND_str("if != 1");
+		SEND_str("success");
 		SEND_str("\n");
 	}
 	else
 	{
 		HAL_GPIO_WritePin(varPortOUT, varPinOUT, RESET);
-		SEND_str("nothing");
+		SEND_str("miss");
 		SEND_str("\n");
 	}
 }
