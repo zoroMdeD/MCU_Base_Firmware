@@ -1,5 +1,6 @@
-input_data.c:14:6:set_dido	40	static
-input_data.c:58:6:set_aido	24	static
-input_data.c:67:6:set_diao	24	static
-input_data.c:77:6:set_aiao	24	static
-input_data.c:83:6:set_data	4	static
+input_data.c:33:6:CheckReWrite	16	static
+input_data.c:57:6:set_dido	296	static
+input_data.c:120:6:set_aido	24	static
+input_data.c:129:6:set_diao	24	static
+input_data.c:139:6:set_aiao	24	static
+input_data.c:145:6:set_data	4	static

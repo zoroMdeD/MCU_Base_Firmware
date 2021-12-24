@@ -44,10 +44,10 @@ char paramValue[8];
 char *test;
 
 
-char a[32];
-char b[32];
-char c[32];
-char d[32];
+char a[10];
+uint8_t b;
+char c[10];
+uint8_t d;
 
 //Функция разбора подстроки значений параметра
 //Принимает указатель на массив символов со значениями параметра
@@ -96,7 +96,6 @@ void json_input(char *text)
 				D_OUT = s3->valuestring;
 				VAR_OUT = s4->valuestring;
 
-				//parseValue(a, D_IN);
 				for(int i = 1, j = 0; i < strlen(D_IN); i++)
 				{
 					if(i % 2)
@@ -105,16 +104,6 @@ void json_input(char *text)
 						j++;
 					}
 				}
-				//parseValue(b, VAR_IN);
-				for(int i = 1, j = 0; i < strlen(VAR_IN); i++)
-				{
-					if(i % 2)
-					{
-						b[j] = VAR_IN[i];
-						j++;
-					}
-				}
-				//parseValue(c, D_OUT);
 				for(int i = 1, j = 0; i < strlen(D_OUT); i++)
 				{
 					if(i % 2)
@@ -123,17 +112,11 @@ void json_input(char *text)
 						j++;
 					}
 				}
-				//parseValue(d, VAR_OUT);
-				for(int i = 1, j = 0; i < strlen(VAR_OUT); i++)
-				{
-					if(i % 2)
-					{
-						d[j] = VAR_OUT[i];
-						j++;
-					}
-				}
 
-				set_dido(D_IN, (VAR_IN - 0x30), D_OUT, (VAR_OUT - 0x30));
+				b = (uint8_t)(atoi(VAR_IN));
+				d = (uint8_t)(atoi(VAR_OUT));
+
+				set_dido(D_IN, (uint8_t)(atoi(VAR_IN)), D_OUT, (uint8_t)(atoi(VAR_OUT)));
 
 				SEND_str("\n");
 				SEND_str(TYPE);

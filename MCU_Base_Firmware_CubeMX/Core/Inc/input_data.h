@@ -10,7 +10,8 @@
 
 #include "main.h"
 
-void set_dido(char *d_vhod, uint8_t data_a, char *d_vihod, uint8_t data_b);
+void CheckReWrite();
+void set_dido(char *D_IN, uint8_t VAR_IN, char *D_OUT, uint8_t VAR_OUT);
 
 #define VHOD1	GPIOD
 #define VHOD2	GPIOD

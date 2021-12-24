@@ -57,14 +57,15 @@ extern uint8_t SPI_rx_buf[1];
 extern uint8_t SPI_tx_buf[1];
 
 uint8_t ReInitFlag = 0;
+uint8_t flag_two = 1;
 
 char Buff[32];
 
 
 extern char a[32];
-extern char b[32];
+extern uint8_t b;
 extern char c[32];
-extern char d[32];
+extern uint8_t d;
 
 //RTC_TimeTypeDef sTime = {0};
 //RTC_DateTypeDef DateToUpdate = {0};
@@ -220,8 +221,9 @@ int main(void)
 		//--------------ReINIT_GPIO---------------
 		if(ReInitFlag)
 		{
+			HAL_Delay(1000);
 			ReInitFlag = 0;
-			set_dido(a, (b - 0x30), c, (d - 0x30));
+			CheckReWrite();
 			SEND_str("interrupt...");
 			SEND_str("\n");
 		}
@@ -308,7 +310,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 }
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-	//DINn_Callback(GPIO_Pin);
 	if(!ReInitFlag)
 		ReInitFlag = 1;
 	else

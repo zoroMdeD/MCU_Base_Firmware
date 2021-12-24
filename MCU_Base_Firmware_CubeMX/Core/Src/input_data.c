@@ -5,48 +5,110 @@
  *      Author: MMorozov
  */
 #include "input_data.h"
+#include "stdio.h"
+
+extern uint8_t Status_AIN[];	//Статус аналоговых входов
+extern uint8_t Status_DIN[];	//Статус цифровых входов
+extern uint8_t Status_PWM[];	//Статус выходов ШИМ
+extern uint8_t Status_OCD[];	//Статус выходов открытый коллектор
+extern uint8_t Status_1WR[];	//Статус выходов интерфейса 1-Wire
+
+GPIO_TypeDef *varPortIN = 0;
+GPIO_TypeDef *varPortOUT = 0;
+uint16_t varPinIN = 0;
+uint16_t varPinOUT = 0;
+
+uint8_t NumOut = 0;
+
+struct ScanDIN_UpdOCD
+{
+	GPIO_TypeDef *D_IN;
+	uint8_t VAR_IN;
+	uint16_t DIN_Pin;
+	GPIO_TypeDef *D_OUT;
+	uint8_t VAR_OUT;
+	uint16_t OCD_Pin;
+}DiDo[8];
+
+void CheckReWrite()
+{
+	for(int i = 0; i < 8; i++)
+	{
+		if(HAL_GPIO_ReadPin(DiDo[i].D_IN, DiDo[i].DIN_Pin) != DiDo[i].VAR_IN)	//(Если Вход1 == 0 то Выход3 = 1) Инверсная логика на входах оптопар
+		{
+			//Status_OCD[j] = DiDo[i].VAR_OUT;									//нужно записать в массив актуальные данные!!!
+			HAL_GPIO_WritePin(DiDo[i].D_OUT, DiDo[i].OCD_Pin, DiDo[i].VAR_OUT);
+			//SEND_str("success...\n");
+		}
+		else if(HAL_GPIO_ReadPin(DiDo[i].D_IN, DiDo[i].DIN_Pin) == DiDo[i].VAR_IN)
+		{
+			//Status_OCD[j] = !DiDo[i].VAR_OUT;
+			HAL_GPIO_WritePin(DiDo[i].D_OUT, DiDo[i].OCD_Pin, !DiDo[i].VAR_OUT);
+			//SEND_str("miss...\n");
+		}
+	}
+}
 
 //Включить/выключить цифровой выход если цифровой вход = значение(уровень)
 //Принимает "d_vhod" - строку с номером цифрового входа
 //Принимает "data_a" - переменная состояния входа
 //Принимает "d_vihod" - строку с номером цифрового выхода
 //Принимает "data_b" - переменная состояния выхода
-void set_dido(char *d_vhod, uint8_t data_a, char *d_vihod, uint8_t data_b)
+void set_dido(char *D_IN, uint8_t VAR_IN, char *D_OUT, uint8_t VAR_OUT)
 {
-	GPIO_TypeDef *varPortIN = 0;
-	GPIO_TypeDef *varPortOUT = 0;
-	uint16_t varPinIN = 0;
-	uint16_t varPinOUT = 0;
+	char VHOD[8][10] = {"VHOD1", "VHOD2", "VHOD3", "VHOD4", "VHOD5", "VHOD6", "VHOD7", "VHOD8"};
+	char VIHOD[8][10] = {"VIHOD1", "VIHOD2", "VIHOD3", "VIHOD4", "VIHOD5", "VIHOD6", "VIHOD7", "VIHOD8"};
 
-	if(strcmp(d_vhod, "VHOD1") == 0){varPortIN = VHOD1; varPinIN = IN0_Pin;}
-	else if(strcmp(d_vhod, "VHOD2") == 0){varPortIN = VHOD2; varPinIN = IN1_Pin;}
-	else if(strcmp(d_vhod, "VHOD3") == 0){varPortIN = VHOD3; varPinIN = IN2_Pin;}
-	else if(strcmp(d_vhod, "VHOD4") == 0){varPortIN = VHOD4; varPinIN = IN3_Pin;}
-	else if(strcmp(d_vhod, "VHOD5") == 0){varPortIN = VHOD5; varPinIN = IN4_Pin;}
-	else if(strcmp(d_vhod, "VHOD6") == 0){varPortIN = VHOD6; varPinIN = IN5_Pin;}
-	else if(strcmp(d_vhod, "VHOD7") == 0){varPortIN = VHOD7; varPinIN = IN6_Pin;}
-	else if(strcmp(d_vhod, "VHOD8") == 0){varPortIN = VHOD8; varPinIN = IN7_Pin;}
+	uint16_t DIN_Pin[8] = {IN0_Pin, IN1_Pin, IN2_Pin, IN3_Pin, IN4_Pin, IN5_Pin, IN6_Pin, IN7_Pin};
+	uint16_t OCD_Pin[8] = {O0_Pin, O1_Pin, O2_Pin, O3_Pin, O4_Pin, O5_Pin, O6_Pin, O7_Pin};
 
-	if(strcmp(d_vihod, "VIHOD1") == 0){varPortOUT = VIHOD1; varPinOUT = O0_Pin;}
-	else if(strcmp(d_vihod, "VIHOD2") == 0){varPortOUT = VIHOD2; varPinOUT = O1_Pin;}
-	else if(strcmp(d_vihod, "VIHOD3") == 0){varPortOUT = VIHOD3; varPinOUT = O2_Pin;}
-	else if(strcmp(d_vihod, "VIHOD4") == 0){varPortOUT = VIHOD4; varPinOUT = O3_Pin;}
-	else if(strcmp(d_vihod, "VIHOD5") == 0){varPortOUT = VIHOD5; varPinOUT = O4_Pin;}
-	else if(strcmp(d_vihod, "VIHOD6") == 0){varPortOUT = VIHOD6; varPinOUT = O5_Pin;}
-	else if(strcmp(d_vihod, "VIHOD7") == 0){varPortOUT = VIHOD7; varPinOUT = O6_Pin;}
-	else if(strcmp(d_vihod, "VIHOD8") == 0){varPortOUT = VIHOD8; varPinOUT = O7_Pin;}
+	GPIO_TypeDef *pVHOD[8] = {VHOD1, VHOD2, VHOD3, VHOD4, VHOD5, VHOD6, VHOD7, VHOD8};
+	GPIO_TypeDef *pVIHOD[8] = {VIHOD1, VIHOD2, VIHOD3, VIHOD4, VIHOD5, VIHOD6, VIHOD7, VIHOD8};
 
-	if(HAL_GPIO_ReadPin(varPortIN, varPinIN) == !data_a)	//(Если Вход1 == 0 то Выход3 = 1) Инверсная логика на входах оптопар
+	for(int i = 0; i < 8; i++)
 	{
-		HAL_GPIO_WritePin(varPortOUT, varPinOUT, data_b);
-		SEND_str("success");
-		SEND_str("\n");
-	}
-	else
-	{
-		HAL_GPIO_WritePin(varPortOUT, varPinOUT, RESET);
-		SEND_str("miss");
-		SEND_str("\n");
+		if(strcmp(D_IN, VHOD[i]) == 0)
+		{
+			DiDo[i].D_IN = pVHOD[i];
+			DiDo[i].VAR_IN = VAR_IN;
+			DiDo[i].DIN_Pin = DIN_Pin[i];
+			for(int j = 0; j < 8; j++)
+			{
+				if(strcmp(D_OUT, VIHOD[j]) == 0)
+				{
+					DiDo[i].D_OUT = pVIHOD[j];
+					DiDo[i].VAR_OUT = VAR_OUT;
+					DiDo[i].OCD_Pin = OCD_Pin[j];
+
+					if(HAL_GPIO_ReadPin(DiDo[i].D_IN, DiDo[i].DIN_Pin) != VAR_IN)	//(Если Вход1 == 0 то Выход3 = 1) Инверсная логика на входах оптопар
+					{
+						Status_OCD[j] = VAR_OUT;
+						HAL_GPIO_WritePin(DiDo[i].D_OUT, DiDo[i].OCD_Pin, VAR_OUT);
+						SEND_str("success...\n");
+					}
+					else if(HAL_GPIO_ReadPin(DiDo[i].D_IN, DiDo[i].DIN_Pin) == VAR_IN)
+					{
+						Status_OCD[j] = !VAR_OUT;
+						HAL_GPIO_WritePin(DiDo[i].D_OUT, DiDo[i].OCD_Pin, !VAR_OUT);
+						SEND_str("miss...\n");
+					}
+
+					//----------------------------------For debuging----------------------------------
+					if(DiDo[i].D_IN == VHOD1)
+						SEND_str("1 - success...\n");
+					if(DiDo[i].VAR_IN == VAR_IN)
+						SEND_str("2 - success...\n");
+					if(DiDo[i].D_OUT == VIHOD3)
+						SEND_str("3 - success...\n");
+					if(DiDo[i].VAR_OUT == VAR_OUT)
+						SEND_str("4 - success...\n");
+					//--------------------------------------------------------------------------------
+
+					break;
+				}
+			}
+			break;
+		}
 	}
 }
 //Включить/выключить один цифровой выход если аналоговый вход в интервале значений
