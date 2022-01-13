@@ -221,7 +221,7 @@ int main(void)
 		//--------------ReINIT_GPIO---------------
 		if(ReInitFlag)
 		{
-			HAL_Delay(1000);
+			HAL_Delay(250);
 			ReInitFlag = 0;
 			CheckReWrite();
 			SEND_str("interrupt...");

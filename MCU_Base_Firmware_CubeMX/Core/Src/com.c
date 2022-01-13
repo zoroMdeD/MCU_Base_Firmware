@@ -78,7 +78,11 @@ void DEBUG_main(void)
 		}
 		else if(strstr(DBG_buf, "SP1") != NULL)
 		{
-			json_input("{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_DIDO\",\"D_IN\":\"VHOD1\",\"VAR_IN\":\"0\",\"D_OUT\":\"VIHOD3\",\"VAR_OUT\":\"1\"},\"TIME\":\"1122334455\"}");
+			json_input("{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_DIDO\",\"D_IN\":\"VHOD1\",\"VAR_IN\":\"0\",\"D_OUT\":\"VIHOD1\",\"VAR_OUT\":\"1\"},\"TIME\":\"1122334455\"}");
+		}
+		else if(strstr(DBG_buf, "SP2") != NULL)
+		{
+			json_input("{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_DIDO\",\"D_IN\":\"VHOD2\",\"VAR_IN\":\"1\",\"D_OUT\":\"VIHOD8\",\"VAR_OUT\":\"1\"},\"TIME\":\"1122334455\"}");
 		}
 
 		if(fdbg)
