@@ -49,6 +49,7 @@ extern "C" {
 #include "logic_func.h"
 #include "cJSON.h"
 #include "input_JSON.h"
+#include "input_data.h"
 
 #include <stdio.h>
 #include <string.h>

@@ -20,7 +20,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "gpio.h"
 /* USER CODE BEGIN 0 */
-
 /* USER CODE END 0 */
 
 /*----------------------------------------------------------------------------*/
@@ -116,7 +115,7 @@ void MX_GPIO_Init(void)
                            PDPin PDPin PDPin PDPin */
   GPIO_InitStruct.Pin = IN7_Pin|IN6_Pin|IN5_Pin|IN4_Pin
                           |IN3_Pin|IN2_Pin|IN1_Pin|IN0_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 

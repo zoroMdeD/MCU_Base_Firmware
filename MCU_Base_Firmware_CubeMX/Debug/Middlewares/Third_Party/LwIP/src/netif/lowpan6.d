@@ -43,7 +43,7 @@ Middlewares/Third_Party/LwIP/src/netif/lowpan6.o: \
  ../Core/Inc/gsm.h ../Core/Inc/com.h ../Core/Inc/rs485.h \
  ../Core/Inc/analog.h ../Core/Inc/digital.h ../Core/Inc/spi_interface.h \
  ../Core/Inc/usart_ring.h ../Core/Inc/logic_func.h ../Core/Inc/cJSON.h \
- ../Core/Inc/input_JSON.h \
+ ../Core/Inc/input_JSON.h ../Core/Inc/input_data.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/debug.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/arch.h \
  ../Middlewares/Third_Party/LwIP/system/arch/cc.h \
@@ -160,6 +160,8 @@ Middlewares/Third_Party/LwIP/src/netif/lowpan6.o: \
 ../Core/Inc/cJSON.h:
 
 ../Core/Inc/input_JSON.h:
+
+../Core/Inc/input_data.h:
 
 ../Middlewares/Third_Party/LwIP/src/include/lwip/debug.h:
 

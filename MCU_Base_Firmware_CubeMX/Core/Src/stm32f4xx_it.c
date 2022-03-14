@@ -205,6 +205,7 @@ void SysTick_Handler(void)
   /* USER CODE BEGIN SysTick_IRQn 0 */
 
   /* USER CODE END SysTick_IRQn 0 */
+
   /* USER CODE BEGIN SysTick_IRQn 1 */
 
   /* USER CODE END SysTick_IRQn 1 */
@@ -325,7 +326,7 @@ void USART3_IRQHandler(void)
 {
   /* USER CODE BEGIN USART3_IRQn 0 */
 //Раскоментить для дебага по USART(кроме отладки по Ethernet)
-/*
+
 	if(((huart3.Instance->SR & USART_SR_RXNE) != RESET) && ((huart3.Instance->CR1 & USART_CR1_RXNEIE) != RESET))
 	{
 		uint8_t rbyte = (uint8_t)(huart3.Instance->DR & (uint8_t)0x00FF); // читает байт из регистра
@@ -339,7 +340,7 @@ void USART3_IRQHandler(void)
 	}
 
 	return;
-*/
+
   /* USER CODE END USART3_IRQn 0 */
   HAL_UART_IRQHandler(&huart3);
   /* USER CODE BEGIN USART3_IRQn 1 */

@@ -43,6 +43,12 @@ int Time_Client = 0;	//Переменная системного времени 
 char paramValue[8];
 char *test;
 
+
+char a[10];
+uint8_t b;
+char c[10];
+uint8_t d;
+
 //Функция разбора подстроки значений параметра
 //Принимает указатель на массив символов со значениями параметра
 //Ворзвращает указатель на разобранный массив символов со значениями параметра
@@ -89,6 +95,28 @@ void json_input(char *text)
 				VAR_IN = s2->valuestring;
 				D_OUT = s3->valuestring;
 				VAR_OUT = s4->valuestring;
+
+				for(int i = 1, j = 0; i < strlen(D_IN); i++)
+				{
+					if(i % 2)
+					{
+						a[j] = D_IN[i];
+						j++;
+					}
+				}
+				for(int i = 1, j = 0; i < strlen(D_OUT); i++)
+				{
+					if(i % 2)
+					{
+						c[j] = D_OUT[i];
+						j++;
+					}
+				}
+
+				b = (uint8_t)(atoi(VAR_IN));
+				d = (uint8_t)(atoi(VAR_OUT));
+
+				set_dido(D_IN, (uint8_t)(atoi(VAR_IN)), D_OUT, (uint8_t)(atoi(VAR_OUT)));
 
 				SEND_str("\n");
 				SEND_str(TYPE);
@@ -270,38 +298,38 @@ void json_input(char *text)
 				free(sType);
 				free(s1);
 			}
-			else if(strcmp(TYPE, "OneWire") == 0)
-			{
-				cJSON *s1 = cJSON_GetObjectItem(cJSON_GetObjectItem(json, "COMMAND"), "SET");
-
-				OpenCollectorDrainParamMass = s1->valuestring;
-
-				test = parseValue(OpenCollectorDrainParamMass);
-
-				for(int i = 0; i < 8; i++)
-				{
-					Status_OCD[i] = (test[i] - 0x30);
-				}
-
-				//-------------------------For testing-------------------------
-				SEND_str("\n");
-				SEND_str(TYPE);
-				SEND_str("\n");
-				//-------------------------------------------------------------
-
-				cJSON_Delete(json);
-				free(stime);
-				free(sInstruction);
-				free(sType);
-				free(s1);
-			}
-			else
-			{
-				cJSON_Delete(json);
-				free(stime);
-				free(sInstruction);
-				free(sType);
-			}
+//			else if(strcmp(TYPE, "OneWire") == 0)
+//			{
+//				cJSON *s1 = cJSON_GetObjectItem(cJSON_GetObjectItem(json, "COMMAND"), "SET");
+//
+//				OpenCollectorDrainParamMass = s1->valuestring;
+//
+//				test = parseValue(OpenCollectorDrainParamMass);
+//
+//				for(int i = 0; i < 8; i++)
+//				{
+//					Status_OCD[i] = (test[i] - 0x30);
+//				}
+//
+//				//-------------------------For testing-------------------------
+//				SEND_str("\n");
+//				SEND_str(TYPE);
+//				SEND_str("\n");
+//				//-------------------------------------------------------------
+//
+//				cJSON_Delete(json);
+//				free(stime);
+//				free(sInstruction);
+//				free(sType);
+//				free(s1);
+//			}
+//			else
+//			{
+//				cJSON_Delete(json);
+//				free(stime);
+//				free(sInstruction);
+//				free(sType);
+//			}
 		}
 		else
 		{
