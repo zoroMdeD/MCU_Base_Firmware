@@ -1,2 +1,2 @@
-analog.c:9:7:Conv_ADC1	24	static
+analog.c:9:8:Conv_ADC1	32	static
 analog.c:25:10:Get_ADC1	16	static

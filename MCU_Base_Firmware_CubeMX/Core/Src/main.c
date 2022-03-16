@@ -144,11 +144,11 @@ int main(void)
 	//Для организации обмена данными по ethernet нужно включить:
 	//net_ini(); MX_LWIP_Process();(Вкл в main) также закоментить в файле stm32f4xx_it.c строчки для отладки через DEBUG_main();
 
-	/*
+
 	//----------------ADC_test----------------
-	HAL_GPIO_WritePin(GPIOE, S1_Pin, RESET);												//Вход аналогового комутатора - выход линии 1
+	HAL_GPIO_WritePin(GPIOE, S1_Pin, SET);												//Вход аналогового комутатора - выход линии 1
 	//----------------------------------------
-	*/
+
 
 //	HAL_UART_Receive_IT(&huart3,(uint8_t*)str_ethernet,1);								//Настройка прерывания COM для отладки ETH (!?)
 
@@ -219,14 +219,14 @@ int main(void)
 		//----------------------------------------
 
 		//--------------ReINIT_GPIO---------------
-		if(ReInitFlag)
-		{
-			HAL_Delay(250);
-			ReInitFlag = 0;
-			CheckReWrite();
-			SEND_str("interrupt...");
-			SEND_str("\n");
-		}
+//		if(ReInitFlag)
+//		{
+//			HAL_Delay(250);
+//			ReInitFlag = 0;
+//			CheckReWrite();
+//			SEND_str("interrupt...");
+//			SEND_str("\n");
+//		}
 		//----------------------------------------
 
 
@@ -310,12 +310,20 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 }
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-	if(!ReInitFlag)
-		ReInitFlag = 1;
-	else
-	{
-		__NOP();
-	}
+//	if((GPIOB->IDR & GPIO_Pin_0) != 1)
+//	{
+//		delay(250);
+//		if((GPIOB->IDR & GPIO_Pin_0) != 1)
+//			VCP_send_buffer_new("START\n",6);
+//		delay(2000);
+//	}
+//	if(!ReInitFlag)
+//		ReInitFlag = 1;
+	CheckReWrite();
+//	else
+//	{
+//		__NOP();
+//	}
 }
 void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 {

@@ -1,2 +1,2 @@
-input_JSON.c:55:7:parseValue	32	static
-input_JSON.c:71:6:json_input	152	static
+input_JSON.c:53:7:parseValue	32	static
+input_JSON.c:69:6:json_input	152	static

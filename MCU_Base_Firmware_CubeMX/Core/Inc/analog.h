@@ -10,7 +10,7 @@
 
 #include "main.h"
 
-float Conv_ADC1(void);
+double Conv_ADC1(void);
 uint16_t Get_ADC1(void);
 
 #endif /* INC_ANALOG_INI_H_ */

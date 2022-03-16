@@ -74,7 +74,7 @@ void DEBUG_main(void)
 		}
 		else if(strstr(DBG_buf, "OCD") != NULL)
 		{
-			json_input("{\"INSTRUCTION\":\"SET_PERIPHERALS\",\"COMMAND\":{\"TYPE\":\"OCD\",\"SET\":\"[0,1,0,1,0,1,1,1]\"},\"TIME\":\"1122334455\"}");
+			json_input("{\"INSTRUCTION\":\"SET_PERIPHERALS\",\"COMMAND\":{\"TYPE\":\"OCD\",\"SET\":\"[0,1,1,0,0,1,1,0]\"},\"TIME\":\"1122334455\"}");
 		}
 		else if(strstr(DBG_buf, "SP1") != NULL)
 		{
@@ -83,6 +83,10 @@ void DEBUG_main(void)
 		else if(strstr(DBG_buf, "SP2") != NULL)
 		{
 			json_input("{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_DIDO\",\"D_IN\":\"VHOD2\",\"VAR_IN\":\"1\",\"D_OUT\":\"VIHOD8\",\"VAR_OUT\":\"1\"},\"TIME\":\"1122334455\"}");
+		}
+		else if(strstr(DBG_buf, "SP3") != NULL)
+		{
+			json_input("{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_VAIDO\",\"A_IN\":\"VHOD1\",\"RANGE_LOW\":\"2.5\",\"RANGE_HIGH\":\"3.5\",\"D_OUT\":\"VIHOD3\",\"VAR_OUT\":\"1\"},\"TIME\":\"1122334455\"}");
 		}
 
 		if(fdbg)

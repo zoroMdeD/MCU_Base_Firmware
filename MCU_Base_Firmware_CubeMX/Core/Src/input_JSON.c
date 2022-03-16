@@ -44,9 +44,7 @@ char paramValue[8];
 char *test;
 
 
-char a[10];
 uint8_t b;
-char c[10];
 uint8_t d;
 
 //Функция разбора подстроки значений параметра
@@ -84,6 +82,7 @@ void json_input(char *text)
 		{
 			cJSON *sType = cJSON_GetObjectItem(cJSON_GetObjectItem(json, "COMMAND"), "TYPE");
 			TYPE = sType->valuestring;
+
 			if(strcmp(TYPE, "SET_DIDO") == 0)	//Включить/выключить цифровой выход если цифровой вход = значение(уровень)
 			{
 				cJSON *s1 = cJSON_GetObjectItem(cJSON_GetObjectItem(json, "COMMAND"), "D_IN");
@@ -96,39 +95,25 @@ void json_input(char *text)
 				D_OUT = s3->valuestring;
 				VAR_OUT = s4->valuestring;
 
-				for(int i = 1, j = 0; i < strlen(D_IN); i++)
-				{
-					if(i % 2)
-					{
-						a[j] = D_IN[i];
-						j++;
-					}
-				}
-				for(int i = 1, j = 0; i < strlen(D_OUT); i++)
-				{
-					if(i % 2)
-					{
-						c[j] = D_OUT[i];
-						j++;
-					}
-				}
-
-				b = (uint8_t)(atoi(VAR_IN));
-				d = (uint8_t)(atoi(VAR_OUT));
-
 				set_dido(D_IN, (uint8_t)(atoi(VAR_IN)), D_OUT, (uint8_t)(atoi(VAR_OUT)));
 
+				//---------------------------------QA---------------------------------
 				SEND_str("\n");
 				SEND_str(TYPE);
 				SEND_str("\n");
 				SEND_str(D_IN);
+				SEND_str(": ");
+				USART_Tx(D_IN[4]);
 				SEND_str("\n");
 				SEND_str(VAR_IN);
 				SEND_str("\n");
 				SEND_str(D_OUT);
+				SEND_str(": ");
+				USART_Tx(D_OUT[5]);
 				SEND_str("\n");
 				SEND_str(VAR_OUT);
 				SEND_str("\n");
+				//------------------------------------------------------------------
 
 				cJSON_Delete(json);
 				free(stime);
@@ -139,7 +124,7 @@ void json_input(char *text)
 				free(s3);
 				free(s4);
 			}
-			else if(strcmp(TYPE, "SET_AIDO") == 0)	//Включить/выключить один цифровой выход если аналоговый вход в интервале значений
+			else if(strcmp(TYPE, "SET_VAIDO") == 0)	//Включить/выключить один цифровой выход если аналоговый вход в интервале значений
 			{
 				cJSON *s1 = cJSON_GetObjectItem(cJSON_GetObjectItem(json, "COMMAND"), "A_IN");
 				cJSON *s2 = cJSON_GetObjectItem(cJSON_GetObjectItem(json, "COMMAND"), "RANGE_LOW");
@@ -152,6 +137,11 @@ void json_input(char *text)
 				D_OUT = s4->valuestring;
 				VAR_OUT = s5->valuestring;
 
+				//set_vaido(D_IN, (uint8_t)(atoi(VAR_IN)), D_OUT, (uint8_t)(atoi(VAR_OUT)));
+				//sprintf(Buff, "%.3f", Conv_ADC1());
+
+				set_vaido(A_IN, atof(RANGE_LOW), atof(RANGE_HIGH), D_OUT, (uint8_t)(atoi(VAR_OUT)));
+				//---------------------------------QA---------------------------------
 				SEND_str("\n");
 				SEND_str(TYPE);
 				SEND_str("\n");
@@ -165,7 +155,7 @@ void json_input(char *text)
 				SEND_str("\n");
 				SEND_str(VAR_OUT);
 				SEND_str("\n");
-
+				//------------------------------------------------------------------
 				cJSON_Delete(json);
 				free(stime);
 				free(sInstruction);
@@ -286,11 +276,7 @@ void json_input(char *text)
 					Status_OCD[i] = (test[i] - 0x30);
 				}
 
-				//-------------------------For testing-------------------------
-				SEND_str("\n");
-				SEND_str(TYPE);
-				SEND_str("\n");
-				//-------------------------------------------------------------
+				ReWriteOCD();
 
 				cJSON_Delete(json);
 				free(stime);
