@@ -53,6 +53,7 @@ extern "C" {
 
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 
 /* USER CODE END Includes */
 
@@ -68,6 +69,7 @@ struct ScaningDIN_UpdateOCD
 	GPIO_TypeDef *D_OUT;	//Адрес порта открытого(ых) коллектора(ов), который(е) устанавливаем в состояние на порту выхода OCD(VAR_OUT)
 	uint8_t VAR_OUT;		//Значение которое устанавливается если выполняется условие, которое установлено на вход(VAR_IN)
 	uint16_t OCD_Pin;		//Адрес разряда порта(D_OUT) на который устанавливаем значение(VAR_OUT), которое например переключает реле
+	bool clrFlag;			//Флаг использования переменной
 }DiDo[8];
 
 //Voltage Analog Input Digital Output(Open Drain)
@@ -79,6 +81,7 @@ struct ScaningVAIN_UpdateOCD
 	GPIO_TypeDef *D_OUT;	//Адрес порта открытого(ых) коллектора(ов), который(е) устанавливаем в состояние на порту выхода OCD(VAR_OUT)
 	uint8_t VAR_OUT;		//Значение которое устанавливается если выполняется условие, которое установлено на вход(VAR_IN)
 	uint16_t OCD_Pin;		//Адрес разряда порта(D_OUT) на который устанавливаем значение(VAR_OUT), которое например переключает реле
+	bool clrFlag;			//Флаг использования переменной
 }VAiDo[4];
 
 /*Таблица истонности переключения аналогового комутатора
@@ -87,6 +90,26 @@ struct ScaningVAIN_UpdateOCD
  * S3_Pin = 0 - Включено измерение тока на 5-ом канале измерения ADC1_IN5 || S3_Pin = 1 - Включено измерение напряжения на 5-ом канале измерения ADC1_IN5
  * S4_Pin = 0 - Включено измерение тока на 6-ом канале измерения ADC1_IN6 || S4_Pin = 1 - Включено измерение напряжения на 6-ом канале измерения ADC1_IN6
  */
+
+//Voltage Analog Input PWM Output(Open Drain)
+//struct ScaningVAIN_UpdatePWM
+//{
+//	uint8_t A_IN;			//Номер канала аналогового входа который считываем
+//	double RANGE_LOW;		//Нижнее значение на входе A_IN удовлетворяющее условию
+//	double RANGE_HIGH;		//Верхнее значение на входе A_IN удовлетворяющее условию
+//	GPIO_TypeDef *P_OUT;	//Адрес порта генерации Ш�?М
+//	uint16_t PULSE_WIDTH;	//Значение длительности импульса
+//	uint16_t PULSE_PERIOD;	//Значение периода импульсоа
+//	bool clrFlag;			//Флаг использования переменной
+//}VAiPo[4];
+
+struct UpdatePWM
+{
+	uint32_t PWM_Channel;	//канал генерации ШИМ
+	uint16_t D_CYCLE[1];	//коэффициент заполнения ШИМ
+	bool clrFlag;			//Флаг использования переменной
+}PWM[4];
+
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/

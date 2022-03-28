@@ -1,6 +1,7 @@
-input_data.c:33:6:CheckReWrite	16	static
-input_data.c:57:6:set_dido	296	static
-input_data.c:120:6:set_vaido	264	static
-input_data.c:197:6:set_diao	24	static
-input_data.c:207:6:set_aiao	24	static
-input_data.c:213:6:set_data	4	static
+input_data.c:22:6:CheckReWriteDiDo	24	static
+input_data.c:40:6:CheckReWriteVAiDo	24	static
+input_data.c:68:6:set_dido	216	static
+input_data.c:131:6:set_vaido	216	static
+input_data.c:182:6:set_pwm	96	static
+input_data.c:220:6:set_diao	24	static
+input_data.c:230:6:set_aiao	24	static

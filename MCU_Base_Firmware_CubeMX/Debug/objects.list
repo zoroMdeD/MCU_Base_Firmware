@@ -4,6 +4,7 @@
 "./Core/Src/cmd.o"
 "./Core/Src/com.o"
 "./Core/Src/digital.o"
+"./Core/Src/dma.o"
 "./Core/Src/gpio.o"
 "./Core/Src/gsm.o"
 "./Core/Src/input_JSON.o"

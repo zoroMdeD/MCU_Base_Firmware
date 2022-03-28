@@ -20,6 +20,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "adc.h"
+#include "dma.h"
 #include "lwip.h"
 #include "rtc.h"
 #include "spi.h"
@@ -59,8 +60,11 @@ extern uint8_t SPI_tx_buf[1];
 uint8_t ReInitFlag = 0;
 uint8_t flag_two = 1;
 
-char Buff[32];
-
+//char Buff[32];
+char trans_str[64] = {0,};
+volatile uint16_t adc[4] = {0,}; // у нас 4 канала поэтому массив из 4 элементов
+double adcValue[4] = {0,};
+volatile uint8_t flag = 0;
 
 extern char a[32];
 extern uint8_t b;
@@ -113,6 +117,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_ADC1_Init();
   MX_SPI1_Init();
   MX_SPI2_Init();
@@ -121,6 +126,7 @@ int main(void)
   MX_USART2_UART_Init();
   MX_USART3_UART_Init();
   MX_LWIP_Init();
+  MX_TIM4_Init();
   MX_RTC_Init();
   /* USER CODE BEGIN 2 */
 
@@ -146,13 +152,42 @@ int main(void)
 
 
 	//----------------ADC_test----------------
-	HAL_GPIO_WritePin(GPIOE, S1_Pin, SET);												//Вход аналогового комутатора - выход линии 1
+	HAL_GPIO_WritePin(GPIOE, S1_Pin, RESET);												//Вход аналогового комутатора - выход линии 1
+	HAL_GPIO_WritePin(GPIOE, S2_Pin, RESET);
+	HAL_GPIO_WritePin(GPIOE, S3_Pin, RESET);
+	HAL_GPIO_WritePin(GPIOE, S4_Pin, RESET);
+
+	//HAL_ADCEx_Calibration_Start(&hadc1);
+	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)&adc, 4); // стартуем АЦП
+	HAL_TIM_OC_Start(&htim4, TIM_CHANNEL_4);
+	//HAL_ADC_Start_IT(&hadc1); // это здесь не нужно
 	//----------------------------------------
 
 
 //	HAL_UART_Receive_IT(&huart3,(uint8_t*)str_ethernet,1);								//Настройка прерывания COM для отладки ETH (!?)
 
 	HAL_SPI_TransmitReceive_IT(&hspi2, (uint8_t *)SPI_tx_buf, (uint8_t *)SPI_rx_buf, 1);	//Настройка прерывания по spi для МК
+
+	//----------------PWM_test------------------
+
+//      uint16_t buff_CH1tmp[1] = {100};		//1%
+//      uint16_t buff_CH2tmp[1] = {1000};		//10%
+//      uint16_t buff_CH3tmp[1] = {5000};		//50%
+//      uint16_t buff_CH4tmp[1] = {9000};		//90%
+//
+//	  HAL_TIM_PWM_Start_DMA(&htim3, TIM_CHANNEL_1, (uint32_t*)buff_CH1tmp, 1);
+//      SEND_str("step_1\n");
+//	  //HAL_Delay(100);
+//      HAL_TIM_PWM_Start_DMA(&htim3, TIM_CHANNEL_2, (uint32_t*)buff_CH2tmp, 1);
+//	  SEND_str("step_2\n");
+//	  //HAL_Delay(100);
+//	  HAL_TIM_PWM_Start_DMA(&htim3, TIM_CHANNEL_3, (uint32_t*)buff_CH3tmp, 1);
+//	  SEND_str("step_3\n");
+//	  //HAL_Delay(100);
+//	  HAL_TIM_PWM_Start_DMA(&htim3, TIM_CHANNEL_4, (uint32_t*)buff_CH4tmp, 1);
+// 	  SEND_str("step_4\n");
+//	//------------------------------------------
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -200,7 +235,7 @@ int main(void)
 
 		///*
 		//--------------SPI_test_MK---------------
-		SPI_available();
+		SPI_available();	//Необходимо переделать так чтобы на дисплее был только статус вывода.
 		//----------------------------------------
 		//*/
 
@@ -212,6 +247,45 @@ int main(void)
 		HAL_Delay(2000);
 		//----------------------------------------
 		*/
+
+		//----------------PWM_test----------------
+//        uint16_t psk = TIM3->PSC;
+//        uint16_t arr = TIM3->ARR;
+//        uint16_t rcr = TIM3->RCR;
+//
+//        uint16_t ccr1 = HAL_TIM_ReadCapturedValue(&htim3, TIM_CHANNEL_1);
+//        uint16_t ccr2 = HAL_TIM_ReadCapturedValue(&htim3, TIM_CHANNEL_2);
+//        uint16_t ccr3 = HAL_TIM_ReadCapturedValue(&htim3, TIM_CHANNEL_3);
+//        uint16_t ccr4 = HAL_TIM_ReadCapturedValue(&htim3, TIM_CHANNEL_4);
+//
+//        char str[128] = {0,};
+//        snprintf(str, 128, "PSK %d ARR %d RCR %d CCR1 %d CCR2 %d CCR3 %d CCR4 %d\n", psk, arr, rcr, ccr1, ccr2, ccr3, ccr4);
+//        HAL_UART_Transmit(&huart3, (uint8_t*)str, strlen(str), 1000);
+//
+//        HAL_Delay(500);
+		//----------------------------------------
+
+
+
+//		  if(flag)
+//		  {
+//		        flag = 0;
+//
+////		        //HAL_ADC_Stop_DMA(&hadc1); // это необязательно
+//		        snprintf(trans_str, 63, "ADC %.3f %.3f %.3f %.3f\n", Conversion_ADC1((uint16_t)adc[0]), Conversion_ADC1((uint16_t)adc[1]),
+//		        											 Conversion_ADC1((uint16_t)adc[2]), Conversion_ADC1((uint16_t)adc[3]));
+//		        HAL_UART_Transmit(&huart3, (uint8_t*)trans_str, strlen(trans_str), 1000);
+
+//				//SEND_str((uint8_t*)trans_str);
+//
+//		        //adc[0] = 0;
+//		        //adc[1] = 0;
+//		        //adc[2] = 0;
+//		        //adc[3] = 0;
+//		        //HAL_ADC_Start_DMA(&hadc1, (uint32_t*)&adc, 4);
+//		    	//HAL_Delay(1000);
+//		  }
+
 
 
 		//------------------DEBUG-----------------
@@ -226,6 +300,7 @@ int main(void)
 //			CheckReWrite();
 //			SEND_str("interrupt...");
 //			SEND_str("\n");
+		CheckReWriteVAiDo();
 //		}
 		//----------------------------------------
 
@@ -319,7 +394,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 //	}
 //	if(!ReInitFlag)
 //		ReInitFlag = 1;
-	CheckReWrite();
+	CheckReWriteDiDo();
 //	else
 //	{
 //		__NOP();
@@ -337,6 +412,22 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 	    	flag_iput_spi2 = 1;
 	    }
 	}
+}
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
+{
+    if(hadc->Instance == ADC1)
+    {
+//    	//HAL_ADC_Stop(&hadc1);
+//    	flag = 1;
+//        snprintf(trans_str, 63, "ADC %.3f %.3f %.3f %.3f\n", Conversion_ADC1((uint16_t)adc[0]), Conversion_ADC1((uint16_t)adc[1]),
+//        											 Conversion_ADC1((uint16_t)adc[2]), Conversion_ADC1((uint16_t)adc[3]));
+        //HAL_UART_Transmit(&huart3, (uint8_t*)trans_str, strlen(trans_str), 1000);
+
+        adcValue[0] = Conversion_ADC1((uint16_t)adc[0]);
+        adcValue[1] = Conversion_ADC1((uint16_t)adc[1]);
+        adcValue[2] = Conversion_ADC1((uint16_t)adc[2]);
+        adcValue[3] = Conversion_ADC1((uint16_t)adc[3]);
+    }
 }
 /* USER CODE END 4 */
 

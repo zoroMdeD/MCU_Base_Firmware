@@ -20,14 +20,19 @@ char *INSTRUCTION;		//Инструкция
 char *TYPE;				//Комманда
 
 //Переменные уловных выражений
-char *D_IN;				//Цифровой вход
-char *D_OUT;			//Цифровой выход
-char *VAR_IN;			//Переменная уровня цифрового входа
-char *VAR_OUT;			//Переменная уровня цифрового выхода
-char *A_IN;				//Аналоговый вход
-char *A_OUT;			//Аналоговый выход
-char *RANGE_LOW;		//Переменная нижней границы аналогового входа
-char *RANGE_HIGH;		//Переменная верхней границы аналогового выхода
+char *D_IN;					//Цифровой вход
+char *D_OUT;				//Цифровой выход
+char *VAR_IN;				//Переменная уровня цифрового входа
+char *VAR_OUT;				//Переменная уровня цифрового выхода
+char *A_IN;					//Аналоговый вход
+char *A_OUT;				//Аналоговый выход
+char *RANGE_LOW;			//Переменная нижней границы аналогового входа
+char *RANGE_HIGH;			//Переменная верхней границы аналогового выхода
+char *PWM_OUT;				//Выход ШИМ
+char *D_CYCLE;				//Коэффициент заполнения ШИМ
+char *D_CONVERSION_STEP;	//Шаг преобразования ШИМ
+char *BREATHING_EFFECT;		//Эффект "дыхания"
+char *DYNAMIC_PWM;			//Динамический ШИМ?
 
 //Массивы параметров
 char *DigitalParamMass;					//Массив для значений цифровых выходов (8 параметров)
@@ -137,8 +142,14 @@ void json_input(char *text)
 				D_OUT = s4->valuestring;
 				VAR_OUT = s5->valuestring;
 
-				//set_vaido(D_IN, (uint8_t)(atoi(VAR_IN)), D_OUT, (uint8_t)(atoi(VAR_OUT)));
-				//sprintf(Buff, "%.3f", Conv_ADC1());
+				if(strcmp(A_IN, "VHOD1") == 0)
+					SelectChannelOne;
+				else if(strcmp(A_IN, "VHOD2") == 0)
+					SelectChannelTwo;
+				else if(strcmp(A_IN, "VHOD3") == 0)
+					SelectChannelThree;
+				else if(strcmp(A_IN, "VHOD4") == 0)
+					SelectChannelFour;
 
 				set_vaido(A_IN, atof(RANGE_LOW), atof(RANGE_HIGH), D_OUT, (uint8_t)(atoi(VAR_OUT)));
 				//---------------------------------QA---------------------------------
@@ -165,6 +176,31 @@ void json_input(char *text)
 				free(s3);
 				free(s4);
 				free(s5);
+			}
+			else if(strcmp(TYPE, "SET_PWM") == 0)	//Выставить коэффициент заполнения на ШИМ
+			{
+				cJSON *s1 = cJSON_GetObjectItem(cJSON_GetObjectItem(json, "COMMAND"), "PWM_OUT");
+				cJSON *s2 = cJSON_GetObjectItem(cJSON_GetObjectItem(json, "COMMAND"), "D_CYCLE");
+
+				PWM_OUT = s1->valuestring;
+				D_CYCLE = s2->valuestring;
+
+				set_pwm(PWM_OUT, (uint32_t)(atoi(D_CYCLE)));
+				//---------------------------------QA---------------------------------
+				SEND_str("\n");
+				SEND_str(TYPE);
+				SEND_str("\n");
+				SEND_str(PWM_OUT);
+				SEND_str("\n");
+				SEND_str(D_CYCLE);
+				SEND_str("\n");
+				//------------------------------------------------------------------
+				cJSON_Delete(json);
+				free(stime);
+				free(sInstruction);
+				free(sType);
+				free(s1);
+				free(s2);
 			}
 			else if(strcmp(TYPE, "SET_AIAO") == 0)	//Установить значение в аналоговый выход если аналоговый вход = значение
 			{

@@ -10,9 +10,11 @@
 
 #include "main.h"
 
-void CheckReWrite();
+void CheckReWriteDiDo(void);
+void CheckReWriteVAiDo(void);
 void set_dido(char *D_IN, uint8_t VAR_IN, char *D_OUT, uint8_t VAR_OUT);
 void set_vaido(char *A_IN, double RANGE_LOW, double RANGE_HIGH, char *D_OUT, uint8_t VAR_OUT);
+void set_pwm(char *PWM_OUT, uint32_t DUTY_CYCLE);
 
 #define VHOD1	GPIOD
 #define VHOD2	GPIOD
@@ -36,7 +38,12 @@ void set_vaido(char *A_IN, double RANGE_LOW, double RANGE_HIGH, char *D_OUT, uin
 #define ADC1_IN4	2
 #define ADC1_IN5	3
 #define ADC1_IN6	4
-
+/*Таблица истонности переключения аналогового комутатора
+ * S1_Pin = 0 - Включено измерение тока на 3-ем канале измерения ADC1_IN3 || S1_Pin = 1 - Включено измерение напряжения на 3-ем канале измерения ADC1_IN3
+ * S2_Pin = 0 - Включено измерение тока на 4-ом канале измерения ADC1_IN4 || S2_Pin = 1 - Включено измерение напряжения на 4-ом канале измерения ADC1_IN4
+ * S3_Pin = 0 - Включено измерение тока на 5-ом канале измерения ADC1_IN5 || S3_Pin = 1 - Включено измерение напряжения на 5-ом канале измерения ADC1_IN5
+ * S4_Pin = 0 - Включено измерение тока на 6-ом канале измерения ADC1_IN6 || S4_Pin = 1 - Включено измерение напряжения на 6-ом канале измерения ADC1_IN6
+ */
 #define SelectChannelOne	HAL_GPIO_WritePin(GPIOE, S1_Pin, SET)
 #define SelectChannelTwo	HAL_GPIO_WritePin(GPIOE, S2_Pin, SET)
 #define SelectChannelThree	HAL_GPIO_WritePin(GPIOE, S3_Pin, SET)

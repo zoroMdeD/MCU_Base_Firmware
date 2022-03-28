@@ -31,3 +31,46 @@ char *json[] = "{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_AI
 
 
 char *json[] = "{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_DIDO\",\"D_IN\":\"VHOD1\",\"VAR_IN\":\"0\",\"D_OUT\":\"VIHOD3\",\"VAR_OUT\":\"1\"},\"TIME\":\"1122334455\"}";
+
+
+{
+	"INSTRUCTION":"SET_PROGRAMM",
+	"COMMAND":
+			{
+				"TYPE":"SET_VAIDO",
+				"A_IN":"VHOD1",
+				"RANGE_LOW":"1.5",
+				"RANGE_HIGH":"2.5",
+				"D_OUT":"VIHOD4",
+				"VAR_OUT":"1"
+			},
+	"TIME":"1122334455"     
+}
+
+
+char *json[] = "{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_VAIDO\",\"A_IN\":\"VHOD1\",\"RANGE_LOW\":\"1.5\",\"RANGE_HIGH\":\"2.5\",\"D_OUT\":\"VIHOD4\",\"VAR_OUT\":\"1\"},\"TIME\":\"1122334455\"}";
+
+
+{
+	"INSTRUCTION":"SET_PROGRAMM",
+	"COMMAND":
+			{
+				"TYPE":"SET_VAIPO",
+				"A_IN":"VHOD1",
+				"RANGE_LOW":"1.5",
+				"RANGE_HIGH":"2.5",
+				"P_OUT":"PVIHOD1",
+				"PULSE_WIDTH":"300",	//in us
+				"PULSE_PERIOD":"1000"	//in us
+			},
+	"TIME":"1122334455"     
+}
+
+
+char *json[] = "{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_VAIPO\",\"A_IN\":\"VHOD1\",\"RANGE_LOW\":\"1.5\",\"RANGE_HIGH\":\"2.5\",\"P_OUT\":\"PVIHOD1\",\"PULSE_WIDTH\":\"300\",\"PULSE_PERIOD\":\"1000\"},\"TIME\":\"1122334455\"}";
+
+
+
+
+
+

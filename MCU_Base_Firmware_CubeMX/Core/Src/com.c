@@ -76,19 +76,48 @@ void DEBUG_main(void)
 		{
 			json_input("{\"INSTRUCTION\":\"SET_PERIPHERALS\",\"COMMAND\":{\"TYPE\":\"OCD\",\"SET\":\"[0,1,1,0,0,1,1,0]\"},\"TIME\":\"1122334455\"}");
 		}
+		//------------------------------------------------Digital-----------------------------------------------
 		else if(strstr(DBG_buf, "SP1") != NULL)
 		{
 			json_input("{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_DIDO\",\"D_IN\":\"VHOD1\",\"VAR_IN\":\"0\",\"D_OUT\":\"VIHOD1\",\"VAR_OUT\":\"1\"},\"TIME\":\"1122334455\"}");
 		}
 		else if(strstr(DBG_buf, "SP2") != NULL)
 		{
-			json_input("{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_DIDO\",\"D_IN\":\"VHOD2\",\"VAR_IN\":\"1\",\"D_OUT\":\"VIHOD8\",\"VAR_OUT\":\"1\"},\"TIME\":\"1122334455\"}");
+			json_input("{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_DIDO\",\"D_IN\":\"VHOD1\",\"VAR_IN\":\"0\",\"D_OUT\":\"VIHOD8\",\"VAR_OUT\":\"1\"},\"TIME\":\"1122334455\"}");
 		}
+		//----------------------------------------------End_Digital---------------------------------------------
+		//------------------------------------------------Analog------------------------------------------------
 		else if(strstr(DBG_buf, "SP3") != NULL)
 		{
 			json_input("{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_VAIDO\",\"A_IN\":\"VHOD1\",\"RANGE_LOW\":\"2.5\",\"RANGE_HIGH\":\"3.5\",\"D_OUT\":\"VIHOD3\",\"VAR_OUT\":\"1\"},\"TIME\":\"1122334455\"}");
 		}
-
+		else if(strstr(DBG_buf, "SP4") != NULL)
+		{
+			json_input("{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_VAIDO\",\"A_IN\":\"VHOD1\",\"RANGE_LOW\":\"0\",\"RANGE_HIGH\":\"1\",\"D_OUT\":\"VIHOD4\",\"VAR_OUT\":\"1\"},\"TIME\":\"1122334455\"}");
+		}
+		//----------------------------------------------End_Analog----------------------------------------------
+		//--------------------------------------------------PWM-------------------------------------------------
+		else if(strstr(DBG_buf, "SP5") != NULL)
+		{
+			json_input("{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_PWM\",\"PWM_OUT\":\"PWM1\",\"D_CYCLE\":\"10\"},\"TIME\":\"1122334455\"}");
+		}
+		else if(strstr(DBG_buf, "SP6") != NULL)
+		{
+			json_input("{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_PWM\",\"PWM_OUT\":\"PWM2\",\"D_CYCLE\":\"25\"},\"TIME\":\"1122334455\"}");
+		}
+		else if(strstr(DBG_buf, "SP7") != NULL)
+		{
+			json_input("{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_PWM\",\"PWM_OUT\":\"PWM3\",\"D_CYCLE\":\"50\"},\"TIME\":\"1122334455\"}");
+		}
+		else if(strstr(DBG_buf, "SP8") != NULL)
+		{
+			json_input("{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_PWM\",\"PWM_OUT\":\"PWM4\",\"D_CYCLE\":\"90\"},\"TIME\":\"1122334455\"}");
+		}
+		else if(strstr(DBG_buf, "SP9") != NULL)
+		{
+			json_input("{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_PWM\",\"PWM_OUT\":\"PWM1\",\"D_CYCLE\":\"50\"},\"TIME\":\"1122334455\"}");
+		}
+		//------------------------------------------------End_PWM-----------------------------------------------
 		if(fdbg)
 		{
 			snprintf(DBG_str, DBG_RX_BUFFER_SIZE, "%s\n", DBG_buf);

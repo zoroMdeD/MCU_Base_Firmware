@@ -11,6 +11,7 @@
 #include "main.h"
 
 double Conv_ADC1(void);
+double Conversion_ADC1(uint16_t ADC_value);
 uint16_t Get_ADC1(void);
 
 #endif /* INC_ANALOG_INI_H_ */
