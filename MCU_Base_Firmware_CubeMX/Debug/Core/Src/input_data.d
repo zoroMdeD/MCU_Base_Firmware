@@ -38,7 +38,8 @@ Core/Src/input_data.o: ../Core/Src/input_data.c ../Core/Inc/input_data.h \
  ../Core/Inc/gsm.h ../Core/Inc/com.h ../Core/Inc/rs485.h \
  ../Core/Inc/analog.h ../Core/Inc/digital.h ../Core/Inc/spi_interface.h \
  ../Core/Inc/usart_ring.h ../Core/Inc/logic_func.h ../Core/Inc/cJSON.h \
- ../Core/Inc/input_JSON.h ../Core/Inc/input_data.h
+ ../Core/Inc/input_JSON.h ../Core/Inc/input_data.h ../Core/Inc/ds18b20.h \
+ ../Core/Inc/delay.h
 
 ../Core/Inc/input_data.h:
 
@@ -145,3 +146,7 @@ Core/Src/input_data.o: ../Core/Src/input_data.c ../Core/Inc/input_data.h \
 ../Core/Inc/input_JSON.h:
 
 ../Core/Inc/input_data.h:
+
+../Core/Inc/ds18b20.h:
+
+../Core/Inc/delay.h:

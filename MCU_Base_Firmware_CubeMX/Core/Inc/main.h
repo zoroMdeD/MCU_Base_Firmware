@@ -50,6 +50,24 @@ extern "C" {
 #include "cJSON.h"
 #include "input_JSON.h"
 #include "input_data.h"
+#include "ds18b20.h"
+
+//--------------------------delay_ns--------------------------
+#include "delay.h"
+
+//#define DEMCR_TRCENA    0x01000000
+//
+///* Core Debug registers */
+//#define DEMCR           (*((volatile uint32_t *)0xE000EDFC))
+//#define DWT_CTRL        (*(volatile uint32_t *)0xe0001000)
+//#define CYCCNTENA       (1<<0)
+//#define DWT_CYCCNT      ((volatile uint32_t *)0xE0001004)
+//#define CPU_CYCLES      *DWT_CYCCNT
+//#define CLK_SPEED         168000000 // EXAMPLE for CortexM4, EDIT as needed
+//
+//#define STOPWATCH_START { m_nStart = *((volatile unsigned int *)0xE0001004);}
+//#define STOPWATCH_STOP  { m_nStop = *((volatile unsigned int *)0xE0001004);}
+//------------------------------------------------------------
 
 #include <stdio.h>
 #include <string.h>
@@ -105,8 +123,8 @@ struct ScaningVAIN_UpdateOCD
 
 struct UpdatePWM
 {
-	uint32_t PWM_Channel;	//канал генерации ШИМ
-	uint16_t D_CYCLE[1];	//коэффициент заполнения ШИМ
+	uint32_t PWM_Channel;	//канал генерации Ш�?М
+	uint16_t D_CYCLE[1];	//коэффициент заполнения Ш�?М
 	bool clrFlag;			//Флаг использования переменной
 }PWM[4];
 
@@ -220,8 +238,6 @@ void Error_Handler(void);
 #define WR0_GPIO_Port GPIOD
 #define WR1_Pin GPIO_PIN_1
 #define WR1_GPIO_Port GPIOD
-#define PWR0_Pin GPIO_PIN_2
-#define PWR0_GPIO_Port GPIOD
 #define PWR1_Pin GPIO_PIN_3
 #define PWR1_GPIO_Port GPIOD
 #define RS485_DE_Pin GPIO_PIN_4
