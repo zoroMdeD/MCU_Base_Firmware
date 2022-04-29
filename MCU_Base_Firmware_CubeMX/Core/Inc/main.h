@@ -52,8 +52,21 @@ extern "C" {
 #include "cJSON.h"
 #include "input_JSON.h"
 #include "input_data.h"
-#include <temperature_sensors.h>
+#include "temperature_sensors.h"
 
+//---------------------------FATfs----------------------------
+#include "spi_sd.h"
+
+//uint8_t	SD_State = 0x00;
+//
+//FATFS FATFS_Obj;
+
+///* Exported functions ------------------------------------------------------- */
+//FRESULT scan_files (
+//    char* path,        /* Start node to be scanned (also used as work area) */
+//    int* numFiles,
+//    int pos
+//);
 //--------------------------delay_ns--------------------------
 #include "delay.h"
 

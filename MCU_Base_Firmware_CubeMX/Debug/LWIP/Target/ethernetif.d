@@ -39,7 +39,9 @@ LWIP/Target/ethernetif.o: ../LWIP/Target/ethernetif.c ../Core/Inc/main.h \
  ../Core/Inc/analog.h ../Core/Inc/digital.h ../Core/Inc/spi_interface.h \
  ../Core/Inc/usart_ring.h ../Core/Inc/logic_func.h ../Core/Inc/cJSON.h \
  ../Core/Inc/input_JSON.h ../Core/Inc/input_data.h \
- ../Core/Inc/temperature_sensors.h ../Core/Inc/delay.h \
+ ../Core/Inc/temperature_sensors.h ../Core/Inc/spi_sd.h \
+ ../Core/Inc/diskio.h ../Core/Inc/integer.h ../Core/Inc/ff.h \
+ ../Core/Inc/ffconf.h ../Core/Inc/ffconf.h ../Core/Inc/delay.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/opt.h \
  ../LWIP/Target/lwipopts.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/debug.h \
@@ -179,6 +181,18 @@ LWIP/Target/ethernetif.o: ../LWIP/Target/ethernetif.c ../Core/Inc/main.h \
 ../Core/Inc/input_data.h:
 
 ../Core/Inc/temperature_sensors.h:
+
+../Core/Inc/spi_sd.h:
+
+../Core/Inc/diskio.h:
+
+../Core/Inc/integer.h:
+
+../Core/Inc/ff.h:
+
+../Core/Inc/ffconf.h:
+
+../Core/Inc/ffconf.h:
 
 ../Core/Inc/delay.h:
 

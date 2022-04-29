@@ -71,6 +71,19 @@ extern uint8_t b;
 extern char c[32];
 extern uint8_t d;
 
+//----------------FATfs----------------------
+uint8_t	SD_State = 0x00;
+
+FATFS FATFS_Obj;
+
+/* Exported functions ------------------------------------------------------- */
+FRESULT scan_files (
+    char* path,        /* Start node to be scanned (also used as work area) */
+    int* numFiles,
+    int pos
+);
+
+
 //RTC_TimeTypeDef sTime = {0};
 //RTC_DateTypeDef DateToUpdate = {0};
 //
