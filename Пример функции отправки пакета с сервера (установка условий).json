@@ -90,4 +90,68 @@ char *json[] = "{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_PW
 char *json[] = "{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_PWM_RANGE\",\"PWM_OUT\":\"PWM1\",\"D_CONVERSION_STEP\":\"1\",\"D_CYCLE\":\"12\",\"BREATHING_EFFECT\":\"YES\",\"DYNAMIC_PWM\":\"YES\"},\"TIME\":\"1122334455\"}";
 
 
+//---------------------------------------------------------------------ТЕМПЕРАТУРНЫЕ ПРОФИЛИ---------------------------------------------------------------------
+
+//Установка температурного профиля:
+{
+	"INSTRUCTION":"SET_PROGRAMM",
+	"COMMAND":
+			{
+				"TYPE":"SET_TEMP_PROFILE",
+				"SENSOR":"1",
+				"RANGE_TEMP_LOW":"+28",
+				"RANGE_TEMP_HIGH":"+50",
+				"D_OUT":"VIHOD1",
+				"VAR_OUT":"1"
+			},
+	"TIME":"1122334455"     
+}
+char *json[] = "{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_TEMP_PROFILE\",\"SENSOR\":\"1\",\"RANGE_TEMP_LOW\":\"+28\",\"RANGE_TEMP_HIGH\":\"+50\",\"D_OUT\":\"VIHOD1\",\"VAR_OUT\":\"1\"},\"TIME\":\"1122334455\"}";
+
+OR
+
+{
+	"INSTRUCTION":"SET_PROGRAMM",
+	"COMMAND":
+			{
+				"TYPE":"SET_TEMP_PROFILE",
+				"ROM_RAW":"28790E950C000069",
+				"RANGE_TEMP_LOW":"+28",
+				"RANGE_TEMP_HIGH":"+50",
+				"D_OUT":"VIHOD1",
+				"VAR_OUT":"1"
+			},
+	"TIME":"1122334455"     
+}
+char *json[] = "{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_TEMP_PROFILE\",\"SENSOR\":\"[0x28, 0x79, 0x0E, 0x95, 0x0C, 0x00, 0x00, 0x69]\",\"RANGE_TEMP_LOW\":\"+28\",\"RANGE_TEMP_HIGH\":\"+50\",\"D_OUT\":\"VIHOD1\",\"VAR_OUT\":\"1\"},\"TIME\":\"1122334455\"}";
+
+
+//Запрос сервера:
+{
+	"INSTRUCTION":"GET_INFO",
+	"COMMAND":
+			{
+				"TYPE":"GET_TEMP_PROFILE",
+				"SENSOR":"1",
+			},
+	"TIME":"1122334455"     
+}
+char *json[] = "{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_PWM_RANGE\",\"PWM_OUT\":\"PWM1\",\"D_CONVERSION_STEP\":\"1\",\"D_CYCLE\":\"12\",\"BREATHING_EFFECT\":\"YES\",\"DYNAMIC_PWM\":\"YES\"},\"TIME\":\"1122334455\"}";
+
+//Ответ контроллера:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

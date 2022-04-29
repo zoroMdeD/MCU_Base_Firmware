@@ -15,36 +15,45 @@ extern uint8_t Status_1WR[];	//Статус выходов интерфейса 
 
 extern double adcValue[];
 
+extern bool OneWire_Test_Flag_Init;
+extern bool OneWire_Test_Flag_Read;
+extern uint8_t Dev_Cnt;
+uint16_t raw_temper;
+uint8_t dt[8];
+char c;
+extern char Device_RAW_ROM[AMT_TEMP_SENS][20];
+extern float temper;
+
 GPIO_TypeDef *pVHOD[8] = {VHOD1, VHOD2, VHOD3, VHOD4, VHOD5, VHOD6, VHOD7, VHOD8};				//Входы дискретных сигналов
 GPIO_TypeDef *pVIHOD[8] = {VIHOD1, VIHOD2, VIHOD3, VIHOD4, VIHOD5, VIHOD6, VIHOD7, VIHOD8};		//Выходы открытый коллектор
 uint16_t OCD_Pin[8] = {O0_Pin, O1_Pin, O2_Pin, O3_Pin, O4_Pin, O5_Pin, O6_Pin, O7_Pin};
 
+//Мониторинг дискретных входов и изменение выходов открытый коллектор
+//	*(Если Вход1 == 0 то Выход3 = 1) Инверсная логика на входах оптопар
 void CheckReWriteDiDo(void)
 {
 	for(int i = 0; i < 8; i++)
 	{
-		if(HAL_GPIO_ReadPin(DiDo[i].D_IN, DiDo[i].DIN_Pin) != DiDo[i].VAR_IN)	//(Если Вход1 == 0 то Выход3 = 1) Инверсная логика на входах оптопар
+		if(HAL_GPIO_ReadPin(DiDo[i].D_IN, DiDo[i].DIN_Pin) != DiDo[i].VAR_IN)
 		{
-			//Status_OCD[i] = DiDo[i].VAR_OUT;									//нужно записать в массив актуальные данные!!!
 			Status_OCD[i] = DiDo[i].VAR_OUT;
-			HAL_GPIO_WritePin(DiDo[i].D_OUT, DiDo[i].OCD_Pin, DiDo[i].VAR_OUT);		//DiDo[i].VAR_OUT
+			HAL_GPIO_WritePin(DiDo[i].D_OUT, DiDo[i].OCD_Pin, DiDo[i].VAR_OUT);
 		}
 		else if(HAL_GPIO_ReadPin(DiDo[i].D_IN, DiDo[i].DIN_Pin) == DiDo[i].VAR_IN)
 		{
-			//Status_OCD[i] = !DiDo[i].VAR_OUT;
 			Status_OCD[i] = !DiDo[i].VAR_OUT;
-			HAL_GPIO_WritePin(DiDo[i].D_OUT, DiDo[i].OCD_Pin, !DiDo[i].VAR_OUT);	//!DiDo[i].VAR_OUT
+			HAL_GPIO_WritePin(DiDo[i].D_OUT, DiDo[i].OCD_Pin, !DiDo[i].VAR_OUT);
 		}
 	}
 }
+//Мониторинг аналоговых входов и изменение выходов открытый коллектор
 void CheckReWriteVAiDo(void)
 {
 	for(int i = 0; i < 4; i++)
 	{
 		for(int j = 0; j < 8; j++)
 		{
-			//if(strcmp(VAiDo[i].D_OUT, pVIHOD[j]) == 0)
-			if(VAiDo[i].D_OUT == pVIHOD[j])
+			if(VAiDo[i].OCD_Pin == OCD_Pin[j])
 			{
 				if((adcValue[i] >= VAiDo[i].RANGE_LOW) && (VAiDo[i].RANGE_HIGH >= adcValue[i]))
 				{
@@ -58,6 +67,52 @@ void CheckReWriteVAiDo(void)
 				}
 			}
 		}
+	}
+}
+//Мониторинг датчиков температуры и изменение выходов открытый коллектор
+void CheckReWriteTSiDo(void)
+{
+	if(OneWire_Test_Flag_Init)
+	{
+		OneWire_Test_Flag_Init = false;
+    	for(uint8_t i = 1; i <= Dev_Cnt; i++)
+    	{
+    		sensors_MeasureTemperCmd(NO_SKIP_ROM, i);
+    	}
+	}
+	if(OneWire_Test_Flag_Read)
+	{
+		OneWire_Test_Flag_Read = false;
+    	for(uint8_t i = 1; i <= Dev_Cnt; i++)
+    	{
+    		for(uint8_t j = 0; j < 8; j++)
+    		{
+    			if(TSiDo[i-1].OCD_Pin == OCD_Pin[j])
+    			{
+    				sensors_ReadStratcpad(NO_SKIP_ROM, dt, i);
+    				raw_temper = ((uint16_t)dt[1]<<8)|dt[0];
+    				if(sensors_GetSign(raw_temper))
+    					c='-';
+    				else
+    					c='+';
+    				char test[16];
+    				temper = sensors_Convert(raw_temper);
+    				sprintf(test, "%d t: %c%.2f\r\n", i, c, temper);
+    				HAL_UART_Transmit(&huart3, (uint8_t*)test, strlen(test), 0x1000);
+
+					if((temper >= TSiDo[i-1].RANGE_TEMP_LOW) && (TSiDo[i-1].RANGE_TEMP_HIGH >= temper))
+					{
+						Status_OCD[j] = 1;
+						HAL_GPIO_WritePin(TSiDo[i-1].D_OUT, TSiDo[i-1].OCD_Pin, SET);
+					}
+					else
+					{
+						Status_OCD[j] = 0;
+						HAL_GPIO_WritePin(TSiDo[i-1].D_OUT, TSiDo[i-1].OCD_Pin, RESET);
+					}
+    			}
+    		}
+    	}
 	}
 }
 //Включить/выключить цифровой выход(Открытый коллектор) если цифровой вход = значение(уровень)
@@ -208,6 +263,58 @@ void set_pwm(char *PWM_OUT, uint32_t D_CYCLE)
 			SEND_str("\n");
 			//------------------------------------------------
 
+			break;
+		}
+	}
+}
+//Включить/выключить один цифровой выход(открытый коллектор) если температура датчика в интервале значений
+//Принимает "ROM_RAW" - строку с уникальным идкнтификатором температурного датчика
+//Принимает "RANGE_TEMP_LOW" - нижний предел значения температуры
+//Принимает "RANGE_TEMP_HIGH" - верхний предел значения температуры
+//Принимает "D_OUT" - строку с номером цифрового выхода
+//Принимает "VAR_OUT" - переменная состояния выхода
+void set_temperature(char *ROM_RAW, double RANGE_TEMP_LOW, double RANGE_TEMP_HIGH, char *D_OUT, uint8_t VAR_OUT)
+{
+	char VIHOD[8][10] = {"VIHOD1", "VIHOD2", "VIHOD3", "VIHOD4", "VIHOD5", "VIHOD6", "VIHOD7", "VIHOD8"};
+
+	for(int i = 0; i < AMT_TEMP_SENS; i++)
+	{
+		if(strcmp(ROM_RAW, Device_RAW_ROM[i]) == 0)
+		{
+			if(TSiDo[i].clrFlag != false)
+				HAL_GPIO_WritePin(TSiDo[i].D_OUT, TSiDo[i].OCD_Pin, RESET);
+
+			TSiDo[i].clrFlag = true;
+			TSiDo[i].DEVICE_NUMBER = i+1;
+			for(int j = 0; j < 16; j++)
+				TSiDo[i].ROM_RAW[j] = Device_RAW_ROM[i][j];
+			TSiDo[i].RANGE_TEMP_LOW = RANGE_TEMP_LOW;
+			TSiDo[i].RANGE_TEMP_HIGH = RANGE_TEMP_HIGH;
+			for(int j = 0; j < 8; j++)
+			{
+				if(strcmp(D_OUT, VIHOD[j]) == 0)
+				{
+					TSiDo[i].D_OUT = pVIHOD[j];
+					TSiDo[i].VAR_OUT = VAR_OUT;
+					TSiDo[i].OCD_Pin = OCD_Pin[j];
+
+					//------------------------------------------------
+//					char Buff[32];
+//					SEND_str("SET VALUE: ");
+//					sprintf(Buff, "%.3f", adcValue[i]);
+//					SEND_str(Buff);
+//					SEND_str("\nRANGE_LOW: ");
+//					sprintf(Buff, "%.3f", VAiDo[i].RANGE_LOW);
+//					SEND_str(Buff);
+//					SEND_str("\nRANGE_HIGH: ");
+//					sprintf(Buff, "%.3f", VAiDo[i].RANGE_HIGH);
+//					SEND_str(Buff);
+//					SEND_str("\n");
+					//------------------------------------------------
+
+					break;
+				}
+			}
 			break;
 		}
 	}

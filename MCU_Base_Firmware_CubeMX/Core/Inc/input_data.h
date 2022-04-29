@@ -12,9 +12,11 @@
 
 void CheckReWriteDiDo(void);
 void CheckReWriteVAiDo(void);
+void CheckReWriteTSiDo(void);
 void set_dido(char *D_IN, uint8_t VAR_IN, char *D_OUT, uint8_t VAR_OUT);
 void set_vaido(char *A_IN, double RANGE_LOW, double RANGE_HIGH, char *D_OUT, uint8_t VAR_OUT);
 void set_pwm(char *PWM_OUT, uint32_t DUTY_CYCLE);
+void set_temperature(char *ROM_RAW, double RANGE_TEMP_LOW, double RANGE_TEMP_HIGH, char *D_OUT, uint8_t VAR_OUT);
 
 #define VHOD1	GPIOD
 #define VHOD2	GPIOD

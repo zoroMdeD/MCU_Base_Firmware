@@ -1,0 +1,13 @@
+temperature_sensors.c:29:6:port_init	32	static
+temperature_sensors.c:41:9:sensors_Reset	16	static
+temperature_sensors.c:55:9:sensors_ReadBit	16	static
+temperature_sensors.c:69:9:sensors_ReadByte	16	static
+temperature_sensors.c:79:6:sensors_WriteBit	16	static
+temperature_sensors.c:87:6:sensors_WriteByte	24	static
+temperature_sensors.c:97:9:sensors_SearchRom	32	static
+temperature_sensors.c:177:9:sensors_init	32	static
+temperature_sensors.c:230:6:sensors_MeasureTemperCmd	24	static
+temperature_sensors.c:252:6:sensors_ReadStratcpad	32	static
+temperature_sensors.c:278:9:sensors_GetSign	16	static
+temperature_sensors.c:287:7:sensors_Convert	24	static
+temperature_sensors.c:297:6:UpdateTempSens	64	static

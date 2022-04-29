@@ -118,6 +118,16 @@ void DEBUG_main(void)
 			json_input("{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_PWM\",\"PWM_OUT\":\"PWM1\",\"D_CYCLE\":\"50\"},\"TIME\":\"1122334455\"}");
 		}
 		//------------------------------------------------End_PWM-----------------------------------------------
+		//----------------------------------------------TEMPERATURE---------------------------------------------
+		else if(strstr(DBG_buf, "TP1") != NULL)
+		{
+			json_input("{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_TEMP_PROFILE\",\"ROM_RAW\":\"28BF1E930C000031\",\"RANGE_TEMP_LOW\":\"+28\",\"RANGE_TEMP_HIGH\":\"+50\",\"D_OUT\":\"VIHOD3\",\"VAR_OUT\":\"1\"},\"TIME\":\"1122334455\"}");
+		}
+		else if(strstr(DBG_buf, "TP2") != NULL)
+		{
+			json_input("{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_TEMP_PROFILE\",\"ROM_RAW\":\"28790E950C000069\",\"RANGE_TEMP_LOW\":\"+28\",\"RANGE_TEMP_HIGH\":\"+50\",\"D_OUT\":\"VIHOD4\",\"VAR_OUT\":\"1\"},\"TIME\":\"1122334455\"}");
+		}
+		//--------------------------------------------End_TEMPERATURE-------------------------------------------
 		if(fdbg)
 		{
 			snprintf(DBG_str, DBG_RX_BUFFER_SIZE, "%s\n", DBG_buf);

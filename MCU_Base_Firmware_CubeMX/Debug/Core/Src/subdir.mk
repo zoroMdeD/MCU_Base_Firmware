@@ -13,7 +13,6 @@ C_SRCS += \
 ../Core/Src/delay.c \
 ../Core/Src/digital.c \
 ../Core/Src/dma.c \
-../Core/Src/ds18b20.c \
 ../Core/Src/gpio.c \
 ../Core/Src/gsm.c \
 ../Core/Src/input_JSON.c \
@@ -31,6 +30,7 @@ C_SRCS += \
 ../Core/Src/syscalls.c \
 ../Core/Src/sysmem.c \
 ../Core/Src/system_stm32f4xx.c \
+../Core/Src/temperature_sensors.c \
 ../Core/Src/tim.c \
 ../Core/Src/usart.c \
 ../Core/Src/usart_ring.c 
@@ -44,7 +44,6 @@ OBJS += \
 ./Core/Src/delay.o \
 ./Core/Src/digital.o \
 ./Core/Src/dma.o \
-./Core/Src/ds18b20.o \
 ./Core/Src/gpio.o \
 ./Core/Src/gsm.o \
 ./Core/Src/input_JSON.o \
@@ -62,6 +61,7 @@ OBJS += \
 ./Core/Src/syscalls.o \
 ./Core/Src/sysmem.o \
 ./Core/Src/system_stm32f4xx.o \
+./Core/Src/temperature_sensors.o \
 ./Core/Src/tim.o \
 ./Core/Src/usart.o \
 ./Core/Src/usart_ring.o 
@@ -75,7 +75,6 @@ C_DEPS += \
 ./Core/Src/delay.d \
 ./Core/Src/digital.d \
 ./Core/Src/dma.d \
-./Core/Src/ds18b20.d \
 ./Core/Src/gpio.d \
 ./Core/Src/gsm.d \
 ./Core/Src/input_JSON.d \
@@ -93,6 +92,7 @@ C_DEPS += \
 ./Core/Src/syscalls.d \
 ./Core/Src/sysmem.d \
 ./Core/Src/system_stm32f4xx.d \
+./Core/Src/temperature_sensors.d \
 ./Core/Src/tim.d \
 ./Core/Src/usart.d \
 ./Core/Src/usart_ring.d 
@@ -105,7 +105,7 @@ Core/Src/%.o: ../Core/Src/%.c Core/Src/subdir.mk
 clean: clean-Core-2f-Src
 
 clean-Core-2f-Src:
-	-$(RM) ./Core/Src/adc.d ./Core/Src/adc.o ./Core/Src/analog.d ./Core/Src/analog.o ./Core/Src/cJSON.d ./Core/Src/cJSON.o ./Core/Src/cmd.d ./Core/Src/cmd.o ./Core/Src/com.d ./Core/Src/com.o ./Core/Src/delay.d ./Core/Src/delay.o ./Core/Src/digital.d ./Core/Src/digital.o ./Core/Src/dma.d ./Core/Src/dma.o ./Core/Src/ds18b20.d ./Core/Src/ds18b20.o ./Core/Src/gpio.d ./Core/Src/gpio.o ./Core/Src/gsm.d ./Core/Src/gsm.o ./Core/Src/input_JSON.d ./Core/Src/input_JSON.o ./Core/Src/input_data.d ./Core/Src/input_data.o ./Core/Src/logic_func.d ./Core/Src/logic_func.o ./Core/Src/main.d ./Core/Src/main.o ./Core/Src/net.d ./Core/Src/net.o ./Core/Src/rs485.d ./Core/Src/rs485.o ./Core/Src/rtc.d ./Core/Src/rtc.o ./Core/Src/spi.d ./Core/Src/spi.o ./Core/Src/spi_interface.d ./Core/Src/spi_interface.o ./Core/Src/stm32f4xx_hal_msp.d ./Core/Src/stm32f4xx_hal_msp.o ./Core/Src/stm32f4xx_hal_timebase_tim.d ./Core/Src/stm32f4xx_hal_timebase_tim.o ./Core/Src/stm32f4xx_it.d ./Core/Src/stm32f4xx_it.o ./Core/Src/syscalls.d ./Core/Src/syscalls.o ./Core/Src/sysmem.d ./Core/Src/sysmem.o ./Core/Src/system_stm32f4xx.d ./Core/Src/system_stm32f4xx.o ./Core/Src/tim.d ./Core/Src/tim.o ./Core/Src/usart.d ./Core/Src/usart.o ./Core/Src/usart_ring.d ./Core/Src/usart_ring.o
+	-$(RM) ./Core/Src/adc.d ./Core/Src/adc.o ./Core/Src/analog.d ./Core/Src/analog.o ./Core/Src/cJSON.d ./Core/Src/cJSON.o ./Core/Src/cmd.d ./Core/Src/cmd.o ./Core/Src/com.d ./Core/Src/com.o ./Core/Src/delay.d ./Core/Src/delay.o ./Core/Src/digital.d ./Core/Src/digital.o ./Core/Src/dma.d ./Core/Src/dma.o ./Core/Src/gpio.d ./Core/Src/gpio.o ./Core/Src/gsm.d ./Core/Src/gsm.o ./Core/Src/input_JSON.d ./Core/Src/input_JSON.o ./Core/Src/input_data.d ./Core/Src/input_data.o ./Core/Src/logic_func.d ./Core/Src/logic_func.o ./Core/Src/main.d ./Core/Src/main.o ./Core/Src/net.d ./Core/Src/net.o ./Core/Src/rs485.d ./Core/Src/rs485.o ./Core/Src/rtc.d ./Core/Src/rtc.o ./Core/Src/spi.d ./Core/Src/spi.o ./Core/Src/spi_interface.d ./Core/Src/spi_interface.o ./Core/Src/stm32f4xx_hal_msp.d ./Core/Src/stm32f4xx_hal_msp.o ./Core/Src/stm32f4xx_hal_timebase_tim.d ./Core/Src/stm32f4xx_hal_timebase_tim.o ./Core/Src/stm32f4xx_it.d ./Core/Src/stm32f4xx_it.o ./Core/Src/syscalls.d ./Core/Src/syscalls.o ./Core/Src/sysmem.d ./Core/Src/sysmem.o ./Core/Src/system_stm32f4xx.d ./Core/Src/system_stm32f4xx.o ./Core/Src/temperature_sensors.d ./Core/Src/temperature_sensors.o ./Core/Src/tim.d ./Core/Src/tim.o ./Core/Src/usart.d ./Core/Src/usart.o ./Core/Src/usart_ring.d ./Core/Src/usart_ring.o
 
 .PHONY: clean-Core-2f-Src
 
