@@ -159,7 +159,8 @@ void set_dido(char *D_IN, uint8_t VAR_IN, char *D_OUT, uint8_t VAR_OUT)
 						SEND_str("miss...\n");
 					}
 
-					//----------------------------------For debuging----------------------------------
+					//For Debug:
+					//------------------------------------------------
 					if(DiDo[i].D_IN == VHOD1)
 						SEND_str("1 - success...\n");
 					if(DiDo[i].VAR_IN == VAR_IN)
@@ -168,7 +169,7 @@ void set_dido(char *D_IN, uint8_t VAR_IN, char *D_OUT, uint8_t VAR_OUT)
 						SEND_str("3 - success...\n");
 					if(DiDo[i].VAR_OUT == VAR_OUT)
 						SEND_str("4 - success...\n");
-					//--------------------------------------------------------------------------------
+					//------------------------------------------------
 
 					break;
 				}
@@ -210,6 +211,7 @@ void set_vaido(char *A_IN, double RANGE_LOW, double RANGE_HIGH, char *D_OUT, uin
 					VAiDo[i].VAR_OUT = VAR_OUT;
 					VAiDo[i].OCD_Pin = OCD_Pin[j];
 
+					//For Debug:
 					//------------------------------------------------
 					char Buff[32];
 					SEND_str("SET VALUE: ");
@@ -251,6 +253,7 @@ void set_pwm(char *PWM_OUT, uint32_t D_CYCLE)
 			PWM[i].D_CYCLE[0] = (D_CYCLE * 100);
 			HAL_TIM_PWM_Start_DMA(&htim3, PWM_Channel[i], (uint32_t*)PWM[i].D_CYCLE, 1);
 
+			//For Debug:
 			//------------------------------------------------
 			char Buff[32];
 			SEND_str("PWM_OUT: ");
@@ -298,6 +301,7 @@ void set_temperature(char *ROM_RAW, double RANGE_TEMP_LOW, double RANGE_TEMP_HIG
 					TSiDo[i].VAR_OUT = VAR_OUT;
 					TSiDo[i].OCD_Pin = OCD_Pin[j];
 
+					//For Debug:
 					//------------------------------------------------
 					char Buff[32];
 					SEND_str("ROM_RAW: ");

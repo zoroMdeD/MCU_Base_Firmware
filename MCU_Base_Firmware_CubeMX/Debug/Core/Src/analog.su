@@ -1,3 +1,3 @@
-analog.c:9:8:Conv_ADC1	32	static
-analog.c:25:8:Conversion_ADC1	32	static
+analog.c:9:8:Conv_ADC1	40	static
+analog.c:25:8:Conversion_ADC1	40	static
 analog.c:35:10:Get_ADC1	16	static
