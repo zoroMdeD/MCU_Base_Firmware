@@ -4,6 +4,6 @@ input_data.c:73:6:CheckReWriteTSiDo	48	static
 input_data.c:123:6:set_dido	216	static
 input_data.c:186:6:set_vaido	216	static
 input_data.c:237:6:set_pwm	96	static
-input_data.c:276:6:set_temperature	136	static
-input_data.c:327:6:set_diao	24	static
-input_data.c:337:6:set_aiao	24	static
+input_data.c:276:6:set_temperature	168	static
+input_data.c:330:6:set_diao	24	static
+input_data.c:340:6:set_aiao	24	static

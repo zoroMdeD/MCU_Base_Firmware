@@ -299,17 +299,20 @@ void set_temperature(char *ROM_RAW, double RANGE_TEMP_LOW, double RANGE_TEMP_HIG
 					TSiDo[i].OCD_Pin = OCD_Pin[j];
 
 					//------------------------------------------------
-//					char Buff[32];
-//					SEND_str("SET VALUE: ");
-//					sprintf(Buff, "%.3f", adcValue[i]);
-//					SEND_str(Buff);
-//					SEND_str("\nRANGE_LOW: ");
-//					sprintf(Buff, "%.3f", VAiDo[i].RANGE_LOW);
-//					SEND_str(Buff);
-//					SEND_str("\nRANGE_HIGH: ");
-//					sprintf(Buff, "%.3f", VAiDo[i].RANGE_HIGH);
-//					SEND_str(Buff);
-//					SEND_str("\n");
+					char Buff[32];
+					SEND_str("ROM_RAW: ");
+					SEND_str(ROM_RAW);
+					SEND_str("\n");
+					SEND_str("SET VALUE: ");
+					sprintf(Buff, "%.2f", temper);
+					SEND_str(Buff);
+					SEND_str("\nRANGE_TEMP_LOW: ");
+					sprintf(Buff, "%.2f", TSiDo[i].RANGE_TEMP_LOW);
+					SEND_str(Buff);
+					SEND_str("\nRANGE_TEMP_HIGH: ");
+					sprintf(Buff, "%.2f", TSiDo[i].RANGE_TEMP_HIGH);
+					SEND_str(Buff);
+					SEND_str("\n");
 					//------------------------------------------------
 
 					break;
