@@ -11,8 +11,6 @@
 			},
 	"TIME":"1122334455"     
 }
-
-
 char *json[] = "{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_AIDO\",\"A_IN\":\"VHOD1\",\"RANGE_LOW\":\"0\",\"RANGE_HIGH\":\"0\",\"D_OUT\":\"VIHOD3\",\"VAR_OUT\":\"1\"},\"TIME\":\"1122334455\"}";
 
 
@@ -28,6 +26,132 @@ char *json[] = "{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_AI
 			},
 	"TIME":"1122334455"     
 }
-
-
 char *json[] = "{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_DIDO\",\"D_IN\":\"VHOD1\",\"VAR_IN\":\"0\",\"D_OUT\":\"VIHOD3\",\"VAR_OUT\":\"1\"},\"TIME\":\"1122334455\"}";
+
+
+{
+	"INSTRUCTION":"SET_PROGRAMM",
+	"COMMAND":
+			{
+				"TYPE":"SET_VAIDO",
+				"A_IN":"VHOD1",
+				"RANGE_LOW":"1.5",
+				"RANGE_HIGH":"2.5",
+				"D_OUT":"VIHOD4",
+				"VAR_OUT":"1"
+			},
+	"TIME":"1122334455"     
+}
+char *json[] = "{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_VAIDO\",\"A_IN\":\"VHOD1\",\"RANGE_LOW\":\"1.5\",\"RANGE_HIGH\":\"2.5\",\"D_OUT\":\"VIHOD4\",\"VAR_OUT\":\"1\"},\"TIME\":\"1122334455\"}";
+
+
+{
+	"INSTRUCTION":"SET_PROGRAMM",
+	"COMMAND":
+			{
+				"TYPE":"SET_VAIPO",
+				"A_IN":"VHOD1",
+				"RANGE_LOW":"1.5",
+				"RANGE_HIGH":"2.5",
+				"P_OUT":"PVIHOD1",
+				"DUTY_CYCLE":"12"	//in percent at 0 from 100
+			},
+	"TIME":"1122334455"     
+}
+char *json[] = "{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_VAIPO\",\"A_IN\":\"VHOD1\",\"RANGE_LOW\":\"1.5\",\"RANGE_HIGH\":\"2.5\",\"P_OUT\":\"PVIHOD1\",\"DUTY_CYCLE\":\"12\"},\"TIME\":\"1122334455\"}";
+
+
+{
+	"INSTRUCTION":"SET_PROGRAMM",
+	"COMMAND":
+			{
+				"TYPE":"SET_PWM",
+				"PWM_OUT":"PWM1",
+				"D_CYCLE":"12"	//in percent at 0 from 100
+			},
+	"TIME":"1122334455"     
+}
+char *json[] = "{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_PWM\",\"PWM_OUT\":\"PWM1\",\"D_CYCLE\":\"12\"},\"TIME\":\"1122334455\"}";
+
+
+{
+	"INSTRUCTION":"SET_PROGRAMM",
+	"COMMAND":
+			{
+				"TYPE":"SET_PWM_RANGE",
+				"PWM_OUT":"PWM1",
+				"D_CONVERSION_STEP":"1",	//set_param: 1, 10, 100
+				"D_CYCLE":"12",				//in percent at 0 from 100
+				"BREATHING_EFFECT":"YES",	//YES or NO
+				"DYNAMIC_PWM":"YES"			//YES or NO
+			},
+	"TIME":"1122334455"     
+}
+char *json[] = "{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_PWM_RANGE\",\"PWM_OUT\":\"PWM1\",\"D_CONVERSION_STEP\":\"1\",\"D_CYCLE\":\"12\",\"BREATHING_EFFECT\":\"YES\",\"DYNAMIC_PWM\":\"YES\"},\"TIME\":\"1122334455\"}";
+
+
+//---------------------------------------------------------------------ТЕМПЕРАТУРНЫЕ ПРОФИЛИ---------------------------------------------------------------------
+
+//Установка температурного профиля:
+{
+	"INSTRUCTION":"SET_PROGRAMM",
+	"COMMAND":
+			{
+				"TYPE":"SET_TEMP_PROFILE",
+				"SENSOR":"1",
+				"RANGE_TEMP_LOW":"+28",
+				"RANGE_TEMP_HIGH":"+50",
+				"D_OUT":"VIHOD1",
+				"VAR_OUT":"1"
+			},
+	"TIME":"1122334455"     
+}
+char *json[] = "{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_TEMP_PROFILE\",\"SENSOR\":\"1\",\"RANGE_TEMP_LOW\":\"+28\",\"RANGE_TEMP_HIGH\":\"+50\",\"D_OUT\":\"VIHOD1\",\"VAR_OUT\":\"1\"},\"TIME\":\"1122334455\"}";
+
+OR
+
+{
+	"INSTRUCTION":"SET_PROGRAMM",
+	"COMMAND":
+			{
+				"TYPE":"SET_TEMP_PROFILE",
+				"ROM_RAW":"28790E950C000069",
+				"RANGE_TEMP_LOW":"+28",
+				"RANGE_TEMP_HIGH":"+50",
+				"D_OUT":"VIHOD1",
+				"VAR_OUT":"1"
+			},
+	"TIME":"1122334455"     
+}
+char *json[] = "{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_TEMP_PROFILE\",\"SENSOR\":\"[0x28, 0x79, 0x0E, 0x95, 0x0C, 0x00, 0x00, 0x69]\",\"RANGE_TEMP_LOW\":\"+28\",\"RANGE_TEMP_HIGH\":\"+50\",\"D_OUT\":\"VIHOD1\",\"VAR_OUT\":\"1\"},\"TIME\":\"1122334455\"}";
+
+
+//Запрос сервера:
+{
+	"INSTRUCTION":"GET_INFO",
+	"COMMAND":
+			{
+				"TYPE":"GET_TEMP_PROFILE",
+				"SENSOR":"1",
+			},
+	"TIME":"1122334455"     
+}
+char *json[] = "{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_PWM_RANGE\",\"PWM_OUT\":\"PWM1\",\"D_CONVERSION_STEP\":\"1\",\"D_CYCLE\":\"12\",\"BREATHING_EFFECT\":\"YES\",\"DYNAMIC_PWM\":\"YES\"},\"TIME\":\"1122334455\"}";
+
+//Ответ контроллера:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

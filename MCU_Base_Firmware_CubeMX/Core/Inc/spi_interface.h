@@ -102,7 +102,11 @@
 //----------------------Запрос даты и времени-----------------------
 #define MCU_TIME	0x67
 //------------------------------------------------------------------
-
+void ReWriteOCD(void);
+void ReWriteDIN(void);
+void ReWriteAIN(void);
+void ReWritePWM(void);
+void ReWrite1Wire(void);
 void SPI_available(void);
 
 #endif /* INC_SPI_INTERFACE_H_ */

@@ -20,14 +20,22 @@ char *INSTRUCTION;		//Инструкция
 char *TYPE;				//Комманда
 
 //Переменные уловных выражений
-char *D_IN;				//Цифровой вход
-char *D_OUT;			//Цифровой выход
-char *VAR_IN;			//Переменная уровня цифрового входа
-char *VAR_OUT;			//Переменная уровня цифрового выхода
-char *A_IN;				//Аналоговый вход
-char *A_OUT;			//Аналоговый выход
-char *RANGE_LOW;		//Переменная нижней границы аналогового входа
-char *RANGE_HIGH;		//Переменная верхней границы аналогового выхода
+char *D_IN;					//Цифровой вход
+char *D_OUT;				//Цифровой выход
+char *VAR_IN;				//Переменная уровня цифрового входа
+char *VAR_OUT;				//Переменная уровня цифрового выхода
+char *A_IN;					//Аналоговый вход
+char *A_OUT;				//Аналоговый выход
+char *RANGE_LOW;			//Переменная нижней границы аналогового входа
+char *RANGE_HIGH;			//Переменная верхней границы аналогового выхода
+char *PWM_OUT;				//Выход ШИМ
+char *D_CYCLE;				//Коэффициент заполнения ШИМ
+char *D_CONVERSION_STEP;	//Шаг преобразования ШИМ
+char *BREATHING_EFFECT;		//Эффект "дыхания"
+char *DYNAMIC_PWM;			//Динамический ШИМ?
+char *ROM_RAW;				//Уникальный идентификатор датчика температуры
+char *RANGE_TEMP_LOW;		//Нижняя границы температуры
+char *RANGE_TEMP_HIGH;		//Верхняя граница температуры
 
 //Массивы параметров
 char *DigitalParamMass;					//Массив для значений цифровых выходов (8 параметров)
@@ -44,9 +52,7 @@ char paramValue[8];
 char *test;
 
 
-char a[10];
 uint8_t b;
-char c[10];
 uint8_t d;
 
 //Функция разбора подстроки значений параметра
@@ -84,6 +90,7 @@ void json_input(char *text)
 		{
 			cJSON *sType = cJSON_GetObjectItem(cJSON_GetObjectItem(json, "COMMAND"), "TYPE");
 			TYPE = sType->valuestring;
+
 			if(strcmp(TYPE, "SET_DIDO") == 0)	//Включить/выключить цифровой выход если цифровой вход = значение(уровень)
 			{
 				cJSON *s1 = cJSON_GetObjectItem(cJSON_GetObjectItem(json, "COMMAND"), "D_IN");
@@ -96,39 +103,25 @@ void json_input(char *text)
 				D_OUT = s3->valuestring;
 				VAR_OUT = s4->valuestring;
 
-				for(int i = 1, j = 0; i < strlen(D_IN); i++)
-				{
-					if(i % 2)
-					{
-						a[j] = D_IN[i];
-						j++;
-					}
-				}
-				for(int i = 1, j = 0; i < strlen(D_OUT); i++)
-				{
-					if(i % 2)
-					{
-						c[j] = D_OUT[i];
-						j++;
-					}
-				}
-
-				b = (uint8_t)(atoi(VAR_IN));
-				d = (uint8_t)(atoi(VAR_OUT));
-
 				set_dido(D_IN, (uint8_t)(atoi(VAR_IN)), D_OUT, (uint8_t)(atoi(VAR_OUT)));
 
+				//---------------------------------QA---------------------------------
 				SEND_str("\n");
 				SEND_str(TYPE);
 				SEND_str("\n");
 				SEND_str(D_IN);
+				SEND_str(": ");
+				USART_Tx(D_IN[4]);
 				SEND_str("\n");
 				SEND_str(VAR_IN);
 				SEND_str("\n");
 				SEND_str(D_OUT);
+				SEND_str(": ");
+				USART_Tx(D_OUT[5]);
 				SEND_str("\n");
 				SEND_str(VAR_OUT);
 				SEND_str("\n");
+				//------------------------------------------------------------------
 
 				cJSON_Delete(json);
 				free(stime);
@@ -139,7 +132,7 @@ void json_input(char *text)
 				free(s3);
 				free(s4);
 			}
-			else if(strcmp(TYPE, "SET_AIDO") == 0)	//Включить/выключить один цифровой выход если аналоговый вход в интервале значений
+			else if(strcmp(TYPE, "SET_VAIDO") == 0)	//Включить/выключить один цифровой выход если аналоговый вход в интервале значений
 			{
 				cJSON *s1 = cJSON_GetObjectItem(cJSON_GetObjectItem(json, "COMMAND"), "A_IN");
 				cJSON *s2 = cJSON_GetObjectItem(cJSON_GetObjectItem(json, "COMMAND"), "RANGE_LOW");
@@ -152,6 +145,17 @@ void json_input(char *text)
 				D_OUT = s4->valuestring;
 				VAR_OUT = s5->valuestring;
 
+				if(strcmp(A_IN, "VHOD1") == 0)
+					SelectChannelOne;
+				else if(strcmp(A_IN, "VHOD2") == 0)
+					SelectChannelTwo;
+				else if(strcmp(A_IN, "VHOD3") == 0)
+					SelectChannelThree;
+				else if(strcmp(A_IN, "VHOD4") == 0)
+					SelectChannelFour;
+
+				set_vaido(A_IN, atof(RANGE_LOW), atof(RANGE_HIGH), D_OUT, (uint8_t)(atoi(VAR_OUT)));
+				//---------------------------------QA---------------------------------
 				SEND_str("\n");
 				SEND_str(TYPE);
 				SEND_str("\n");
@@ -160,6 +164,70 @@ void json_input(char *text)
 				SEND_str(RANGE_LOW);
 				SEND_str("\n");
 				SEND_str(RANGE_HIGH);
+				SEND_str("\n");
+				SEND_str(D_OUT);
+				SEND_str("\n");
+				SEND_str(VAR_OUT);
+				SEND_str("\n");
+				//------------------------------------------------------------------
+				cJSON_Delete(json);
+				free(stime);
+				free(sInstruction);
+				free(sType);
+				free(s1);
+				free(s2);
+				free(s3);
+				free(s4);
+				free(s5);
+			}
+			else if(strcmp(TYPE, "SET_PWM") == 0)	//Выставить коэффициент заполнения на ШИМ
+			{
+				cJSON *s1 = cJSON_GetObjectItem(cJSON_GetObjectItem(json, "COMMAND"), "PWM_OUT");
+				cJSON *s2 = cJSON_GetObjectItem(cJSON_GetObjectItem(json, "COMMAND"), "D_CYCLE");
+				PWM_OUT = s1->valuestring;
+				D_CYCLE = s2->valuestring;
+
+				set_pwm(PWM_OUT, (uint32_t)(atoi(D_CYCLE)));
+				//---------------------------------QA---------------------------------
+				SEND_str("\n");
+				SEND_str(TYPE);
+				SEND_str("\n");
+				SEND_str(PWM_OUT);
+				SEND_str("\n");
+				SEND_str(D_CYCLE);
+				SEND_str("\n");
+				//------------------------------------------------------------------
+				cJSON_Delete(json);
+				free(stime);
+				free(sInstruction);
+				free(sType);
+				free(s1);
+				free(s2);
+			}
+			else if(strcmp(TYPE, "SET_TEMP_PROFILE") == 0)	//Установить профиль температуры: Если температура в диапазоне значений то установить цыфровой выход(OCD)
+			{
+				cJSON *s1 = cJSON_GetObjectItem(cJSON_GetObjectItem(json, "COMMAND"), "ROM_RAW");
+				cJSON *s2 = cJSON_GetObjectItem(cJSON_GetObjectItem(json, "COMMAND"), "RANGE_TEMP_LOW");
+				cJSON *s3 = cJSON_GetObjectItem(cJSON_GetObjectItem(json, "COMMAND"), "RANGE_TEMP_HIGH");
+				cJSON *s4 = cJSON_GetObjectItem(cJSON_GetObjectItem(json, "COMMAND"), "D_OUT");
+				cJSON *s5 = cJSON_GetObjectItem(cJSON_GetObjectItem(json, "COMMAND"), "VAR_OUT");
+
+				ROM_RAW = s1->valuestring;
+				RANGE_TEMP_LOW = s2->valuestring;
+				RANGE_TEMP_HIGH = s3->valuestring;
+				D_OUT = s4->valuestring;
+				VAR_OUT = s5->valuestring;
+
+				set_temperature(ROM_RAW, atof(RANGE_TEMP_LOW), atof(RANGE_TEMP_HIGH), D_OUT, (uint8_t)(atoi(VAR_OUT)));
+
+				SEND_str("\n");
+				SEND_str(TYPE);
+				SEND_str("\n");
+				SEND_str(ROM_RAW);
+				SEND_str("\n");
+				SEND_str(RANGE_TEMP_LOW);
+				SEND_str("\n");
+				SEND_str(RANGE_TEMP_HIGH);
 				SEND_str("\n");
 				SEND_str(D_OUT);
 				SEND_str("\n");
@@ -221,6 +289,7 @@ void json_input(char *text)
 				free(sType);
 			}
 		}
+
 		else if(strcmp(INSTRUCTION, "SET_PERIPHERALS") == 0)
 		{
 			cJSON *sType = cJSON_GetObjectItem(cJSON_GetObjectItem(json, "COMMAND"), "TYPE");
@@ -286,11 +355,7 @@ void json_input(char *text)
 					Status_OCD[i] = (test[i] - 0x30);
 				}
 
-				//-------------------------For testing-------------------------
-				SEND_str("\n");
-				SEND_str(TYPE);
-				SEND_str("\n");
-				//-------------------------------------------------------------
+				ReWriteOCD();
 
 				cJSON_Delete(json);
 				free(stime);

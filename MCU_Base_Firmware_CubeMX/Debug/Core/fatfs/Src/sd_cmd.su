@@ -1,0 +1,3 @@
+sd_cmd.c:22:6:my_init_card	8	static
+sd_cmd.c:28:6:my_read_file	80	static
+sd_cmd.c:79:6:my_write_file	80	static

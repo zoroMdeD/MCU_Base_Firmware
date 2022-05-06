@@ -1,1 +1,6 @@
-spi_interface.c:34:6:SPI_available	8	static
+spi_interface.c:46:6:ReWriteOCD	8	static
+spi_interface.c:82:6:ReWriteDIN	8	static
+spi_interface.c:118:6:ReWriteAIN	8	static
+spi_interface.c:138:6:ReWritePWM	8	static
+spi_interface.c:158:6:ReWrite1Wire	8	static
+spi_interface.c:171:6:SPI_available	8	static

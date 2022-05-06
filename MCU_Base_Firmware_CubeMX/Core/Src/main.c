@@ -20,6 +20,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "adc.h"
+#include "dma.h"
 #include "lwip.h"
 #include "rtc.h"
 #include "spi.h"
@@ -30,6 +31,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "net.h"
+//#include "../../Core/fatfs/Inc/spi_sd.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -59,18 +61,35 @@ extern uint8_t SPI_tx_buf[1];
 uint8_t ReInitFlag = 0;
 uint8_t flag_two = 1;
 
-char Buff[32];
-
+//char Buff[32];
+char trans_str[64] = {0,};
+volatile uint16_t adc[4] = {0,}; // у нас 4 канала поэтому массив из 4 элементов
+double adcValue[4] = {0,};
+volatile uint8_t flag = 0;
 
 extern char a[32];
 extern uint8_t b;
 extern char c[32];
 extern uint8_t d;
 
+////----------------FATfs----------------------
+//volatile uint16_t Timer1=0;
+////-------------------------------------------
+
 //RTC_TimeTypeDef sTime = {0};
 //RTC_DateTypeDef DateToUpdate = {0};
 //
 //char trans_str[64] = {0,};
+
+float temper;
+uint8_t Dev_ID[AMT_TEMP_SENS][8]={0};
+uint8_t Dev_Cnt;
+char Device_RAW_ROM[AMT_TEMP_SENS][20];
+
+uint8_t Time_Counter_Init = 0;
+uint8_t Time_Counter_Read = 0;
+bool OneWire_Test_Flag_Init = false;
+bool OneWire_Test_Flag_Read = false;
 
 /* USER CODE END PV */
 
@@ -92,7 +111,6 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -113,6 +131,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_ADC1_Init();
   MX_SPI1_Init();
   MX_SPI2_Init();
@@ -121,115 +140,116 @@ int main(void)
   MX_USART2_UART_Init();
   MX_USART3_UART_Init();
   MX_LWIP_Init();
+  MX_TIM4_Init();
   MX_RTC_Init();
+  MX_TIM6_Init();
   /* USER CODE BEGIN 2 */
 
 	HAL_Delay(5000);
+	DWT_Init();
 
-	EN_Interrupt();	//Для дебага по USART3
+	EN_Interrupt();		//Для дебага по USART3
 
-	/*
-	//----------------GSM_test----------------
-	INIT_GSM();
-	//----------------------------------------
-	 */
-	//Для организации обмена данными по блютуз нужно включить:
-	//EN_Interrupt(); INIT_GSM(); GSM_RxCpltCallback();(Вкл в main)
 
-	///*
-	//----------------ETH_test----------------
+	//----------------GSM_test------------------
+//	INIT_GSM();
+	//------------------------------------------
+
+												//Для организации обмена данными по блютуз нужно включить:
+												//EN_Interrupt(); INIT_GSM(); GSM_RxCpltCallback();(Вкл в main)
+
+	//----------------ETH_test------------------
 //	net_ini();
-	//----------------------------------------
-	//*/
-	//Для организации обмена данными по ethernet нужно включить:
-	//net_ini(); MX_LWIP_Process();(Вкл в main) также закоментить в файле stm32f4xx_it.c строчки для отладки через DEBUG_main();
+	//------------------------------------------
 
-	/*
-	//----------------ADC_test----------------
-	HAL_GPIO_WritePin(GPIOE, S1_Pin, RESET);												//Вход аналогового комутатора - выход линии 1
-	//----------------------------------------
-	*/
+												//Для организации обмена данными по ethernet нужно включить:
+												//net_ini(); MX_LWIP_Process();(Вкл в main) также закоментить в файле stm32f4xx_it.c строчки для отладки через DEBUG_main();
 
-//	HAL_UART_Receive_IT(&huart3,(uint8_t*)str_ethernet,1);								//Настройка прерывания COM для отладки ETH (!?)
+	//----------------ADC_test------------------
+	//Допилить фичу переключения аналогового комутатора !!!
+	HAL_GPIO_WritePin(GPIOE, S1_Pin, RESET);	//Вход аналогового комутатора - выход линии 1
+	HAL_GPIO_WritePin(GPIOE, S2_Pin, RESET);
+	HAL_GPIO_WritePin(GPIOE, S3_Pin, RESET);
+	HAL_GPIO_WritePin(GPIOE, S4_Pin, RESET);
 
-	HAL_SPI_TransmitReceive_IT(&hspi2, (uint8_t *)SPI_tx_buf, (uint8_t *)SPI_rx_buf, 1);	//Настройка прерывания по spi для МК
+	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)&adc, 4);		//Стартуем АЦП
+	HAL_TIM_OC_Start(&htim4, TIM_CHANNEL_4);
+	//------------------------------------------
+
+	//-------------1-WIRE_test------------------
+	UpdateTempSens();
+	//------------------------------------------
+
+
+//	HAL_UART_Receive_IT(&huart3,(uint8_t*)str_ethernet,1);		//Настройка прерывания COM для отладки ETH (!?)
+
+//	HAL_SPI_TransmitReceive_IT(&hspi2, (uint8_t *)SPI_tx_buf, (uint8_t *)SPI_rx_buf, 1);	//Настройка прерывания по spi для МК
+
+	//----------------PWM_test------------------
+	//------------------------------------------
+	//---------------FATfs----------------------
+	my_init_card();
+	SEND_str("Init sd card -> success\n");
+	//------------------------------------------
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 	while (1)
 	{
-		/*
 		//----------------RCT_test----------------
-        HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN); // RTC_FORMAT_BIN , RTC_FORMAT_BCD
-        snprintf(trans_str, 63, "Time %d:%d:%d\n", sTime.Hours, sTime.Minutes, sTime.Seconds);
-        //HAL_UART_Transmit(&huart1, (uint8_t*)trans_str, strlen(trans_str), 1000);
-        SEND_str(trans_str);
-
-        HAL_RTC_GetDate(&hrtc, &DateToUpdate, RTC_FORMAT_BIN);
-        snprintf(trans_str, 63, "Date %d-%d-20%d\n", DateToUpdate.Date, DateToUpdate.Month, DateToUpdate.Year);
-        //HAL_UART_Transmit(&huart1, (uint8_t*)trans_str, strlen(trans_str), 1000);
-        SEND_str(trans_str);
-    	HAL_Delay(1000);
+//        HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN); // RTC_FORMAT_BIN , RTC_FORMAT_BCD
+//        snprintf(trans_str, 63, "Time %d:%d:%d\n", sTime.Hours, sTime.Minutes, sTime.Seconds);
+//        //HAL_UART_Transmit(&huart1, (uint8_t*)trans_str, strlen(trans_str), 1000);
+//        SEND_str(trans_str);
+//
+//        HAL_RTC_GetDate(&hrtc, &DateToUpdate, RTC_FORMAT_BIN);
+//        snprintf(trans_str, 63, "Date %d-%d-20%d\n", DateToUpdate.Date, DateToUpdate.Month, DateToUpdate.Year);
+//        //HAL_UART_Transmit(&huart1, (uint8_t*)trans_str, strlen(trans_str), 1000);
+//        SEND_str(trans_str);
+//    	HAL_Delay(1000);
     	//----------------------------------------
-    	*/
 
-		/*
 		//---------------RS485_test---------------
-		RS485_Tx;
-			HAL_Delay(50);
-			SEND_RS485_str("Test_addr\n");
-			HAL_Delay(50);
-		RS485_Rx;
-
-		RS485_main();				//Обработчик принятия данных по rs485
+//		RS485_Tx;
+//			HAL_Delay(50);
+//			SEND_RS485_str("Test_addr\n");
+//			HAL_Delay(50);
+//		RS485_Rx;
+//
+//		RS485_main();				//Обработчик принятия данных по rs485
 		//----------------------------------------
-		*/
 
-		///*
 		//----------------ETH_test----------------
 //		MX_LWIP_Process();			//Обработчик передачи данных по ETH
 		//----------------------------------------
-		//*/
 
-		/*
 		//----------------GSM_test----------------
-		GSM_RxCpltCallback();		//Обработчик принятых данных от модуля GSM
+//		GSM_RxCpltCallback();		//Обработчик принятых данных от модуля GSM
 		//----------------------------------------
-		 */
 
-		///*
 		//--------------SPI_test_MK---------------
-		SPI_available();
+//		SPI_available();			//Необходимо переделать так чтобы на дисплее был только статус вывода.
 		//----------------------------------------
-		//*/
 
-		/*
 		//----------------ADC_test----------------
-		sprintf(Buff, "%.3f", Conv_ADC1());
-		SEND_str(Buff);
-		SEND_str("\n");
-		HAL_Delay(2000);
 		//----------------------------------------
-		*/
 
+		//----------------PWM_test----------------
+		//----------------------------------------
 
 		//------------------DEBUG-----------------
 		DEBUG_main();
 		//----------------------------------------
 
 		//--------------ReINIT_GPIO---------------
-		if(ReInitFlag)
-		{
-			HAL_Delay(250);
-			ReInitFlag = 0;
-			CheckReWrite();
-			SEND_str("interrupt...");
-			SEND_str("\n");
-		}
+		CheckReWriteVAiDo();
 		//----------------------------------------
 
-
+		//----------TEST_EXAMPLE_1-WIRE-----------
+//		TempSensMain();
+		CheckReWriteTSiDo();
+		//----------------------------------------
 
     /* USER CODE END WHILE */
 
@@ -310,12 +330,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 }
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-	if(!ReInitFlag)
-		ReInitFlag = 1;
-	else
-	{
-		__NOP();
-	}
+	CheckReWriteDiDo();
 }
 void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 {
@@ -330,6 +345,16 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 	    }
 	}
 }
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
+{
+    if(hadc->Instance == ADC1)
+    {
+        adcValue[0] = Conversion_ADC1((uint16_t)adc[0]);
+        adcValue[1] = Conversion_ADC1((uint16_t)adc[1]);
+        adcValue[2] = Conversion_ADC1((uint16_t)adc[2]);
+        adcValue[3] = Conversion_ADC1((uint16_t)adc[3]);
+    }
+}
 /* USER CODE END 4 */
 
 /**
@@ -343,6 +368,23 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
   /* USER CODE BEGIN Callback 0 */
+    if(htim->Instance == TIM6) //check if the interrupt comes from TIM6
+    {
+		Time_Counter_Init++;
+		Time_Counter_Read++;
+
+		if(Time_Counter_Init == 16)		//Запрос данных каждую 0.8 сек (old 16: 83 to 49999)
+        {
+	    	OneWire_Test_Flag_Init = true;
+        }
+		if(Time_Counter_Read == 32)	//Запрос данных каждую 1.6 сек (old 32: 83 to 49999))
+        {
+	    	OneWire_Test_Flag_Read = true;
+
+	    	Time_Counter_Init = 0;
+	    	Time_Counter_Read = 0;
+        }
+    }
 
   /* USER CODE END Callback 0 */
   if (htim->Instance == TIM1) {

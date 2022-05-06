@@ -38,7 +38,15 @@ Core/Src/input_data.o: ../Core/Src/input_data.c ../Core/Inc/input_data.h \
  ../Core/Inc/gsm.h ../Core/Inc/com.h ../Core/Inc/rs485.h \
  ../Core/Inc/analog.h ../Core/Inc/digital.h ../Core/Inc/spi_interface.h \
  ../Core/Inc/usart_ring.h ../Core/Inc/logic_func.h ../Core/Inc/cJSON.h \
- ../Core/Inc/input_JSON.h ../Core/Inc/input_data.h
+ ../Core/Inc/input_JSON.h ../Core/Inc/input_data.h \
+ ../Core/Inc/temperature_sensors.h ../Core/Inc/delay.h \
+ ../Core/Inc/../../Core/fatfs/Inc/sd_cmd.h ../Core/Inc/main.h \
+ ../Core/Inc/../../Core/fatfs/Inc/spi_sd.h \
+ ../Core/Inc/../../Core/fatfs/Inc/diskio.h \
+ ../Core/Inc/../../Core/fatfs/Inc/integer.h \
+ ../Core/Inc/../../Core/fatfs/Inc/ff.h \
+ ../Core/Inc/../../Core/fatfs/Inc/ffconf.h \
+ ../Core/Inc/../fatfs/Inc/sd_main.h ../Core/Inc/../Inc/main.h
 
 ../Core/Inc/input_data.h:
 
@@ -145,3 +153,25 @@ Core/Src/input_data.o: ../Core/Src/input_data.c ../Core/Inc/input_data.h \
 ../Core/Inc/input_JSON.h:
 
 ../Core/Inc/input_data.h:
+
+../Core/Inc/temperature_sensors.h:
+
+../Core/Inc/delay.h:
+
+../Core/Inc/../../Core/fatfs/Inc/sd_cmd.h:
+
+../Core/Inc/main.h:
+
+../Core/Inc/../../Core/fatfs/Inc/spi_sd.h:
+
+../Core/Inc/../../Core/fatfs/Inc/diskio.h:
+
+../Core/Inc/../../Core/fatfs/Inc/integer.h:
+
+../Core/Inc/../../Core/fatfs/Inc/ff.h:
+
+../Core/Inc/../../Core/fatfs/Inc/ffconf.h:
+
+../Core/Inc/../fatfs/Inc/sd_main.h:
+
+../Core/Inc/../Inc/main.h:

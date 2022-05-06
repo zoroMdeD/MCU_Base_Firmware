@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2022 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under Ultimate Liberty license
@@ -50,7 +50,7 @@ void MX_GPIO_Init(void)
   __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(FLAG_MCU_GPIO_Port, FLAG_MCU_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOE, FLAG_MCU_Pin|CS2__Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(PWRON_GPIO_Port, PWRON_Pin, GPIO_PIN_RESET);
@@ -64,21 +64,21 @@ void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOE, O3_Pin|O4_Pin|O5_Pin|O6_Pin
                           |O7_Pin|S2_Pin|S3_Pin|S4_Pin
-                          |S1_Pin|WP__Pin|CS2__Pin, GPIO_PIN_RESET);
+                          |S1_Pin|WP__Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(PKEY_GPIO_Port, PKEY_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOD, WR0_Pin|WR1_Pin|PWR0_Pin|PWR1_Pin
-                          |RS485_DE_Pin|RS485_RE__Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOD, WR0_Pin|WR1_Pin|PWR1_Pin|RS485_DE_Pin
+                          |RS485_RE__Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : PEPin PEPin PEPin PEPin
                            PEPin PEPin PEPin PEPin
-                           PEPin PEPin PEPin PEPin */
+                           PEPin PEPin PEPin */
   GPIO_InitStruct.Pin = FLAG_MCU_Pin|O3_Pin|O4_Pin|O5_Pin
                           |O6_Pin|O7_Pin|S2_Pin|S3_Pin
-                          |S4_Pin|S1_Pin|WP__Pin|CS2__Pin;
+                          |S4_Pin|S1_Pin|WP__Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
@@ -119,10 +119,15 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PDPin PDPin PDPin PDPin
-                           PDPin PDPin */
-  GPIO_InitStruct.Pin = WR0_Pin|WR1_Pin|PWR0_Pin|PWR1_Pin
-                          |RS485_DE_Pin|RS485_RE__Pin;
+  /*Configure GPIO pin : PtPin */
+  GPIO_InitStruct.Pin = WR0_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+  HAL_GPIO_Init(WR0_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PDPin PDPin PDPin PDPin */
+  GPIO_InitStruct.Pin = WR1_Pin|PWR1_Pin|RS485_DE_Pin|RS485_RE__Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
@@ -133,6 +138,13 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(CD_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PtPin */
+  GPIO_InitStruct.Pin = CS2__Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+  HAL_GPIO_Init(CS2__GPIO_Port, &GPIO_InitStruct);
 
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI9_5_IRQn, 0, 0);
