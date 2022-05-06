@@ -145,7 +145,7 @@ int main(void)
   MX_TIM6_Init();
   /* USER CODE BEGIN 2 */
 
-	HAL_Delay(5000);
+	HAL_Delay(1000);
 	DWT_Init();
 
 	EN_Interrupt();		//Для дебага по USART3
@@ -167,7 +167,9 @@ int main(void)
 
 	//----------------ADC_test------------------
 	//Допилить фичу переключения аналогового комутатора !!!
-	HAL_GPIO_WritePin(GPIOE, S1_Pin, RESET);	//Вход аналогового комутатора - выход линии 1
+//	char Buff[32];
+
+	HAL_GPIO_WritePin(GPIOE, S1_Pin, RESET);		//Вход аналогового комутатора - выход линии 1
 	HAL_GPIO_WritePin(GPIOE, S2_Pin, RESET);
 	HAL_GPIO_WritePin(GPIOE, S3_Pin, RESET);
 	HAL_GPIO_WritePin(GPIOE, S4_Pin, RESET);
@@ -233,6 +235,11 @@ int main(void)
 		//----------------------------------------
 
 		//----------------ADC_test----------------
+//		sprintf(Buff, "%.5f", adcValue[0]);
+////		sprintf(Buff, "%d", (uint16_t)adc[0]);
+//		SEND_str(Buff);
+//		SEND_str("\n");
+//		HAL_Delay(2000);
 		//----------------------------------------
 
 		//----------------PWM_test----------------

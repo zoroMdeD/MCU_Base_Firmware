@@ -17,8 +17,8 @@ double Conv_ADC1(void)
 	ADC_value = HAL_ADC_GetValue(&hadc1);
 
 	Value = (ADC_value * Resolution);
-	Value = (Value * 3.2323232323232);	//Напряжение
-//	Value = (Value / 60);		//Ток
+//	Value = (Value * 3.2323232323232);	//Напряжение
+	Value = (Value / 70);		//Ток
 
 	return Value;
 }
@@ -29,6 +29,7 @@ double Conversion_ADC1(uint16_t ADC_value)
 
 	Value = (ADC_value * Resolution);
 	Value = (Value * 3.2323232323232);	//Напряжение
+//	Value = (Value / 60);				//Ток
 
 	return Value;
 }

@@ -46,9 +46,9 @@ void set_temperature(char *ROM_RAW, double RANGE_TEMP_LOW, double RANGE_TEMP_HIG
  * S3_Pin = 0 - Включено измерение тока на 5-ом канале измерения ADC1_IN5 || S3_Pin = 1 - Включено измерение напряжения на 5-ом канале измерения ADC1_IN5
  * S4_Pin = 0 - Включено измерение тока на 6-ом канале измерения ADC1_IN6 || S4_Pin = 1 - Включено измерение напряжения на 6-ом канале измерения ADC1_IN6
  */
-#define SelectChannelOne	HAL_GPIO_WritePin(GPIOE, S1_Pin, SET)
-#define SelectChannelTwo	HAL_GPIO_WritePin(GPIOE, S2_Pin, SET)
-#define SelectChannelThree	HAL_GPIO_WritePin(GPIOE, S3_Pin, SET)
-#define SelectChannelFour	HAL_GPIO_WritePin(GPIOE, S4_Pin, SET)
+#define SelectChannelOne(x)		HAL_GPIO_WritePin(GPIOE, S1_Pin, x)
+#define SelectChannelTwo(x)		HAL_GPIO_WritePin(GPIOE, S2_Pin, x)
+#define SelectChannelThree(x)	HAL_GPIO_WritePin(GPIOE, S3_Pin, x)
+#define SelectChannelFour(x)	HAL_GPIO_WritePin(GPIOE, S4_Pin, x)
 
 #endif /* INC_DIGITAL_SEND_H_ */

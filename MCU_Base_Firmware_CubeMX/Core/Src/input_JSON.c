@@ -146,13 +146,13 @@ void json_input(char *text)
 				VAR_OUT = s5->valuestring;
 
 				if(strcmp(A_IN, "VHOD1") == 0)
-					SelectChannelOne;
+					SelectChannelOne(SET);
 				else if(strcmp(A_IN, "VHOD2") == 0)
-					SelectChannelTwo;
+					SelectChannelTwo(SET);
 				else if(strcmp(A_IN, "VHOD3") == 0)
-					SelectChannelThree;
+					SelectChannelThree(SET);
 				else if(strcmp(A_IN, "VHOD4") == 0)
-					SelectChannelFour;
+					SelectChannelFour(SET);
 
 				set_vaido(A_IN, atof(RANGE_LOW), atof(RANGE_HIGH), D_OUT, (uint8_t)(atoi(VAR_OUT)));
 				//---------------------------------QA---------------------------------
