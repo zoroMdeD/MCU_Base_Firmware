@@ -6,7 +6,7 @@
 //  * @brief   
 //  ******************************************************************************
 
-#include "spi_sd.h"
+#include "../../Core/fatfs/Inc/spi_sd.h"
 
 
 uint8_t  SDHC = 0;
@@ -405,7 +405,7 @@ DSTATUS disk_initialize (
 	if (Stat & STA_NODISK) return Stat;	/* No card in the socket */
 
 //	spi_init();
-//	CS_HIGH();
+	CS_HIGH();
 	power_on();							/* Force socket power on */
 	FCLK_SLOW();
 	CS_LOW();
@@ -726,6 +726,3 @@ uint32_t get_fattime (void)
 }
 
 /* End Of File ---------------------------------------------------------------*/
-
-
-

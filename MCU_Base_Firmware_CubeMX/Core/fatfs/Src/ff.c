@@ -96,8 +96,8 @@
 / Jan 24,'13 R0.09b Added f_setlabel() and f_getlabel(). (_USE_LABEL = 1)
 /---------------------------------------------------------------------------*/
 
-#include "ff.h"			/* FatFs configurations and declarations */
-#include "diskio.h"		/* Declarations of low level disk I/O functions */
+#include "../../Core/fatfs/Inc/ff.h"			/* FatFs configurations and declarations */
+#include "../../Core/fatfs/Inc/diskio.h"		/* Declarations of low level disk I/O functions */
 
 
 /*--------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 cJSON.c:37:13:cJSON_GetErrorPtr	4	static
-cJSON.c:39:12:cJSON_strcasecmp	32	static
+cJSON.c:39:12:cJSON_strcasecmp	24	static
 cJSON.c:49:14:cJSON_strdup	24	static
 cJSON.c:60:6:cJSON_InitHooks	16	static
 cJSON.c:73:15:cJSON_New_Item	16	static
@@ -8,7 +8,7 @@ cJSON.c:96:20:parse_number	56	static
 cJSON.c:117:12:pow2gt	16	static
 cJSON.c:121:14:ensure	24	static
 cJSON.c:138:12:update	32	static
-cJSON.c:147:14:print_number	80	static
+cJSON.c:147:14:print_number	72	static
 cJSON.c:177:17:parse_hex4	24	static
 cJSON.c:192:20:parse_string	40	static
 cJSON.c:252:14:print_string_ptr	40	static
@@ -46,13 +46,13 @@ cJSON.c:692:8:cJSON_CreateNull	16	static
 cJSON.c:693:8:cJSON_CreateTrue	16	static
 cJSON.c:694:8:cJSON_CreateFalse	16	static
 cJSON.c:695:8:cJSON_CreateBool	24	static
-cJSON.c:696:8:cJSON_CreateNumber	32	static
+cJSON.c:696:8:cJSON_CreateNumber	24	static
 cJSON.c:697:8:cJSON_CreateString	24	static
 cJSON.c:698:8:cJSON_CreateArray	16	static
 cJSON.c:699:8:cJSON_CreateObject	16	static
-cJSON.c:702:8:cJSON_CreateIntArray	40	static
-cJSON.c:703:8:cJSON_CreateFloatArray	40	static
+cJSON.c:702:8:cJSON_CreateIntArray	32	static
+cJSON.c:703:8:cJSON_CreateFloatArray	32	static
 cJSON.c:704:8:cJSON_CreateDoubleArray	32	static
 cJSON.c:705:8:cJSON_CreateStringArray	32	static
-cJSON.c:708:8:cJSON_Duplicate	40	static
+cJSON.c:708:8:cJSON_Duplicate	32	static
 cJSON.c:735:6:cJSON_Minify	24	static

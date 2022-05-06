@@ -301,6 +301,7 @@ void UpdateTempSens(void)
 	for(uint8_t i = 0; i < Dev_Cnt; i++)
 	{
 		sprintf(Device_RAW_ROM[i],"%02X%02X%02X%02X%02X%02X%02X%02X", Dev_ID[i][0], Dev_ID[i][1], Dev_ID[i][2], Dev_ID[i][3], Dev_ID[i][4], Dev_ID[i][5], Dev_ID[i][6], Dev_ID[i][7]);
+		//----------------------from debug---------------------------
 		if(strcmp(Device_RAW_ROM[i], "28790E950C000069") == 0)
 		{
 			SEND_str(Device_RAW_ROM[i]);
@@ -311,37 +312,9 @@ void UpdateTempSens(void)
 			SEND_str(Device_RAW_ROM[i]);
 			SEND_str(" - YES\n");
 		}
+		//-----------------------------------------------------------
 	}
 
 	__HAL_TIM_CLEAR_FLAG(&htim6, TIM_SR_UIF); // очищаем флаг
 	HAL_TIM_Base_Start_IT(&htim6);
 }
-
-//void TempSensMain(void)
-//{
-//	if(OneWire_Test_Flag_Init)
-//	{
-//		OneWire_Test_Flag_Init = false;
-//    	for(i = 1; i <= Dev_Cnt; i++)
-//    	{
-//    		sensors_MeasureTemperCmd(NO_SKIP_ROM, i);
-//    	}
-//	}
-//	if(OneWire_Test_Flag_Read)
-//	{
-//		OneWire_Test_Flag_Read = false;
-//    	for(i = 1; i <= Dev_Cnt; i++)
-//    	{
-//    		sensors_ReadStratcpad(NO_SKIP_ROM, dt, i);
-//    		raw_temper = ((uint16_t)dt[1]<<8)|dt[0];
-//    		if(sensors_GetSign(raw_temper))
-//    			c='-';
-//    		else
-//    			c='+';
-//    		char test[16];
-//    		temper = sensors_Convert(raw_temper);
-//    		sprintf(test, "%d t: %c%.2f\r\n", i, c, temper);
-//    		HAL_UART_Transmit(&huart3, (uint8_t*)test, strlen(test), 0x1000);
-//    	}
-//	}
-//}

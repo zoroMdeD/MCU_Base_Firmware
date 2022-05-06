@@ -26,7 +26,7 @@
 */
 
 //#include "../ff.h" //RPi
-#include "ff.h"      //RPi
+#include "../../Core/fatfs/Inc/ff.h"      //RPi
 
 
 #if _CODE_PAGE == 437

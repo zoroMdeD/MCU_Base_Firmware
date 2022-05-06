@@ -31,6 +31,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "net.h"
+//#include "../../Core/fatfs/Inc/spi_sd.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -71,18 +72,9 @@ extern uint8_t b;
 extern char c[32];
 extern uint8_t d;
 
-//----------------FATfs----------------------
-uint8_t	SD_State = 0x00;
-
-FATFS FATFS_Obj;
-
-/* Exported functions ------------------------------------------------------- */
-FRESULT scan_files (
-    char* path,        /* Start node to be scanned (also used as work area) */
-    int* numFiles,
-    int pos
-);
-
+////----------------FATfs----------------------
+//volatile uint16_t Timer1=0;
+////-------------------------------------------
 
 //RTC_TimeTypeDef sTime = {0};
 //RTC_DateTypeDef DateToUpdate = {0};
@@ -93,7 +85,6 @@ float temper;
 uint8_t Dev_ID[AMT_TEMP_SENS][8]={0};
 uint8_t Dev_Cnt;
 char Device_RAW_ROM[AMT_TEMP_SENS][20];
-//char str1[60];
 
 uint8_t Time_Counter_Init = 0;
 uint8_t Time_Counter_Read = 0;
@@ -120,7 +111,6 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -193,9 +183,13 @@ int main(void)
 
 //	HAL_UART_Receive_IT(&huart3,(uint8_t*)str_ethernet,1);		//Настройка прерывания COM для отладки ETH (!?)
 
-	HAL_SPI_TransmitReceive_IT(&hspi2, (uint8_t *)SPI_tx_buf, (uint8_t *)SPI_rx_buf, 1);	//Настройка прерывания по spi для МК
+//	HAL_SPI_TransmitReceive_IT(&hspi2, (uint8_t *)SPI_tx_buf, (uint8_t *)SPI_rx_buf, 1);	//Настройка прерывания по spi для МК
 
 	//----------------PWM_test------------------
+	//------------------------------------------
+	//---------------FATfs----------------------
+	my_init_card();
+	SEND_str("Init sd card -> success\n");
 	//------------------------------------------
   /* USER CODE END 2 */
 
@@ -235,7 +229,7 @@ int main(void)
 		//----------------------------------------
 
 		//--------------SPI_test_MK---------------
-		SPI_available();			//Необходимо переделать так чтобы на дисплее был только статус вывода.
+//		SPI_available();			//Необходимо переделать так чтобы на дисплее был только статус вывода.
 		//----------------------------------------
 
 		//----------------ADC_test----------------
@@ -379,11 +373,11 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		Time_Counter_Init++;
 		Time_Counter_Read++;
 
-		if(Time_Counter_Init == 16)	//Запрос данных каждую 0.8 сек
+		if(Time_Counter_Init == 16)		//Запрос данных каждую 0.8 сек (old 16: 83 to 49999)
         {
 	    	OneWire_Test_Flag_Init = true;
         }
-		if(Time_Counter_Read == 32)	//Запрос данных каждую 1.6 сек
+		if(Time_Counter_Read == 32)	//Запрос данных каждую 1.6 сек (old 32: 83 to 49999))
         {
 	    	OneWire_Test_Flag_Read = true;
 

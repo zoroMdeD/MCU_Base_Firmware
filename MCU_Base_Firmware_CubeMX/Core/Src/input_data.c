@@ -23,6 +23,7 @@ uint8_t dt[8];
 char c;
 extern char Device_RAW_ROM[AMT_TEMP_SENS][20];
 extern float temper;
+char sign_temper[16];
 
 GPIO_TypeDef *pVHOD[8] = {VHOD1, VHOD2, VHOD3, VHOD4, VHOD5, VHOD6, VHOD7, VHOD8};				//Входы дискретных сигналов
 GPIO_TypeDef *pVIHOD[8] = {VIHOD1, VIHOD2, VIHOD3, VIHOD4, VIHOD5, VIHOD6, VIHOD7, VIHOD8};		//Выходы открытый коллектор
@@ -95,11 +96,12 @@ void CheckReWriteTSiDo(void)
     					c='-';
     				else
     					c='+';
-    				char test[16];
     				temper = sensors_Convert(raw_temper);
-    				sprintf(test, "%d t: %c%.2f\r\n", i, c, temper);
-    				HAL_UART_Transmit(&huart3, (uint8_t*)test, strlen(test), 0x1000);
-
+    				sprintf(sign_temper, "%c%.2f", c, temper);
+    				temper = atof(sign_temper);
+    				//--------------------from debug--------------------------
+    				HAL_UART_Transmit(&huart3, (uint8_t*)sign_temper, strlen(sign_temper), 0x1000);
+    				//--------------------------------------------------------
 					if((temper >= TSiDo[i-1].RANGE_TEMP_LOW) && (TSiDo[i-1].RANGE_TEMP_HIGH >= temper))
 					{
 						Status_OCD[j] = 1;
@@ -308,7 +310,7 @@ void set_temperature(char *ROM_RAW, double RANGE_TEMP_LOW, double RANGE_TEMP_HIG
 					SEND_str(ROM_RAW);
 					SEND_str("\n");
 					SEND_str("SET VALUE: ");
-					sprintf(Buff, "%.2f", temper);
+					sprintf(Buff, "%.2f", atof(sign_temper));
 					SEND_str(Buff);
 					SEND_str("\nRANGE_TEMP_LOW: ");
 					sprintf(Buff, "%.2f", TSiDo[i].RANGE_TEMP_LOW);

@@ -21,8 +21,8 @@
 extern "C" {
 #endif
 
-#include "integer.h"	/* Basic integer types */
-#include "ffconf.h"		/* FatFs configuration options */
+#include "../../Core/fatfs/Inc/integer.h"	/* Basic integer types */
+#include "../../Core/fatfs/Inc/ffconf.h"		/* FatFs configuration options */
 
 #if _FATFS != _FFCONF
 #error Wrong configuration file (ffconf.h).

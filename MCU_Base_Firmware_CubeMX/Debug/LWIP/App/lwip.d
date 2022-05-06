@@ -41,9 +41,14 @@ LWIP/App/lwip.o: ../LWIP/App/lwip.c ../LWIP/App/lwip.h \
  ../Core/Inc/analog.h ../Core/Inc/digital.h ../Core/Inc/spi_interface.h \
  ../Core/Inc/usart_ring.h ../Core/Inc/logic_func.h ../Core/Inc/cJSON.h \
  ../Core/Inc/input_JSON.h ../Core/Inc/input_data.h \
- ../Core/Inc/temperature_sensors.h ../Core/Inc/spi_sd.h \
- ../Core/Inc/diskio.h ../Core/Inc/integer.h ../Core/Inc/ff.h \
- ../Core/Inc/ffconf.h ../Core/Inc/ffconf.h ../Core/Inc/delay.h \
+ ../Core/Inc/temperature_sensors.h ../Core/Inc/delay.h \
+ ../Core/Inc/../../Core/fatfs/Inc/sd_cmd.h \
+ ../Core/Inc/../../Core/fatfs/Inc/spi_sd.h \
+ ../Core/Inc/../../Core/fatfs/Inc/diskio.h \
+ ../Core/Inc/../../Core/fatfs/Inc/integer.h \
+ ../Core/Inc/../../Core/fatfs/Inc/ff.h \
+ ../Core/Inc/../../Core/fatfs/Inc/ffconf.h \
+ ../Core/Inc/../fatfs/Inc/sd_main.h ../Core/Inc/../Inc/main.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/debug.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/arch.h \
  ../Middlewares/Third_Party/LwIP/system/arch/cc.h \
@@ -194,19 +199,23 @@ LWIP/App/lwip.o: ../LWIP/App/lwip.c ../LWIP/App/lwip.h \
 
 ../Core/Inc/temperature_sensors.h:
 
-../Core/Inc/spi_sd.h:
-
-../Core/Inc/diskio.h:
-
-../Core/Inc/integer.h:
-
-../Core/Inc/ff.h:
-
-../Core/Inc/ffconf.h:
-
-../Core/Inc/ffconf.h:
-
 ../Core/Inc/delay.h:
+
+../Core/Inc/../../Core/fatfs/Inc/sd_cmd.h:
+
+../Core/Inc/../../Core/fatfs/Inc/spi_sd.h:
+
+../Core/Inc/../../Core/fatfs/Inc/diskio.h:
+
+../Core/Inc/../../Core/fatfs/Inc/integer.h:
+
+../Core/Inc/../../Core/fatfs/Inc/ff.h:
+
+../Core/Inc/../../Core/fatfs/Inc/ffconf.h:
+
+../Core/Inc/../fatfs/Inc/sd_main.h:
+
+../Core/Inc/../Inc/main.h:
 
 ../Middlewares/Third_Party/LwIP/src/include/lwip/debug.h:
 

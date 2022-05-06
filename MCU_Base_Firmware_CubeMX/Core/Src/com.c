@@ -33,7 +33,7 @@ void SEND_str(char * string)
 }
 void DEBUG_main(void)
 {
-	if(dbg_available()) //если послали в терминал какую-то команду, то она перенаправиться в модем
+	if(dbg_available())
 	{
 		uint16_t i = 0;
 		uint8_t fdbg = 1;
@@ -51,19 +51,7 @@ void DEBUG_main(void)
 		if(strstr(DBG_buf, "test") != NULL)
 		{
 			SEND_str("respone\n");
-
-			//HAL_UART_Transmit(&huart3, INSTRUCTION, strlen(INSTRUCTION), 0x1000);
-
-			// что-то делаем
-				//HAL_UART_Transmit(&huart3, (uint8_t*)"My number\n", strlen("My number\n"), 1000);
-				//incoming_call(); // можно принять звонок
-				//disable_connection(); // сброс соединения
 		}
-//		clear_string(DBG_buf);
-//		snprintf(DBG_str, DBG_RX_BUFFER_SIZE, "%s\r\n", DBG_buf);
-//		c = strchr(DBG_str, '.') - DBG_str;
-//		HAL_UART_Transmit(&huart2, (uint8_t*)DBG_str, c, 1000);	//strlen(DBG_str)
-
 		else if(strstr(DBG_buf, "AIN") != NULL)
 		{
 			json_input("{\"INSTRUCTION\":\"SET_PERIPHERALS\",\"COMMAND\":{\"TYPE\":\"ANALOG\",\"SET\":\"[1,1,0,0,1,1,0,0]\"},\"TIME\":\"1122334455\"}");
@@ -121,11 +109,19 @@ void DEBUG_main(void)
 		//----------------------------------------------TEMPERATURE---------------------------------------------
 		else if(strstr(DBG_buf, "TP1") != NULL)
 		{
-			json_input("{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_TEMP_PROFILE\",\"ROM_RAW\":\"28BF1E930C000031\",\"RANGE_TEMP_LOW\":\"+28\",\"RANGE_TEMP_HIGH\":\"+50\",\"D_OUT\":\"VIHOD3\",\"VAR_OUT\":\"1\"},\"TIME\":\"1122334455\"}");
+			json_input("{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_TEMP_PROFILE\",\"ROM_RAW\":\"28BF1E930C000031\",\"RANGE_TEMP_LOW\":\"-128\",\"RANGE_TEMP_HIGH\":\"-126\",\"D_OUT\":\"VIHOD3\",\"VAR_OUT\":\"1\"},\"TIME\":\"1122334455\"}");
 		}
 		else if(strstr(DBG_buf, "TP2") != NULL)
 		{
 			json_input("{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_TEMP_PROFILE\",\"ROM_RAW\":\"28790E950C000069\",\"RANGE_TEMP_LOW\":\"+28\",\"RANGE_TEMP_HIGH\":\"+50\",\"D_OUT\":\"VIHOD4\",\"VAR_OUT\":\"1\"},\"TIME\":\"1122334455\"}");
+		}
+		else if(strstr(DBG_buf, "READ_SD") != NULL)
+		{
+			my_read_file();
+		}
+		else if(strstr(DBG_buf, "WRITE_SD") != NULL)
+		{
+			my_write_file();
 		}
 		//--------------------------------------------End_TEMPERATURE-------------------------------------------
 		if(fdbg)

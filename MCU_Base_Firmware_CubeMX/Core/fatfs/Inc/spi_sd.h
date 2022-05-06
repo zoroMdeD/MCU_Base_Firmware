@@ -9,10 +9,10 @@
 #ifndef SD_H_
 #define SD_H_
 
-#include <diskio.h>
-#include <ff.h>
-#include <ffconf.h>
 #include "main.h"
+#include "../../Core/fatfs/Inc/diskio.h"
+#include "../../Core/fatfs/Inc/ff.h"
+#include "../../Core/fatfs/Inc/ffconf.h"
 
 /* Port Controls */
 #define CS_HIGH()	HAL_GPIO_WritePin(GPIOB, CS1__Pin, SET)		//GPIOB->GPIO_BSRR_BS_6		/* MMC CS = H */
