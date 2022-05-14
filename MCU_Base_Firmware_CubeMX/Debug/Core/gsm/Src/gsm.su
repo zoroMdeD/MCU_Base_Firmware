@@ -1,0 +1,9 @@
+gsm.c:27:6:replac_string	16	static
+gsm.c:38:6:set_comand	80	static
+gsm.c:47:6:chek_speed	104	static
+gsm.c:104:6:clear_string	24	static
+gsm.c:124:6:INIT_GSM	8	static
+gsm.c:151:6:USART_GSM	16	static
+gsm.c:158:6:SEND_GSM_str	24	static
+gsm.c:168:6:string_parse_gsm	16	static
+gsm.c:172:6:GSM_RxCpltCallback	16	static

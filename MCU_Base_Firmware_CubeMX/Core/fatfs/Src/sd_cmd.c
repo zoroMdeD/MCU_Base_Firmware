@@ -7,24 +7,24 @@
 
 #include "../../Core/fatfs/Inc/sd_cmd.h"
 
-FATFS FATFS_Obj;
+FATFS FATFS_Obj;	//Инициализация структуры описывающей инициализацию файловой системы
 
-FRESULT result;
-FIL test;
+FRESULT result;		//Инициализация структуры описывающей статусы работы карты памяти
+FIL test;			//Инициализация структуры описывающей выбранный файл
 
-uint8_t readBuffer[512];
-uint32_t BytesToRead = 0;
-uint32_t BytesCounter = 0;
-//	uint32_t currentAddress = 0;
-UINT readBytes = 0;
-UINT WriteBytes = 0;
+uint8_t readBuffer[512];	//Буфер для хранения прочитанных с карты данных
+uint32_t BytesToRead = 0;	//Буфер для хранения размера файла
+uint32_t BytesCounter = 0;	//Счетчик кол-ва прочитанных данных итерируемый пачками readBuffer[512]
+UINT readBytes = 0;			//Счетчик кол-ва прочитанных данных
+UINT WriteBytes = 0;		//Счетчик кол-ва записанных данных
 
+//Функция инициализации карты памяти
 void my_init_card(void)
 {
 //	SD_PowerOn();
 	sd_ini();
 }
-
+//Функция чтения файла с карты памяти
 void my_read_file(void)
 {
 	if (f_mount(0, &FATFS_Obj) == FR_OK)	//Монтируем модуль FatFs
@@ -76,22 +76,22 @@ void my_read_file(void)
 		}
 	}
 }
-void my_write_file(void)
+//Функция записи файла на карту памяти
+//Принимает "path" - указатель на имя файла
+//Принимает "text" - указатель на строку JSON, которую нужно сохранить
+void my_write_file(char *path, char *text)
 {
-	if (f_mount(0, &FATFS_Obj) == FR_OK)	//Монтируем модуль FatFs
+	if (f_mount(0, &FATFS_Obj) == FR_OK)
 	{
 		SEND_str("f_mount -> success\n");
 
-		uint8_t path[12]="test_wr.txt";
-		path[11] = '\0';
-
-		result = f_open(&test, (char*)path, FA_CREATE_ALWAYS|FA_WRITE);
+		result = f_open(&test, path + '\0', FA_CREATE_ALWAYS|FA_WRITE);
 
 		if(result == FR_OK)
 		{
 			SEND_str("f_open -> success\n");
 
-			result = f_write(&test, "\nTesting write on SD card", 25, &WriteBytes);
+			result = f_write(&test, text, strlen(text), &WriteBytes);
 			if(result == FR_OK)
 			{
 				SEND_str("f_write -> success\n");
@@ -103,4 +103,52 @@ void my_write_file(void)
 		    f_close(&test);
 		}
 	}
+}
+//Функция сохраниения конфигурационных данных (Включить/выключить цифровой выход(Открытый коллектор) если цифровой вход = значение(уровень))
+//Принимает "D_IN" - строку с номером цифрового входа
+//Принимает "text" - указатель на строку JSON
+void save_dido(char *D_IN, char *text)
+{
+	char name_FIL[32];
+
+	SEND_str(text);
+	sprintf(name_FIL,"%s%s.json", D_IN, "(DiDo)");
+	SEND_str(name_FIL);
+	my_write_file(name_FIL, text);
+}
+//Функция сохраниения конфигурационных данных (Включить/выключить один цифровой выход(открытый коллектор) если аналоговый вход в интервале значений)
+//Принимает "A_IN" - строку с номером аналогового входа
+//Принимает "text" - указатель на строку JSON
+void save_aido(char *A_IN, char *text)
+{
+	char name_FIL[32];
+
+	SEND_str(text);
+	sprintf(name_FIL,"%s%s.json", A_IN, "(AiDo)");
+	SEND_str(name_FIL);
+	my_write_file(name_FIL, text);
+}
+//Функция сохраниения конфигурационных данных (Задать сигнал ШИМ на одном выходе)
+//Принимает "PWM_OUT" - строку с номером ШИМ выхода
+//Принимает "text" - указатель на строку JSON
+void save_pwm(char *PWM_OUT, char *text)
+{
+	char name_FIL[32];
+
+	SEND_str(text);
+	sprintf(name_FIL,"%s.json", PWM_OUT);
+	SEND_str(name_FIL);
+	my_write_file(name_FIL, text);
+}
+//Функция сохраниения конфигурационных данных (Включить/выключить один цифровой выход(открытый коллектор) если температура датчика в интервале значений)
+//Принимает "ROM_RAW" - строку с уникальным идентификатором температурного датчика
+//Принимает "text" - указатель на строку JSON
+void save_tsido(char *ROM_RAW, char *text)
+{
+	char name_FIL[32];
+
+	SEND_str(text);
+	sprintf(name_FIL,"%s%s.json", ROM_RAW, "(TSiDo)");
+	SEND_str(name_FIL);
+	my_write_file(name_FIL, text);
 }

@@ -13,6 +13,7 @@
 }
 char *json[] = "{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_AIDO\",\"A_IN\":\"VHOD1\",\"RANGE_LOW\":\"0\",\"RANGE_HIGH\":\"0\",\"D_OUT\":\"VIHOD3\",\"VAR_OUT\":\"1\"},\"TIME\":\"1122334455\"}";
 
+//---------------------------------------------------------------------ДИСКРЕТНЫЙ ВХОДЫ---------------------------------------------------------------------
 
 {
 	"INSTRUCTION":"SET_PROGRAMM",
@@ -28,6 +29,7 @@ char *json[] = "{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_AI
 }
 char *json[] = "{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_DIDO\",\"D_IN\":\"VHOD1\",\"VAR_IN\":\"0\",\"D_OUT\":\"VIHOD3\",\"VAR_OUT\":\"1\"},\"TIME\":\"1122334455\"}";
 
+//---------------------------------------------------------------------АНАЛОГОВЫЕ ВХОДЫ---------------------------------------------------------------------
 
 {
 	"INSTRUCTION":"SET_PROGRAMM",
@@ -44,6 +46,22 @@ char *json[] = "{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_DI
 }
 char *json[] = "{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_VAIDO\",\"A_IN\":\"VHOD1\",\"RANGE_LOW\":\"1.5\",\"RANGE_HIGH\":\"2.5\",\"D_OUT\":\"VIHOD4\",\"VAR_OUT\":\"1\"},\"TIME\":\"1122334455\"}";
 
+{
+	"INSTRUCTION":"SET_PROGRAMM",
+	"COMMAND":
+			{
+				"TYPE":"SET_СAIDO",
+				"A_IN":"VHOD1",
+				"RANGE_LOW":"0.006",
+				"RANGE_HIGH":"0.008",
+				"D_OUT":"VIHOD4",
+				"VAR_OUT":"1"
+			},
+	"TIME":"1122334455"     
+}
+char *json[] = "{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_СAIDO\",\"A_IN\":\"VHOD1\",\"RANGE_LOW\":\"0.006\",\"RANGE_HIGH\":\"0.008\",\"D_OUT\":\"VIHOD4\",\"VAR_OUT\":\"1\"},\"TIME\":\"1122334455\"}";
+
+//---------------------------------------------------------------------ШИРОТНОИМПУЛЬСНАЯ МОДУЛЯЦИЯ---------------------------------------------------------------------
 
 {
 	"INSTRUCTION":"SET_PROGRAMM",

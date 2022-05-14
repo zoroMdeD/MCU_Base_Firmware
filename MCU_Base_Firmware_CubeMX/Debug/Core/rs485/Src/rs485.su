@@ -1,0 +1,3 @@
+rs485.c:22:6:USART_RS485	16	static
+rs485.c:29:6:SEND_RS485_str	24	static
+rs485.c:38:6:RS485_main	16	static

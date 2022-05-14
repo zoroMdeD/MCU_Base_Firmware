@@ -1,6 +1,5 @@
 ################################################################################
 # Automatically-generated file. Do not edit!
-# Toolchain: GNU Tools for STM32 (9-2020-q2-update)
 ################################################################################
 
 ELF_SRCS := 
@@ -20,9 +19,16 @@ OBJCOPY_BIN :=
 
 # Every subdirectory with source files must be described here
 SUBDIRS := \
+Core/JSON/Src \
 Core/Src \
 Core/Startup \
+Core/dwt/Src \
+Core/eth/Src \
 Core/fatfs/Src \
+Core/gsm/Src \
+Core/lcd_interface/Src \
+Core/periphery_io/Src \
+Core/rs485/Src \
 Drivers/STM32F4xx_HAL_Driver/Src \
 LWIP/App \
 LWIP/Target \

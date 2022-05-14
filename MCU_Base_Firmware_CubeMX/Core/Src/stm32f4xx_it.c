@@ -24,7 +24,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "usart_ring.h"
-#include "rs485.h"
+
+#include "../rs485/Inc/rs485.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/

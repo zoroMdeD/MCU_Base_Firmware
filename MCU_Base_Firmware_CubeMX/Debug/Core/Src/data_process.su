@@ -1,0 +1,9 @@
+data_process.c:34:6:CheckReWriteDiDo	24	static
+data_process.c:51:6:CheckReWriteAiDo	24	static
+data_process.c:74:6:CheckReWriteTSiDo	40	static
+data_process.c:125:6:set_dido	216	static
+data_process.c:189:6:set_aido	216	static
+data_process.c:241:6:set_pwm	96	static
+data_process.c:281:6:set_temperature	176	static
+data_process.c:336:6:set_diao	24	static
+data_process.c:346:6:set_aiao	24	static

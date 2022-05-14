@@ -1,3 +1,3 @@
-com.c:18:6:USART_Tx	16	static
-com.c:25:6:SEND_str	24	static
-com.c:34:6:DEBUG_main	16	static
+com.c:20:6:USART_Tx	16	static
+com.c:27:6:SEND_str	24	static
+com.c:37:6:DEBUG_main	16	static

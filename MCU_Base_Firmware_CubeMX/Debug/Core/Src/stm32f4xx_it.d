@@ -35,19 +35,22 @@ Core/Src/stm32f4xx_it.o: ../Core/Src/stm32f4xx_it.c ../Core/Inc/main.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
  ../Core/Inc/adc.h ../Core/Inc/main.h ../Core/Inc/spi.h ../Core/Inc/tim.h \
  ../Core/Inc/usart.h ../Core/Inc/gpio.h ../Core/Inc/rtc.h \
- ../Core/Inc/gsm.h ../Core/Inc/com.h ../Core/Inc/rs485.h \
- ../Core/Inc/analog.h ../Core/Inc/digital.h ../Core/Inc/spi_interface.h \
- ../Core/Inc/usart_ring.h ../Core/Inc/logic_func.h ../Core/Inc/cJSON.h \
- ../Core/Inc/input_JSON.h ../Core/Inc/input_data.h \
- ../Core/Inc/temperature_sensors.h ../Core/Inc/delay.h \
- ../Core/Inc/../../Core/fatfs/Inc/sd_cmd.h \
+ ../Core/Inc/../gsm/Inc/gsm.h ../Core/Inc/com.h \
+ ../Core/Inc/../rs485/Inc/rs485.h \
+ ../Core/Inc/../lcd_interface/Inc/update_info.h ../Core/Inc/usart_ring.h \
+ ../Core/Inc/../JSON/Inc/cJSON.h ../Core/Inc/../JSON/Inc/input_JSON.h \
+ ../Core/Inc/../JSON/Inc/create_JSON.h \
+ ../Core/Inc/../periphery_io/Inc/data_process.h \
+ ../Core/Inc/../periphery_io/Inc/temperature_sensors.h \
+ ../Core/Inc/../dwt/Inc/delay.h ../Core/Inc/../../Core/fatfs/Inc/sd_cmd.h \
  ../Core/Inc/../../Core/fatfs/Inc/spi_sd.h \
  ../Core/Inc/../../Core/fatfs/Inc/diskio.h \
  ../Core/Inc/../../Core/fatfs/Inc/integer.h \
  ../Core/Inc/../../Core/fatfs/Inc/ff.h \
  ../Core/Inc/../../Core/fatfs/Inc/ffconf.h \
  ../Core/Inc/../fatfs/Inc/sd_main.h ../Core/Inc/../Inc/main.h \
- ../Core/Inc/stm32f4xx_it.h ../Core/Inc/usart_ring.h ../Core/Inc/rs485.h
+ ../Core/Inc/stm32f4xx_it.h ../Core/Inc/usart_ring.h \
+ ../Core/Src/../rs485/Inc/rs485.h
 
 ../Core/Inc/main.h:
 
@@ -133,31 +136,27 @@ Core/Src/stm32f4xx_it.o: ../Core/Src/stm32f4xx_it.c ../Core/Inc/main.h \
 
 ../Core/Inc/rtc.h:
 
-../Core/Inc/gsm.h:
+../Core/Inc/../gsm/Inc/gsm.h:
 
 ../Core/Inc/com.h:
 
-../Core/Inc/rs485.h:
+../Core/Inc/../rs485/Inc/rs485.h:
 
-../Core/Inc/analog.h:
-
-../Core/Inc/digital.h:
-
-../Core/Inc/spi_interface.h:
+../Core/Inc/../lcd_interface/Inc/update_info.h:
 
 ../Core/Inc/usart_ring.h:
 
-../Core/Inc/logic_func.h:
+../Core/Inc/../JSON/Inc/cJSON.h:
 
-../Core/Inc/cJSON.h:
+../Core/Inc/../JSON/Inc/input_JSON.h:
 
-../Core/Inc/input_JSON.h:
+../Core/Inc/../JSON/Inc/create_JSON.h:
 
-../Core/Inc/input_data.h:
+../Core/Inc/../periphery_io/Inc/data_process.h:
 
-../Core/Inc/temperature_sensors.h:
+../Core/Inc/../periphery_io/Inc/temperature_sensors.h:
 
-../Core/Inc/delay.h:
+../Core/Inc/../dwt/Inc/delay.h:
 
 ../Core/Inc/../../Core/fatfs/Inc/sd_cmd.h:
 
@@ -179,4 +178,4 @@ Core/Src/stm32f4xx_it.o: ../Core/Src/stm32f4xx_it.c ../Core/Inc/main.h \
 
 ../Core/Inc/usart_ring.h:
 
-../Core/Inc/rs485.h:
+../Core/Src/../rs485/Inc/rs485.h:
