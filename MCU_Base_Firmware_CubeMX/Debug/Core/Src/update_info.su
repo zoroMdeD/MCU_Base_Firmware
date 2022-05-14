@@ -1,0 +1,6 @@
+update_info.c:46:6:ReWriteOCD	8	static
+update_info.c:82:6:ReWriteDIN	8	static
+update_info.c:118:6:ReWriteAIN	8	static
+update_info.c:138:6:ReWritePWM	8	static
+update_info.c:158:6:ReWrite1Wire	8	static
+update_info.c:171:6:SPI_available	8	static

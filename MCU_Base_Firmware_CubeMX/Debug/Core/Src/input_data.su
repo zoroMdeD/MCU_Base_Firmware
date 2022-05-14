@@ -1,8 +1,8 @@
 input_data.c:34:6:CheckReWriteDiDo	24	static
-input_data.c:51:6:CheckReWriteVAiDo	24	static
+input_data.c:51:6:CheckReWriteAiDo	24	static
 input_data.c:74:6:CheckReWriteTSiDo	32	static
 input_data.c:125:6:set_dido	216	static
-input_data.c:189:6:set_vaido	216	static
+input_data.c:189:6:set_aido	216	static
 input_data.c:241:6:set_pwm	96	static
 input_data.c:281:6:set_temperature	168	static
 input_data.c:336:6:set_diao	24	static

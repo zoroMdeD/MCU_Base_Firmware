@@ -37,14 +37,16 @@ Core/fatfs/Src/sd_main.o: ../Core/fatfs/Src/sd_main.c \
  ../Core/Inc/../Inc/adc.h ../Core/Inc/../Inc/main.h \
  ../Core/Inc/../Inc/spi.h ../Core/Inc/../Inc/tim.h \
  ../Core/Inc/../Inc/usart.h ../Core/Inc/../Inc/gpio.h \
- ../Core/Inc/../Inc/rtc.h ../Core/Inc/../Inc/gsm.h \
- ../Core/Inc/../Inc/com.h ../Core/Inc/../Inc/rs485.h \
- ../Core/Inc/../Inc/analog.h ../Core/Inc/../Inc/digital.h \
- ../Core/Inc/../Inc/spi_interface.h ../Core/Inc/../Inc/usart_ring.h \
- ../Core/Inc/../Inc/logic_func.h ../Core/Inc/../Inc/cJSON.h \
- ../Core/Inc/../Inc/input_JSON.h ../Core/Inc/../Inc/input_data.h \
- ../Core/Inc/../Inc/temperature_sensors.h ../Core/Inc/../Inc/delay.h \
- ../Core/Inc/../Inc/../../Core/fatfs/Inc/sd_cmd.h ../Core/Inc/main.h \
+ ../Core/Inc/../Inc/rtc.h ../Core/Inc/../Inc/../gsm/Inc/gsm.h \
+ ../Core/Inc/../Inc/com.h ../Core/Inc/../Inc/../rs485/Inc/rs485.h \
+ ../Core/Inc/../Inc/../lcd_interface/Inc/update_info.h \
+ ../Core/Inc/../Inc/usart_ring.h ../Core/Inc/../Inc/../JSON/Inc/cJSON.h \
+ ../Core/Inc/../Inc/../JSON/Inc/input_JSON.h \
+ ../Core/Inc/../Inc/../JSON/Inc/create_JSON.h \
+ ../Core/Inc/../Inc/../periphery_io/Inc/data_process.h ../Core/Inc/main.h \
+ ../Core/Inc/../Inc/../periphery_io/Inc/temperature_sensors.h \
+ ../Core/Inc/../Inc/../dwt/Inc/delay.h \
+ ../Core/Inc/../Inc/../../Core/fatfs/Inc/sd_cmd.h \
  ../Core/Inc/../Inc/../../Core/fatfs/Inc/spi_sd.h \
  ../Core/Inc/../../Core/fatfs/Inc/diskio.h \
  ../Core/Inc/../../Core/fatfs/Inc/integer.h \
@@ -138,35 +140,31 @@ Core/fatfs/Src/sd_main.o: ../Core/fatfs/Src/sd_main.c \
 
 ../Core/Inc/../Inc/rtc.h:
 
-../Core/Inc/../Inc/gsm.h:
+../Core/Inc/../Inc/../gsm/Inc/gsm.h:
 
 ../Core/Inc/../Inc/com.h:
 
-../Core/Inc/../Inc/rs485.h:
+../Core/Inc/../Inc/../rs485/Inc/rs485.h:
 
-../Core/Inc/../Inc/analog.h:
-
-../Core/Inc/../Inc/digital.h:
-
-../Core/Inc/../Inc/spi_interface.h:
+../Core/Inc/../Inc/../lcd_interface/Inc/update_info.h:
 
 ../Core/Inc/../Inc/usart_ring.h:
 
-../Core/Inc/../Inc/logic_func.h:
+../Core/Inc/../Inc/../JSON/Inc/cJSON.h:
 
-../Core/Inc/../Inc/cJSON.h:
+../Core/Inc/../Inc/../JSON/Inc/input_JSON.h:
 
-../Core/Inc/../Inc/input_JSON.h:
+../Core/Inc/../Inc/../JSON/Inc/create_JSON.h:
 
-../Core/Inc/../Inc/input_data.h:
-
-../Core/Inc/../Inc/temperature_sensors.h:
-
-../Core/Inc/../Inc/delay.h:
-
-../Core/Inc/../Inc/../../Core/fatfs/Inc/sd_cmd.h:
+../Core/Inc/../Inc/../periphery_io/Inc/data_process.h:
 
 ../Core/Inc/main.h:
+
+../Core/Inc/../Inc/../periphery_io/Inc/temperature_sensors.h:
+
+../Core/Inc/../Inc/../dwt/Inc/delay.h:
+
+../Core/Inc/../Inc/../../Core/fatfs/Inc/sd_cmd.h:
 
 ../Core/Inc/../Inc/../../Core/fatfs/Inc/spi_sd.h:
 

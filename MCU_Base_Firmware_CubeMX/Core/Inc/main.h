@@ -43,20 +43,18 @@ extern "C" {
 #include "usart.h"
 #include "gpio.h"
 #include "rtc.h"
-#include "gsm.h"
+#include "../gsm/Inc/gsm.h"
 #include "com.h"
-#include "rs485.h"
-#include "analog.h"
-#include "digital.h"
-#include "spi_interface.h"
+#include "../rs485/Inc/rs485.h"
+#include "../lcd_interface/Inc/update_info.h"
 #include "usart_ring.h"
-#include "logic_func.h"
-#include "cJSON.h"
-#include "input_JSON.h"
-#include "input_data.h"
-#include "temperature_sensors.h"
+#include "../JSON/Inc/cJSON.h"
+#include "../JSON/Inc/input_JSON.h"
+#include "../JSON/Inc/create_JSON.h"
+#include "../periphery_io/Inc/data_process.h"
+#include "../periphery_io/Inc/temperature_sensors.h"
 //--------------------------delay_ns--------------------------
-#include "delay.h"
+#include "../dwt/Inc/delay.h"
 //#define DEMCR_TRCENA    0x01000000
 //
 ///* Core Debug registers */
@@ -82,7 +80,7 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
 //---------------------------1-WIRE---------------------------
-#define AMT_TEMP_SENS	8
+#define AMT_TEMP_SENS	2
 //------------------------------------------------------------
 /*Таблица истонности переключения аналогового комутатора
  * S1_Pin = 0 - Включено измерение тока на 3-ем канале измерения ADC1_IN3 || S1_Pin = 1 - Включено измерение напряжения на 3-ем канале измерения ADC1_IN3
@@ -104,7 +102,7 @@ struct ScaningDIN_UpdateOCD
 }DiDo[8];
 
 //Voltage Analog Input Digital Output(Open Drain)
-struct ScaningVAIN_UpdateOCD
+struct ScaningAIN_UpdateOCD
 {
 	uint8_t A_IN;			//Номер канала аналогового входа который считываем
 	double RANGE_LOW;		//Нижнее значение на входе A_IN удовлетворяющее условию
@@ -112,14 +110,15 @@ struct ScaningVAIN_UpdateOCD
 	GPIO_TypeDef *D_OUT;	//Адрес порта открытого(ых) коллектора(ов), который(е) устанавливаем в состояние на порту выхода OCD(VAR_OUT)
 	uint8_t VAR_OUT;		//Значение которое устанавливается если выполняется условие, которое установлено на вход(VAR_IN)
 	uint16_t OCD_Pin;		//Адрес разряда порта(D_OUT) на который устанавливаем значение(VAR_OUT), которое например переключает реле
+	bool inputFlag;			//Флаг инициализации аналогового входа(1 - измерение напряжения; 0 - измерение тока)
 	bool clrFlag;			//Флаг использования переменной
-}VAiDo[4];
+}AiDo[4];
 
 //Configuration PWM output(Open Drain)
 struct UpdatePWM
 {
-	uint32_t PWM_Channel;	//канал генерации Ш�?М
-	uint16_t D_CYCLE[1];	//коэффициент заполнения Ш�?М
+	uint32_t PWM_Channel;	//канал генерации ШИМ
+	uint16_t D_CYCLE[1];	//коэффициент заполнения ШИМ
 	bool clrFlag;			//Флаг использования переменной
 }PWM[4];
 
@@ -283,8 +282,8 @@ void Error_Handler(void);
 #define CS2__GPIO_Port GPIOE
 /* USER CODE BEGIN Private defines */
 //---------------------------RS-485---------------------------
-#define RS485_Tx	GPIOD->ODR |= GPIO_ODR_ODR_4 | GPIO_ODR_ODR_7		//конфа на передачу DE = 1,RE# = 1;
-#define RS485_Rx	GPIOD->ODR &= ~(GPIO_ODR_ODR_4 | GPIO_ODR_ODR_7)	//конфа на прием DE = 0,RE# = 0;
+#define RS485_Tx	GPIOD->ODR |= GPIO_ODR_ODR_4 | GPIO_ODR_ODR_7		//конфа на передачу DE = 1, RE# = 1;
+#define RS485_Rx	GPIOD->ODR &= ~(GPIO_ODR_ODR_4 | GPIO_ODR_ODR_7)	//конфа на прием DE = 0, RE# = 0;
 //------------------------------------------------------------
 /* USER CODE END Private defines */
 

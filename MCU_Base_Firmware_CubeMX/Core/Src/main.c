@@ -30,8 +30,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "net.h"
-//#include "../../Core/fatfs/Inc/spi_sd.h"
+#include "../eth/Inc/net.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -52,20 +51,15 @@
 
 /* USER CODE BEGIN PV */
 extern struct netif gnetif;
-extern char str_ethernet[104];
+extern char str_ethernet[];
 
 extern uint8_t flag_iput_spi2;
 extern uint8_t SPI_rx_buf[1];
 extern uint8_t SPI_tx_buf[1];
 
-uint8_t ReInitFlag = 0;
-uint8_t flag_two = 1;
-
-//char Buff[32];
 char trans_str[64] = {0,};
-volatile uint16_t adc[4] = {0,}; // у нас 4 канала поэтому массив из 4 элементов
-double adcValue[4] = {0,};
-volatile uint8_t flag = 0;
+volatile uint16_t adc[4] = {0,}; 	//Массив для хранения данных АЦП
+double adcValue[4] = {0,};			//Массив для хранения обработанных данных АЦП
 
 extern char a[32];
 extern uint8_t b;
@@ -81,15 +75,10 @@ extern uint8_t d;
 //
 //char trans_str[64] = {0,};
 
-float temper;
-uint8_t Dev_ID[AMT_TEMP_SENS][8]={0};
-uint8_t Dev_Cnt;
-char Device_RAW_ROM[AMT_TEMP_SENS][20];
-
-uint8_t Time_Counter_Init = 0;
-uint8_t Time_Counter_Read = 0;
-bool OneWire_Test_Flag_Init = false;
-bool OneWire_Test_Flag_Read = false;
+uint8_t Time_Counter_Init = 0;	//Счетчик таймера до запуска функции инициализации датчиков температуры
+uint8_t Time_Counter_Read = 0;	//Счетчик таймера до запуска функции чтения датчиков температуры
+bool OneWire_Test_Flag_Init = false;	//Флаг запуска функции инициализации датчиков температуры
+bool OneWire_Test_Flag_Read = false;	//Флаг запуска функции чтения датчиков температуры
 
 /* USER CODE END PV */
 
@@ -141,7 +130,7 @@ int main(void)
   MX_USART3_UART_Init();
   MX_LWIP_Init();
   MX_TIM4_Init();
-  MX_RTC_Init();
+//  MX_RTC_Init();
   MX_TIM6_Init();
   /* USER CODE BEGIN 2 */
 
@@ -166,14 +155,6 @@ int main(void)
 												//net_ini(); MX_LWIP_Process();(Вкл в main) также закоментить в файле stm32f4xx_it.c строчки для отладки через DEBUG_main();
 
 	//----------------ADC_test------------------
-	//Допилить фичу переключения аналогового комутатора !!!
-//	char Buff[32];
-
-	HAL_GPIO_WritePin(GPIOE, S1_Pin, RESET);		//Вход аналогового комутатора - выход линии 1
-	HAL_GPIO_WritePin(GPIOE, S2_Pin, RESET);
-	HAL_GPIO_WritePin(GPIOE, S3_Pin, RESET);
-	HAL_GPIO_WritePin(GPIOE, S4_Pin, RESET);
-
 	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)&adc, 4);		//Стартуем АЦП
 	HAL_TIM_OC_Start(&htim4, TIM_CHANNEL_4);
 	//------------------------------------------
@@ -193,6 +174,7 @@ int main(void)
 	my_init_card();
 	SEND_str("Init sd card -> success\n");
 	//------------------------------------------
+//	test_create_json();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -250,14 +232,12 @@ int main(void)
 		//----------------------------------------
 
 		//--------------ReINIT_GPIO---------------
-		CheckReWriteVAiDo();
+		CheckReWriteAiDo();
 		//----------------------------------------
-
 		//----------TEST_EXAMPLE_1-WIRE-----------
 //		TempSensMain();
 		CheckReWriteTSiDo();
 		//----------------------------------------
-
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -329,7 +309,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 ////		RS485_RxCpltCallback();
 //	}
 
-//Нужно для отладки Ethernet по USART
+////Нужно для отладки Ethernet по USART
 //	if(huart == &huart3)	//COM interrupt
 //	{
 //		UART3_RxCpltCallback();
@@ -356,10 +336,10 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
 {
     if(hadc->Instance == ADC1)
     {
-        adcValue[0] = Conversion_ADC1((uint16_t)adc[0]);
-        adcValue[1] = Conversion_ADC1((uint16_t)adc[1]);
-        adcValue[2] = Conversion_ADC1((uint16_t)adc[2]);
-        adcValue[3] = Conversion_ADC1((uint16_t)adc[3]);
+    	adcValue[0] = Conversion_ADC1((uint16_t)adc[0], 0);
+        adcValue[1] = Conversion_ADC1((uint16_t)adc[1], 1);
+        adcValue[2] = Conversion_ADC1((uint16_t)adc[2], 2);
+        adcValue[3] = Conversion_ADC1((uint16_t)adc[3], 3);
     }
 }
 /* USER CODE END 4 */
@@ -380,11 +360,11 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		Time_Counter_Init++;
 		Time_Counter_Read++;
 
-		if(Time_Counter_Init == 16)		//Запрос данных каждую 0.8 сек (old 16: 83 to 49999)
+		if(Time_Counter_Init == 16)		//Запрос данных каждую ~0.8 сек (old 16: 83 to 49999)
         {
 	    	OneWire_Test_Flag_Init = true;
         }
-		if(Time_Counter_Read == 32)	//Запрос данных каждую 1.6 сек (old 32: 83 to 49999))
+		if(Time_Counter_Read == 32)	//Запрос данных каждую ~1.6 сек (old 32: 83 to 49999))
         {
 	    	OneWire_Test_Flag_Read = true;
 

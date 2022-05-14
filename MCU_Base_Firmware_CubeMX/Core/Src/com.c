@@ -5,16 +5,18 @@
  *      Author: moroz
  */
 #include "main.h"
-#include "rs485.h"
 #include "usart_ring.h"
 #include <stdlib.h>
-#include "cJSON.h"
-#include "input_JSON.h"
+
+#include "../JSON/Inc/cJSON.h"
+#include "../JSON/Inc/input_JSON.h"
+#include "../rs485/Inc/rs485.h"
 
 char DBG_buf[DBG_RX_BUFFER_SIZE] = {0,};
 char DBG_str[DBG_RX_BUFFER_SIZE] = {0,};
 
 //Функция передачи байта по USART3
+//Принимает байт
 void USART_Tx(unsigned char Data)
 {
 	while(!(USART3->SR & USART_SR_TC));
@@ -31,6 +33,7 @@ void SEND_str(char * string)
 		i++;
 	}
 }
+//Функция для отладки через COM порт
 void DEBUG_main(void)
 {
 	if(dbg_available())
@@ -67,11 +70,11 @@ void DEBUG_main(void)
 		//------------------------------------------------Digital-----------------------------------------------
 		else if(strstr(DBG_buf, "SP1") != NULL)
 		{
-			json_input("{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_DIDO\",\"D_IN\":\"VHOD1\",\"VAR_IN\":\"0\",\"D_OUT\":\"VIHOD1\",\"VAR_OUT\":\"1\"},\"TIME\":\"1122334455\"}");
+			json_input("{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_DIDO\",\"D_IN\":\"VHOD1\",\"VAR_IN\":\"0\",\"D_OUT\":\"VIHOD2\",\"VAR_OUT\":\"1\"},\"TIME\":\"1122334455\"}");
 		}
 		else if(strstr(DBG_buf, "SP2") != NULL)
 		{
-			json_input("{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_DIDO\",\"D_IN\":\"VHOD1\",\"VAR_IN\":\"0\",\"D_OUT\":\"VIHOD8\",\"VAR_OUT\":\"1\"},\"TIME\":\"1122334455\"}");
+			json_input("{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_DIDO\",\"D_IN\":\"VHOD2\",\"VAR_IN\":\"0\",\"D_OUT\":\"VIHOD8\",\"VAR_OUT\":\"1\"},\"TIME\":\"1122334455\"}");
 		}
 		//----------------------------------------------End_Digital---------------------------------------------
 		//------------------------------------------------Analog------------------------------------------------
@@ -79,9 +82,13 @@ void DEBUG_main(void)
 		{
 			json_input("{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_VAIDO\",\"A_IN\":\"VHOD1\",\"RANGE_LOW\":\"2.5\",\"RANGE_HIGH\":\"3.5\",\"D_OUT\":\"VIHOD3\",\"VAR_OUT\":\"1\"},\"TIME\":\"1122334455\"}");
 		}
-		else if(strstr(DBG_buf, "SP4") != NULL)
+		else if(strstr(DBG_buf, "SPVol") != NULL)		//Voltage
 		{
-			json_input("{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_VAIDO\",\"A_IN\":\"VHOD1\",\"RANGE_LOW\":\"0\",\"RANGE_HIGH\":\"1\",\"D_OUT\":\"VIHOD4\",\"VAR_OUT\":\"1\"},\"TIME\":\"1122334455\"}");
+			json_input("{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_VAIDO\",\"A_IN\":\"VHOD1\",\"RANGE_LOW\":\"1.5\",\"RANGE_HIGH\":\"2\",\"D_OUT\":\"VIHOD4\",\"VAR_OUT\":\"1\"},\"TIME\":\"1122334455\"}");
+		}
+		else if(strstr(DBG_buf, "SPCur") != NULL)	//Current
+		{
+			json_input("{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_CAIDO\",\"A_IN\":\"VHOD1\",\"RANGE_LOW\":\"0.006\",\"RANGE_HIGH\":\"0.008\",\"D_OUT\":\"VIHOD4\",\"VAR_OUT\":\"1\"},\"TIME\":\"1122334455\"}");
 		}
 		//----------------------------------------------End_Analog----------------------------------------------
 		//--------------------------------------------------PWM-------------------------------------------------
@@ -121,8 +128,14 @@ void DEBUG_main(void)
 		}
 		else if(strstr(DBG_buf, "WRITE_SD") != NULL)
 		{
-			my_write_file();
+//			save_periphery_data();
 		}
+//		else	//тест для посылки строки через терминал
+//		{
+//			snprintf(DBG_str, DBG_RX_BUFFER_SIZE, "%s", DBG_buf);
+//			SEND_str(DBG_str);
+//			json_input(DBG_str);
+//		}
 		//--------------------------------------------End_TEMPERATURE-------------------------------------------
 		if(fdbg)
 		{
