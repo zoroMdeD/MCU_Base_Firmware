@@ -28,7 +28,14 @@ char sign_temper[16];
 
 GPIO_TypeDef *pVHOD[8] = {VHOD1, VHOD2, VHOD3, VHOD4, VHOD5, VHOD6, VHOD7, VHOD8};				//Входы дискретных сигналов
 GPIO_TypeDef *pVIHOD[8] = {VIHOD1, VIHOD2, VIHOD3, VIHOD4, VIHOD5, VIHOD6, VIHOD7, VIHOD8};		//Выходы открытый коллектор
+GPIO_TypeDef *pAVHOD[4] = {AIN0_GPIO_Port, AIN1_GPIO_Port, AIN2_GPIO_Port, AIN3_GPIO_Port};
+GPIO_TypeDef *pPWM[4] = {PWM0_GPIO_Port, PWM1_GPIO_Port, PWM2_GPIO_Port, PWM3_GPIO_Port};
+GPIO_TypeDef *pONEWIRE[2] ={WR0_GPIO_Port, WR1_GPIO_Port};
+uint16_t DIN_Pin[8] = {IN0_Pin, IN1_Pin, IN2_Pin, IN3_Pin, IN4_Pin, IN5_Pin, IN6_Pin, IN7_Pin};
 uint16_t OCD_Pin[8] = {O0_Pin, O1_Pin, O2_Pin, O3_Pin, O4_Pin, O5_Pin, O6_Pin, O7_Pin};
+uint16_t AIN_Pin[4] = {AIN0_Pin, AIN1_Pin, AIN2_Pin, AIN3_Pin};
+uint16_t PWM_Pin[4] = {PWM0_Pin, PWM1_Pin, PWM2_Pin, PWM3_Pin};
+uint16_t OW_Pin[2] = {WR0_Pin, WR1_Pin};
 
 //Мониторинг дискретных входов и изменение выходов открытый коллектор
 //	*(Если Вход1 == 0 то Выход3 = 1) Инверсная логика на входах оптопар
@@ -118,18 +125,16 @@ void CheckReWriteTSiDo(void)
     	}
 	}
 }
+//Функция преобразования данных АЦП
+//Принимает "ADC_value" - значение АЦП
+//Принимает "item" - номер аналогового входа АЦП
+//Возвращает преобразованное значение в зависимости от конфигурации аналогового входа
 double Conversion_ADC1(uint16_t ADC_value, uint8_t item)
 {
 	double Value = 0;
 	const double Resolution = 0.0008056640625;
-
 	Value = (ADC_value * Resolution);
-
-	if(AiDo[item].inputFlag)
-		Value = (Value * 3.2323232323232);	//Напряжение
-	else
-		Value = (Value / 60);				//Ток (60 - коэффициент усиления ОУ)
-
+	(AiDo[item].inputFlag == true) ? (Value = (Value * 3.2323232323232)) : (Value = (Value / 60));
 	return Value;
 }
 //Включить/выключить цифровой выход(Открытый коллектор) если цифровой вход = значение(уровень)
@@ -142,15 +147,12 @@ void set_dido(char *D_IN, uint8_t VAR_IN, char *D_OUT, uint8_t VAR_OUT)
 	char VHOD[8][10] = {"VHOD1", "VHOD2", "VHOD3", "VHOD4", "VHOD5", "VHOD6", "VHOD7", "VHOD8"};
 	char VIHOD[8][10] = {"VIHOD1", "VIHOD2", "VIHOD3", "VIHOD4", "VIHOD5", "VIHOD6", "VIHOD7", "VIHOD8"};
 
-	uint16_t DIN_Pin[8] = {IN0_Pin, IN1_Pin, IN2_Pin, IN3_Pin, IN4_Pin, IN5_Pin, IN6_Pin, IN7_Pin};
-
 	for(int i = 0; i < 8; i++)
 	{
 		if(strcmp(D_IN, VHOD[i]) == 0)
 		{
 			if(DiDo[i].clrFlag != false)
 				HAL_GPIO_WritePin(DiDo[i].D_OUT, DiDo[i].OCD_Pin, RESET);
-
 			DiDo[i].clrFlag = true;
 			DiDo[i].D_IN = pVHOD[i];
 			DiDo[i].VAR_IN = VAR_IN;
@@ -162,7 +164,6 @@ void set_dido(char *D_IN, uint8_t VAR_IN, char *D_OUT, uint8_t VAR_OUT)
 					DiDo[i].D_OUT = pVIHOD[j];
 					DiDo[i].VAR_OUT = VAR_OUT;
 					DiDo[i].OCD_Pin = OCD_Pin[j];
-
 					if(HAL_GPIO_ReadPin(DiDo[i].D_IN, DiDo[i].DIN_Pin) != VAR_IN)	//(Если Вход1 == 0 то Выход3 = 1) Инверсная логика на входах оптопар
 					{
 						Status_OCD[j] = VAR_OUT;

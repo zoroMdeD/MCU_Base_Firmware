@@ -23,18 +23,19 @@ uint8_t i = 0;
 uint8_t j = 0;
 uint8_t tp = 0;
 uint8_t tp1 = 1;
-uint8_t tp2 = 0;
-uint8_t tp3 = 1;
+//uint8_t tp2 = 0;
+//uint8_t tp3 = 1;
 
-//extern struct ScaningDIN_UpdateOCD
-//{
-//	GPIO_TypeDef *D_IN;		//Адрес порта оптопары, который читаем для изменения состояния на порту выхода OCD
-//	uint8_t VAR_IN;			//Значение которое должно быть "флагом" для выполнения условия по выходу OCD(установка значения, например переключение реле)
-//	uint16_t DIN_Pin;		//Адрес разряда порта(D_IN) с которого читаем значение(VAR_IN), которое должно удовлетворять условию для выполнения условия
-//	GPIO_TypeDef *D_OUT;	//Адрес порта открытого(ых) коллектора(ов), который(е) устанавливаем в состояние на порту выхода OCD(VAR_OUT)
-//	uint8_t VAR_OUT;		//Значение которое устанавливается если выполняется условие, которое установлено на вход(VAR_IN)
-//	uint16_t OCD_Pin;		//Адрес разряда порта(D_OUT) на который устанавливаем значение(VAR_OUT), которое например переключает реле
-//}DiDo[8];
+extern GPIO_TypeDef *pVHOD[8];
+extern GPIO_TypeDef *pVIHOD[8];
+extern GPIO_TypeDef *pAVHOD[4];
+extern GPIO_TypeDef *pPWM[4];
+extern GPIO_TypeDef *pONEWIRE[2];
+extern uint16_t DIN_Pin[8];
+extern uint16_t OCD_Pin[8];
+extern uint16_t AIN_Pin[4];
+extern uint16_t PWM_Pin[4];
+extern uint16_t OW_Pin[2];
 
 //RTC
 //RTC_TimeTypeDef sTime = {0};
@@ -46,126 +47,32 @@ uint8_t tp3 = 1;
 //Функция обновления значений в массиве данных коллекторных выходов
 void ReWriteOCD(void)
 {
-	if(Status_OCD[0])
-		HAL_GPIO_WritePin(O0_GPIO_Port, O0_Pin, SET);
-	else
-		HAL_GPIO_WritePin(O0_GPIO_Port, O0_Pin, RESET);
-	if(Status_OCD[1])
-		HAL_GPIO_WritePin(O1_GPIO_Port, O1_Pin, SET);
-	else
-		HAL_GPIO_WritePin(O1_GPIO_Port, O1_Pin, RESET);
-	if(Status_OCD[2])
-		HAL_GPIO_WritePin(O2_GPIO_Port, O2_Pin, SET);
-	else
-		HAL_GPIO_WritePin(O2_GPIO_Port, O2_Pin, RESET);
-	if(Status_OCD[3])
-		HAL_GPIO_WritePin(O3_GPIO_Port, O3_Pin, SET);
-	else
-		HAL_GPIO_WritePin(O3_GPIO_Port, O3_Pin, RESET);
-	if(Status_OCD[4])
-		HAL_GPIO_WritePin(O4_GPIO_Port, O4_Pin, SET);
-	else
-		HAL_GPIO_WritePin(O4_GPIO_Port, O4_Pin, RESET);
-	if(Status_OCD[5])
-		HAL_GPIO_WritePin(O5_GPIO_Port, O5_Pin, SET);
-	else
-		HAL_GPIO_WritePin(O5_GPIO_Port, O5_Pin, RESET);
-	if(Status_OCD[6])
-		HAL_GPIO_WritePin(O6_GPIO_Port, O6_Pin, SET);
-	else
-		HAL_GPIO_WritePin(O6_GPIO_Port, O6_Pin, RESET);
-	if(Status_OCD[7])
-		HAL_GPIO_WritePin(O7_GPIO_Port, O7_Pin, SET);
-	else
-		HAL_GPIO_WritePin(O7_GPIO_Port, O7_Pin, RESET);
+	for(int i = 0; i < 8; i++)
+		(Status_OCD[i]) ? (HAL_GPIO_WritePin(pVIHOD[i], OCD_Pin[i], SET)) : (HAL_GPIO_WritePin(pVIHOD[i], OCD_Pin[i], RESET));
 }
 //Функция обновления значений в массиве данных цифровых входов
 void ReWriteDIN(void)
 {
-	if(Status_DIN[0])
-		HAL_GPIO_WritePin(IN0_GPIO_Port, IN0_Pin, SET);
-	else
-		HAL_GPIO_WritePin(IN0_GPIO_Port, IN0_Pin, RESET);
-	if(Status_DIN[1])
-		HAL_GPIO_WritePin(IN1_GPIO_Port, IN1_Pin, SET);
-	else
-		HAL_GPIO_WritePin(IN1_GPIO_Port, IN1_Pin, RESET);
-	if(Status_DIN[2])
-		HAL_GPIO_WritePin(IN2_GPIO_Port, IN2_Pin, SET);
-	else
-		HAL_GPIO_WritePin(IN2_GPIO_Port, IN2_Pin, RESET);
-	if(Status_DIN[3])
-		HAL_GPIO_WritePin(IN3_GPIO_Port, IN3_Pin, SET);
-	else
-		HAL_GPIO_WritePin(IN3_GPIO_Port, IN3_Pin, RESET);
-	if(Status_DIN[4])
-		HAL_GPIO_WritePin(IN4_GPIO_Port, IN4_Pin, SET);
-	else
-		HAL_GPIO_WritePin(IN4_GPIO_Port, IN4_Pin, RESET);
-	if(Status_DIN[5])
-		HAL_GPIO_WritePin(IN5_GPIO_Port, IN5_Pin, SET);
-	else
-		HAL_GPIO_WritePin(IN5_GPIO_Port, IN5_Pin, RESET);
-	if(Status_DIN[6])
-		HAL_GPIO_WritePin(IN6_GPIO_Port, IN6_Pin, SET);
-	else
-		HAL_GPIO_WritePin(IN6_GPIO_Port, IN6_Pin, RESET);
-	if(Status_DIN[7])
-		HAL_GPIO_WritePin(IN7_GPIO_Port, IN7_Pin, SET);
-	else
-		HAL_GPIO_WritePin(IN7_GPIO_Port, IN7_Pin, RESET);
+	for(int i = 0; i < 8; i++)
+		(Status_DIN[i]) ? (HAL_GPIO_WritePin(pVHOD[i], DIN_Pin[i], SET)) : (HAL_GPIO_WritePin(pVHOD[i], DIN_Pin[i], RESET));
 }
 //Функция обновления значений в массиве данных аналоговых входов
 void ReWriteAIN(void)
 {
-	if(Status_AIN[0])
-		HAL_GPIO_WritePin(AIN0_GPIO_Port, AIN0_Pin, SET);
-	else
-		HAL_GPIO_WritePin(AIN0_GPIO_Port, AIN0_Pin, RESET);
-	if(Status_AIN[1])
-		HAL_GPIO_WritePin(AIN1_GPIO_Port, AIN1_Pin, SET);
-	else
-		HAL_GPIO_WritePin(AIN1_GPIO_Port, AIN1_Pin, RESET);
-	if(Status_AIN[2])
-		HAL_GPIO_WritePin(AIN2_GPIO_Port, AIN2_Pin, SET);
-	else
-		HAL_GPIO_WritePin(AIN2_GPIO_Port, AIN2_Pin, RESET);
-	if(Status_AIN[3])
-		HAL_GPIO_WritePin(AIN3_GPIO_Port, AIN3_Pin, SET);
-	else
-		HAL_GPIO_WritePin(AIN3_GPIO_Port, AIN3_Pin, RESET);
+	for(int i = 0; i < 4; i++)
+		(Status_AIN[i]) ? (HAL_GPIO_WritePin(pAVHOD[i], AIN_Pin[i], SET)) : (HAL_GPIO_WritePin(pAVHOD[i], AIN_Pin[i], RESET));
 }
 //Функция обновления значений в массиве данных выходных каналов широтноимпульсной модуляции
 void ReWritePWM(void)
 {
-	if(Status_PWM[0])
-		HAL_GPIO_WritePin(PWM0_GPIO_Port, PWM0_Pin, SET);
-	else
-		HAL_GPIO_WritePin(PWM0_GPIO_Port, PWM0_Pin, RESET);
-	if(Status_PWM[1])
-		HAL_GPIO_WritePin(PWM1_GPIO_Port, PWM1_Pin, SET);
-	else
-		HAL_GPIO_WritePin(PWM1_GPIO_Port, PWM1_Pin, RESET);
-	if(Status_PWM[2])
-		HAL_GPIO_WritePin(PWM2_GPIO_Port, PWM2_Pin, SET);
-	else
-		HAL_GPIO_WritePin(PWM2_GPIO_Port, PWM2_Pin, RESET);
-	if(Status_PWM[3])
-		HAL_GPIO_WritePin(PWM3_GPIO_Port, PWM3_Pin, SET);
-	else
-		HAL_GPIO_WritePin(PWM3_GPIO_Port, PWM3_Pin, RESET);
+	for(int i = 0; i < 4; i++)
+		(Status_PWM[i]) ? (HAL_GPIO_WritePin(pPWM[i], PWM_Pin[i], SET)) : (HAL_GPIO_WritePin(pPWM[i], PWM_Pin[i], RESET));
 }
 //Функция обновления значений в массиве данных однопроводного интерфейса
 void ReWrite1Wire(void)
 {
-	if(Status_1WR[0])
-		HAL_GPIO_WritePin(WR0_GPIO_Port, WR0_Pin, SET);
-	else
-		HAL_GPIO_WritePin(WR0_GPIO_Port, WR0_Pin, RESET);
-	if(Status_1WR[1])
-		HAL_GPIO_WritePin(WR1_GPIO_Port, WR1_Pin, SET);
-	else
-		HAL_GPIO_WritePin(WR1_GPIO_Port, WR1_Pin, RESET);
+	for(int i = 0; i < 2; i++)
+		(Status_1WR[i]) ? (HAL_GPIO_WritePin(pONEWIRE[i], OW_Pin[i], SET)) : (HAL_GPIO_WritePin(pONEWIRE[i], OW_Pin[i], RESET));
 }
 //Функция обработки посылок от интрефейсного МК
 //Обновляет значения в массивах данных входов/выходов
@@ -424,42 +331,6 @@ void SPI_available(void)
 			USART_Tx(Status_OCD[6]);
 			USART_Tx(Status_OCD[7]);
 			SEND_str(" END_status_OCD\n");
-
-			//----------------------For testing----------------------
-//			if(Status_OCD[0])
-//				HAL_GPIO_WritePin(O0_GPIO_Port, O0_Pin, SET);
-//			else
-//				HAL_GPIO_WritePin(O0_GPIO_Port, O0_Pin, RESET);
-//			if(Status_OCD[1])
-//				HAL_GPIO_WritePin(O1_GPIO_Port, O1_Pin, SET);
-//			else
-//				HAL_GPIO_WritePin(O1_GPIO_Port, O1_Pin, RESET);
-//			if(Status_OCD[2])
-//				HAL_GPIO_WritePin(O2_GPIO_Port, O2_Pin, SET);
-//			else
-//				HAL_GPIO_WritePin(O2_GPIO_Port, O2_Pin, RESET);
-//			if(Status_OCD[3])
-//				HAL_GPIO_WritePin(O3_GPIO_Port, O3_Pin, SET);
-//			else
-//				HAL_GPIO_WritePin(O3_GPIO_Port, O3_Pin, RESET);
-//			if(Status_OCD[4])
-//				HAL_GPIO_WritePin(O4_GPIO_Port, O4_Pin, SET);
-//			else
-//				HAL_GPIO_WritePin(O4_GPIO_Port, O4_Pin, RESET);
-//			if(Status_OCD[5])
-//				HAL_GPIO_WritePin(O5_GPIO_Port, O5_Pin, SET);
-//			else
-//				HAL_GPIO_WritePin(O5_GPIO_Port, O5_Pin, RESET);
-//			if(Status_OCD[6])
-//				HAL_GPIO_WritePin(O6_GPIO_Port, O6_Pin, SET);
-//			else
-//				HAL_GPIO_WritePin(O6_GPIO_Port, O6_Pin, RESET);
-//			if(Status_OCD[7])
-//				HAL_GPIO_WritePin(O7_GPIO_Port, O7_Pin, SET);
-//			else
-//				HAL_GPIO_WritePin(O7_GPIO_Port, O7_Pin, RESET);
-			//-------------------------------------------------------
-
 		}
 		if(tp)
 		{
