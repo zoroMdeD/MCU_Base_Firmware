@@ -113,53 +113,62 @@ void my_write_file_json(char *path, char *text)
 //Функция записи файла прошивки .bin на карту памяти
 //Принимает "path" - указатель на имя файла
 //Принимает "text" - указатель на данные, которые нужно сохранить
-void my_write_file_firmware(char *path, char *data_bytes)
+char *my_write_file_firmware(char *path, char *data_bytes, uint32_t crc16)
 {
+	uint32_t crc16_t = 0;
+
 	if(!check_init)
+	{
 		if (f_mount(0, &FATFS_Obj) == FR_OK)
 		{
-			SEND_str("f_mount -> success\n");
-
 			result = f_open(&MyFile, path + '\0', FA_CREATE_ALWAYS | FA_WRITE);
 			if(result == FR_OK)
 			{
 				check_init = true;
-				SEND_str("f_open -> success\n");
+				firmwareBytesCounter = 0;
 			}
 		}
+	}
 	if(check_init)
 	{
 		result = f_lseek(&MyFile, MyFile.fsize);
-		firmwareBytesCounter = 0;
-
-		BytesToWrite = MyFile.fsize;
-
-		char str1[60];
-		sprintf(str1, "file_Size: %d Byte\n", BytesToWrite);
-		SEND_str(str1);
-
 		if(result == FR_OK)
 		{
-			SEND_str("f_write -> success\n");
-			if((SetFW.SIZE - firmwareBytesCounter) >= 248)
+			//Здесь необходимо проверить контрольную сумму
+			if(crc16 == crc16_t)
 			{
-				result = f_write(&MyFile, data_bytes, 248 , &WriteBytes);	//strlen(data_bytes)
-				firmwareBytesCounter += 248;
+				if((SetFW.SIZE - firmwareBytesCounter) >= 248)
+				{
+					result = f_write(&MyFile, data_bytes, 248 , &WriteBytes);	//strlen(data_bytes)
+					firmwareBytesCounter += 248;
+				}
+				else if (SetFW.SIZE != firmwareBytesCounter)
+				{
+					result = f_write(&MyFile, data_bytes, (SetFW.SIZE - firmwareBytesCounter) , &WriteBytes);	//strlen(data_bytes)
+					firmwareBytesCounter = SetFW.SIZE;
+				}
+				return FW_CRC16_OK;
 			}
-			else if (SetFW.SIZE != firmwareBytesCounter)
-			{
-				result = f_write(&MyFile, data_bytes, (SetFW.SIZE - firmwareBytesCounter) , &WriteBytes);	//strlen(data_bytes)
-	        	firmwareBytesCounter = SetFW.SIZE;
-			}
-			char str1[60];
-			sprintf(str1, "write_bytes: %d Byte\n", WriteBytes);
-			SEND_str(str1);
+			return FW_CRC16_ERR;
 		}
 	}
+	return FW_UPD_ERROR;
 }
 void fl_close(void)
 {
     f_close(&MyFile);
+}
+void str2hexStr(char *input, char *output)
+{
+	int loop = 0, i = 0;
+
+	while(input[loop] != '\0')
+	{
+		sprintf((char*)(output + i),"%02X", input[loop]);
+		loop+=1;
+		i+=2;
+	}
+	output[i++] = '\0';
 }
 //Функция сохраниения конфигурационных данных (Включить/выключить цифровой выход(Открытый коллектор) если цифровой вход = значение(уровень))
 //Принимает "D_IN" - строку с номером цифрового входа

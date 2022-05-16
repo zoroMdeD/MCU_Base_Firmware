@@ -290,6 +290,11 @@ void Error_Handler(void);
 #define CS2__Pin GPIO_PIN_1
 #define CS2__GPIO_Port GPIOE
 /* USER CODE BEGIN Private defines */
+//------------------------UPD_Firmware------------------------
+#define FW_CRC16_OK		"OK"			//Контрольная сумма совпала, пакет данных цел
+#define FW_CRC16_ERR	"ERROR"			//Ошибка передачи пакета данных(необходимо повторить посылку пакета)
+#define FW_UPD_ERROR	"UPD_ERROR"		//Ошибка инициализации карты
+//------------------------------------------------------------
 //---------------------------RS-485---------------------------
 #define RS485_Tx	GPIOD->ODR |= GPIO_ODR_ODR_4 | GPIO_ODR_ODR_7		//конфа на передачу DE = 1, RE# = 1;
 #define RS485_Rx	GPIOD->ODR &= ~(GPIO_ODR_ODR_4 | GPIO_ODR_ODR_7)	//конфа на прием DE = 0, RE# = 0;

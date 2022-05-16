@@ -134,22 +134,24 @@ void DEBUG_main(void)
 		{
 //			save_periphery_data();
 		}
-		else if(strcmp(DBG_buf,"StartDownloadingFirmwareData") == 0)
+		else if(strcmp(DBG_buf,"BeginUPD") == 0)
 		{
 			json_input("{\"INSTRUCTION\":\"UPDATE_FIRMWARE\",\"COMMAND\":{\"TYPE\":\"SETTING_FIRMWARE\",\"NAME\":\"test_firmware\",\"VERSION\":\"v.0.0.1\",\"SIZE\":\"248\"},\"TIME\":\"1122334455\"}");
 			check_UPD_FW = true;
 			SEND_str("start\n");
-//			firmwareBytesToWrite = 248;
 		}
-		else if(strcmp(DBG_buf,"EndDownloadingFirmwareData") == 0)
+		else if(strcmp(DBG_buf,"EndUPD") == 0)
 		{
 			check_UPD_FW = false;
 			fl_close();
 			SEND_str("end\n");
+			//В этом месте перезапускаем контроллер!
 		}
 		else if(check_UPD_FW)
 		{
-			my_write_file_firmware("firmware_2.bin", DBG_buf);
+			char tmp_crc16[9];
+			sprintf((char*)(tmp_crc16), "%02X%02X%02X%02X", DBG_buf[248], DBG_buf[249], DBG_buf[250] ,DBG_buf[251]);
+			SEND_str(my_write_file_firmware(SetFW.NAME, DBG_buf, atoi(tmp_crc16)));
 		}
 //		else	//тест для посылки строки через терминал
 //		{
