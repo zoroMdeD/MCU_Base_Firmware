@@ -379,7 +379,7 @@ void UART3_RxCpltCallback(void)
 	uint8_t b;
 	b = str_ethernet[0];
 	//если вдруг случайно превысим длину буфера
-	if (usartprop.usart_cnt>255)		//default: 101, usart.cnt>25
+	if (usartprop.usart_cnt>253)		//default: 101, usart.cnt>25
 	{
 		usartprop.usart_cnt=0;
 		HAL_UART_Receive_IT(&huart3,(uint8_t*)str_ethernet,1);

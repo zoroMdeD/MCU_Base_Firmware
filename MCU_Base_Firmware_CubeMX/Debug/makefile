@@ -1,5 +1,6 @@
 ################################################################################
 # Automatically-generated file. Do not edit!
+# Toolchain: GNU Tools for STM32 (9-2020-q2-update)
 ################################################################################
 
 -include ../makefile.init
@@ -28,7 +29,6 @@ RM := rm -rf
 -include Core/Startup/subdir.mk
 -include Core/Src/subdir.mk
 -include Core/JSON/Src/subdir.mk
--include subdir.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)
@@ -45,6 +45,17 @@ endif
 
 -include ../makefile.defs
 
+OPTIONAL_TOOL_DEPS := \
+$(wildcard ../makefile.defs) \
+$(wildcard ../makefile.init) \
+$(wildcard ../makefile.targets) \
+
+
+BUILD_ARTIFACT_NAME := MCU_Base_Firmware_CubeMX
+BUILD_ARTIFACT_EXTENSION := elf
+BUILD_ARTIFACT_PREFIX :=
+BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
+
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
 MCU_Base_Firmware_CubeMX.elf \
@@ -60,37 +71,46 @@ MCU_Base_Firmware_CubeMX.bin \
 
 
 # All Target
-all: MCU_Base_Firmware_CubeMX.elf secondary-outputs
+all: main-build
+
+# Main-build Target
+main-build: MCU_Base_Firmware_CubeMX.elf secondary-outputs
 
 # Tool invocations
-MCU_Base_Firmware_CubeMX.elf: $(OBJS) $(USER_OBJS) D:\YandexDisk\YandexDisk\BasicControlAutomated\MCU_Base_Firmware_CubeMX\MCU_Base_Firmware\MCU_Base_Firmware_CubeMX\STM32F407VGTX_FLASH.ld
+MCU_Base_Firmware_CubeMX.elf: $(OBJS) $(USER_OBJS) D:\YandexDisk\YandexDisk\BasicControlAutomated\MCU_Base_Firmware_CubeMX\MCU_Base_Firmware\MCU_Base_Firmware_CubeMX\STM32F407VGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	arm-none-eabi-gcc -o "MCU_Base_Firmware_CubeMX.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"D:\YandexDisk\YandexDisk\BasicControlAutomated\MCU_Base_Firmware_CubeMX\MCU_Base_Firmware\MCU_Base_Firmware_CubeMX\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="MCU_Base_Firmware_CubeMX.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
-default.size.stdout: $(EXECUTABLES)
+default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	arm-none-eabi-size  $(EXECUTABLES)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-MCU_Base_Firmware_CubeMX.list: $(EXECUTABLES)
+MCU_Base_Firmware_CubeMX.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "MCU_Base_Firmware_CubeMX.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
-MCU_Base_Firmware_CubeMX.bin: $(EXECUTABLES)
+MCU_Base_Firmware_CubeMX.bin: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	arm-none-eabi-objcopy  -O binary $(EXECUTABLES) "MCU_Base_Firmware_CubeMX.bin"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) *
+	-$(RM) MCU_Base_Firmware_CubeMX.bin MCU_Base_Firmware_CubeMX.elf MCU_Base_Firmware_CubeMX.list default.size.stdout
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST) $(OBJCOPY_BIN)
 
-.PHONY: all clean dependents
-.SECONDARY:
+fail-specified-linker-script-missing:
+	@echo 'Error: Cannot find the specified linker script. Check the linker settings in the build configuration.'
+	@exit 2
+
+warn-no-linker-script-specified:
+	@echo 'Warning: No linker script specified. Check the linker settings in the build configuration.'
+
+.PHONY: all clean dependents main-build fail-specified-linker-script-missing warn-no-linker-script-specified
 
 -include ../makefile.targets
