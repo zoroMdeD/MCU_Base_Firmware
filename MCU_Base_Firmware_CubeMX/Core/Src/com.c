@@ -15,6 +15,10 @@
 char DBG_buf[DBG_RX_BUFFER_SIZE] = {0,};
 char DBG_str[DBG_RX_BUFFER_SIZE] = {0,};
 
+extern bool check_UPD_FW;
+extern uint32_t firmwareBytesToWrite;
+extern uint32_t size_of_data;
+
 //Функция передачи байта по USART3
 //Принимает байт
 void USART_Tx(unsigned char Data)
@@ -129,6 +133,23 @@ void DEBUG_main(void)
 		else if(strstr(DBG_buf, "WRITE_SD") != NULL)
 		{
 //			save_periphery_data();
+		}
+		else if(strcmp(DBG_buf,"StartDownloadingFirmwareData") == 0)
+		{
+			json_input("{\"INSTRUCTION\":\"UPDATE_FIRMWARE\",\"COMMAND\":{\"TYPE\":\"SETTING_FIRMWARE\",\"NAME\":\"test_firmware\",\"VERSION\":\"v.0.0.1\",\"SIZE\":\"248\"},\"TIME\":\"1122334455\"}");
+			check_UPD_FW = true;
+			SEND_str("start\n");
+//			firmwareBytesToWrite = 248;
+		}
+		else if(strcmp(DBG_buf,"EndDownloadingFirmwareData") == 0)
+		{
+			check_UPD_FW = false;
+			fl_close();
+			SEND_str("end\n");
+		}
+		else if(check_UPD_FW)
+		{
+			my_write_file_firmware("firmware_2.bin", DBG_buf);
 		}
 //		else	//тест для посылки строки через терминал
 //		{

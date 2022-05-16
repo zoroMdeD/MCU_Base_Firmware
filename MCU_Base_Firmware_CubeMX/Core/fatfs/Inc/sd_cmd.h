@@ -13,6 +13,8 @@
 void my_init_card(void);
 void my_read_file(void);
 void my_write_file_json(char *path, char *text);
+void my_write_file_firmware(char *path, char *data_bytes);
+void fl_close(void);
 void save_dido(char *D_IN, char *text);
 void save_aido(char *A_IN, char *text);
 void save_pwm(char *PWM_OUT, char *text);

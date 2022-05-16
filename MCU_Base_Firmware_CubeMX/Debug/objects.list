@@ -20,6 +20,7 @@
 "./Core/Src/usart_ring.o"
 "./Core/Startup/startup_stm32f407vgtx.o"
 "./Core/dwt/Src/delay.o"
+"./Core/eth/Src/eth_cmd.o"
 "./Core/eth/Src/net.o"
 "./Core/fatfs/Src/ccsbcs.o"
 "./Core/fatfs/Src/ff.o"

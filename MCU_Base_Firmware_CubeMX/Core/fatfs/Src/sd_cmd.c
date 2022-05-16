@@ -7,12 +7,18 @@
 
 #include "../../Core/fatfs/Inc/sd_cmd.h"
 
-FATFS FATFS_Obj;	//Инициализация структуры описывающей инициализацию файловой системы
+extern FATFS FATFS_Obj;
+extern FRESULT result;
+extern FIL MyFile;
 
-FRESULT result;		//Инициализация структуры описывающей статусы работы карты памяти
-FIL test;			//Инициализация структуры описывающей выбранный файл
+extern uint32_t BytesToWrite;
+extern uint32_t firmwareBytesToWrite;
+extern uint32_t firmwareBytesCounter;
+
+extern bool check_init;
 
 uint8_t readBuffer[512];	//Буфер для хранения прочитанных с карты данных
+uint8_t WriteBuffer[248];
 uint32_t BytesToRead = 0;	//Буфер для хранения размера файла
 uint32_t BytesCounter = 0;	//Счетчик кол-ва прочитанных данных итерируемый пачками readBuffer[512]
 UINT readBytes = 0;			//Счетчик кол-ва прочитанных данных
@@ -34,13 +40,13 @@ void my_read_file(void)
 		uint8_t path[10]="test.json";
 		path[9] = '\0';
 
-		result = f_open(&test, (char*)path, FA_READ);
+		result = f_open(&MyFile, (char*)path, FA_READ);
 
 		if(result == FR_OK)
 		{
 			SEND_str("f_open -> success\n");
 
-			BytesToRead = test.fsize;
+			BytesToRead = MyFile.fsize;
 
 			char str1[60];
 			sprintf(str1, "file_Size: %d Byte\n", BytesToRead);
@@ -49,14 +55,14 @@ void my_read_file(void)
 			BytesCounter = 0;
 			while ((BytesToRead - BytesCounter) >= 512)
 		    {
-		       	f_read(&test, readBuffer, 512, &readBytes);
+		       	f_read(&MyFile, readBuffer, 512, &readBytes);
 		       	BytesCounter += 512;
 
 		       	HAL_UART_Transmit(&huart3, (uint8_t*)readBuffer, strlen(readBuffer), 0x1000);
 		    }
 		    if (BytesToRead != BytesCounter)
 		    {
-	        	f_read(&test, readBuffer, (BytesToRead - BytesCounter), &readBytes);
+	        	f_read(&MyFile, readBuffer, (BytesToRead - BytesCounter), &readBytes);
 
 	        	HAL_UART_Transmit(&huart3, (uint8_t*)readBuffer, BytesToRead - BytesCounter, 0x1000);
 
@@ -71,7 +77,7 @@ void my_read_file(void)
 //				sprintf(str1,"BytesToRead: %d\n",readBytes);
 //				SEND_str(str1);
 //			}
-		    f_close(&test);
+		    f_close(&MyFile);
 //		    f_unlink((char*)path);
 		}
 	}
@@ -85,13 +91,13 @@ void my_write_file_json(char *path, char *text)
 	{
 		SEND_str("f_mount -> success\n");
 
-		result = f_open(&test, path + '\0', FA_CREATE_ALWAYS|FA_WRITE);
+		result = f_open(&MyFile, path + '\0', FA_CREATE_ALWAYS|FA_WRITE);
 
 		if(result == FR_OK)
 		{
 			SEND_str("f_open -> success\n");
 
-			result = f_write(&test, text, strlen(text), &WriteBytes);
+			result = f_write(&MyFile, text, strlen(text), &WriteBytes);
 			if(result == FR_OK)
 			{
 				SEND_str("f_write -> success\n");
@@ -100,9 +106,60 @@ void my_write_file_json(char *path, char *text)
 				sprintf(str1, "write_bytes: %d Byte\n", WriteBytes);
 				SEND_str(str1);
 			}
-		    f_close(&test);
+		    f_close(&MyFile);
 		}
 	}
+}
+//Функция записи файла прошивки .bin на карту памяти
+//Принимает "path" - указатель на имя файла
+//Принимает "text" - указатель на данные, которые нужно сохранить
+void my_write_file_firmware(char *path, char *data_bytes)
+{
+	if(!check_init)
+		if (f_mount(0, &FATFS_Obj) == FR_OK)
+		{
+			SEND_str("f_mount -> success\n");
+
+			result = f_open(&MyFile, path + '\0', FA_CREATE_ALWAYS | FA_WRITE);
+			if(result == FR_OK)
+			{
+				check_init = true;
+				SEND_str("f_open -> success\n");
+			}
+		}
+	if(check_init)
+	{
+		result = f_lseek(&MyFile, MyFile.fsize);
+		firmwareBytesCounter = 0;
+
+		BytesToWrite = MyFile.fsize;
+
+		char str1[60];
+		sprintf(str1, "file_Size: %d Byte\n", BytesToWrite);
+		SEND_str(str1);
+
+		if(result == FR_OK)
+		{
+			SEND_str("f_write -> success\n");
+			if((SetFW.SIZE - firmwareBytesCounter) >= 248)
+			{
+				result = f_write(&MyFile, data_bytes, 248 , &WriteBytes);	//strlen(data_bytes)
+				firmwareBytesCounter += 248;
+			}
+			else if (SetFW.SIZE != firmwareBytesCounter)
+			{
+				result = f_write(&MyFile, data_bytes, (SetFW.SIZE - firmwareBytesCounter) , &WriteBytes);	//strlen(data_bytes)
+	        	firmwareBytesCounter = SetFW.SIZE;
+			}
+			char str1[60];
+			sprintf(str1, "write_bytes: %d Byte\n", WriteBytes);
+			SEND_str(str1);
+		}
+	}
+}
+void fl_close(void)
+{
+    f_close(&MyFile);
 }
 //Функция сохраниения конфигурационных данных (Включить/выключить цифровой выход(Открытый коллектор) если цифровой вход = значение(уровень))
 //Принимает "D_IN" - строку с номером цифрового входа

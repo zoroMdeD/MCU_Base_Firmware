@@ -46,7 +46,8 @@ Middlewares/Third_Party/LwIP/src/netif/ppp/magic.o: \
  ../Core/Inc/../JSON/Inc/create_JSON.h \
  ../Core/Inc/../periphery_io/Inc/data_process.h \
  ../Core/Inc/../periphery_io/Inc/temperature_sensors.h \
- ../Core/Inc/../dwt/Inc/delay.h ../Core/Inc/../../Core/fatfs/Inc/sd_cmd.h \
+ ../Core/Inc/../eth/Inc/eth_cmd.h ../Core/Inc/../dwt/Inc/delay.h \
+ ../Core/Inc/../../Core/fatfs/Inc/sd_cmd.h \
  ../Core/Inc/../../Core/fatfs/Inc/spi_sd.h \
  ../Core/Inc/../../Core/fatfs/Inc/diskio.h \
  ../Core/Inc/../../Core/fatfs/Inc/integer.h \
@@ -167,6 +168,8 @@ Middlewares/Third_Party/LwIP/src/netif/ppp/magic.o: \
 ../Core/Inc/../periphery_io/Inc/data_process.h:
 
 ../Core/Inc/../periphery_io/Inc/temperature_sensors.h:
+
+../Core/Inc/../eth/Inc/eth_cmd.h:
 
 ../Core/Inc/../dwt/Inc/delay.h:
 

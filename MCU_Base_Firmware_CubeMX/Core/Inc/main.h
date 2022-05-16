@@ -53,6 +53,7 @@ extern "C" {
 #include "../JSON/Inc/create_JSON.h"
 #include "../periphery_io/Inc/data_process.h"
 #include "../periphery_io/Inc/temperature_sensors.h"
+#include "../eth/Inc/eth_cmd.h"
 //--------------------------delay_ns--------------------------
 #include "../dwt/Inc/delay.h"
 //#define DEMCR_TRCENA    0x01000000
@@ -88,6 +89,14 @@ extern "C" {
  * S3_Pin = 0 - Включено измерение тока на 5-ом канале измерения ADC1_IN5 || S3_Pin = 1 - Включено измерение напряжения на 5-ом канале измерения ADC1_IN5
  * S4_Pin = 0 - Включено измерение тока на 6-ом канале измерения ADC1_IN6 || S4_Pin = 1 - Включено измерение напряжения на 6-ом канале измерения ADC1_IN6
  */
+
+//Settings firmware
+struct SettingsFirmware
+{
+	char *NAME;		//Имя файла прошивки
+	char *VERSION;	//Версия прошивки
+	int SIZE;			//Размер файла прошивки в байтах
+}SetFW;
 
 //Digital Input(Discrete signals) Digital Output(Open Drain)
 struct ScaningDIN_UpdateOCD

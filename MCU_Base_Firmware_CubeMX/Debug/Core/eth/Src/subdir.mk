@@ -5,12 +5,15 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
+../Core/eth/Src/eth_cmd.c \
 ../Core/eth/Src/net.c 
 
 OBJS += \
+./Core/eth/Src/eth_cmd.o \
 ./Core/eth/Src/net.o 
 
 C_DEPS += \
+./Core/eth/Src/eth_cmd.d \
 ./Core/eth/Src/net.d 
 
 
@@ -21,7 +24,7 @@ Core/eth/Src/%.o: ../Core/eth/Src/%.c Core/eth/Src/subdir.mk
 clean: clean-Core-2f-eth-2f-Src
 
 clean-Core-2f-eth-2f-Src:
-	-$(RM) ./Core/eth/Src/net.d ./Core/eth/Src/net.o
+	-$(RM) ./Core/eth/Src/eth_cmd.d ./Core/eth/Src/eth_cmd.o ./Core/eth/Src/net.d ./Core/eth/Src/net.o
 
 .PHONY: clean-Core-2f-eth-2f-Src
 

@@ -36,6 +36,10 @@ char *ROM_RAW;				//Уникальный идентификатор датчик
 char *RANGE_TEMP_LOW;		//Нижняя границы температуры
 char *RANGE_TEMP_HIGH;		//Верхняя граница температуры
 
+char *NAME_FW;
+char *VERSION_FW;
+char *SIZE_FW;
+
 //Массивы параметров
 char *DigitalParamMass;					//Массив для значений цифровых выходов (8 параметров)
 char *AnalogParamMass;					//Массив для значений аналоговых выходов (8 параметров)
@@ -48,7 +52,7 @@ int Time_Server = 0;	//Переменная системного времени 
 int Time_Client = 0;	//Переменная системного времени клиента
 
 char paramValue[8];
-char *test;
+char *MyFile;
 
 //Функция разбора подстроки значений параметра
 //Принимает указатель на массив символов со значениями параметра
@@ -336,7 +340,44 @@ void json_input(char *text)
 				free(sType);
 			}
 		}
+		else if(strcmp(INSTRUCTION, "UPDATE_FIRMWARE") == 0)
+		{
+			cJSON *sType = cJSON_GetObjectItem(cJSON_GetObjectItem(json, "COMMAND"), "TYPE");
+			TYPE = sType->valuestring;
 
+			if(strcmp(TYPE, "SETTING_FIRMWARE") == 0)
+			{
+				cJSON *s1 = cJSON_GetObjectItem(cJSON_GetObjectItem(json, "COMMAND"), "NAME");
+				cJSON *s2 = cJSON_GetObjectItem(cJSON_GetObjectItem(json, "COMMAND"), "VERSION");
+				cJSON *s3 = cJSON_GetObjectItem(cJSON_GetObjectItem(json, "COMMAND"), "SIZE");
+				NAME_FW = s1->valuestring;
+				VERSION_FW = s2->valuestring;
+				SIZE_FW = s3->valuestring;
+
+//				for(int i = 0; i < strlen(NAME_FW); i++)
+//				{
+//					SetFW.NAME[i] = NAME_FW[i];
+//				}
+				SetFW.NAME = NAME_FW;
+				SetFW.VERSION = VERSION_FW;
+				SetFW.SIZE = atoi(SIZE_FW);
+
+				cJSON_Delete(json);
+				free(stime);
+				free(sInstruction);
+				free(sType);
+				free(s1);
+				free(s2);
+				free(s3);
+			}
+			else
+			{
+				cJSON_Delete(json);
+				free(stime);
+				free(sInstruction);
+				free(sType);
+			}
+		}
 		else if(strcmp(INSTRUCTION, "SET_PERIPHERALS") == 0)
 		{
 			cJSON *sType = cJSON_GetObjectItem(cJSON_GetObjectItem(json, "COMMAND"), "TYPE");
@@ -346,11 +387,11 @@ void json_input(char *text)
 				cJSON *s1 = cJSON_GetObjectItem(cJSON_GetObjectItem(json, "COMMAND"), "SET");
 				DigitalParamMass = s1->valuestring;
 
-				test = parseValue(DigitalParamMass);
+				MyFile = parseValue(DigitalParamMass);
 
 				for(int i = 0; i < 8; i++)
 				{
-					Status_DIN[i] = (test[i] - 0x30);
+					Status_DIN[i] = (MyFile[i] - 0x30);
 				}
 
 				//-------------------------For testing-------------------------
@@ -370,11 +411,11 @@ void json_input(char *text)
 				cJSON *s1 = cJSON_GetObjectItem(cJSON_GetObjectItem(json, "COMMAND"), "SET");
 				AnalogParamMass = s1->valuestring;
 
-				test = parseValue(AnalogParamMass);
+				MyFile = parseValue(AnalogParamMass);
 
 				for(int i = 0; i < 8; i++)
 				{
-					Status_AIN[i] = (test[i] - 0x30);
+					Status_AIN[i] = (MyFile[i] - 0x30);
 				}
 
 				//-------------------------For testing-------------------------
@@ -395,11 +436,11 @@ void json_input(char *text)
 
 				OpenCollectorDrainParamMass = s1->valuestring;
 
-				test = parseValue(OpenCollectorDrainParamMass);
+				MyFile = parseValue(OpenCollectorDrainParamMass);
 
 				for(int i = 0; i < 8; i++)
 				{
-					Status_OCD[i] = (test[i] - 0x30);
+					Status_OCD[i] = (MyFile[i] - 0x30);
 				}
 
 				ReWriteOCD();

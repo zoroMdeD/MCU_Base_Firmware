@@ -138,13 +138,16 @@ static err_t tcp_client_recv(void *arg, struct tcp_pcb *tpcb, struct pbuf *p, er
 		//HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
 //	    SEND_str("recived is good\n");
 		es->p_tx = p;	//Присваиваем указатель на буфер нашей структуре
-		strncpy(str_ethernet_msg,es->p_tx->payload,es->p_tx->len);	//Копируем содержимое буфера в строчный массив
+		strncpy(str_ethernet_msg, es->p_tx->payload, es->p_tx->len);	//Копируем содержимое буфера в строчный массив
 		str_ethernet_msg[es->p_tx->len] = '\0';		//Заканчиваем строку нулём
 
 		HAL_UART_Transmit(&huart3, (uint8_t*)str_ethernet_msg, strlen(str_ethernet_msg), 0x1000);
 		//char test = str_ethernet_msg;
 		//SEND_str(str_ethernet_msg);
-		json_input(str_ethernet_msg);	//здесь принимаем посылку и отправляем парситься
+//		json_input(str_ethernet_msg);	//здесь принимаем посылку и отправляем парситься
+
+
+
 //		if(strcmp(str_ethernet_msg,"control\n") == 0)
 //		{
 //			//char test[512] ="{\"INSTRUCTION\":\"SET_PERIPHERALS\",\"COMMAND\":{\"TYPE\":\"ANALOG\",\"SET\":\"[1,1,0,0,1,1,0,0]\"},\"TIME\":\"1122334455\"}";

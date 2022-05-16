@@ -45,6 +45,7 @@ Core/fatfs/Src/sd_main.o: ../Core/fatfs/Src/sd_main.c \
  ../Core/Inc/../Inc/../JSON/Inc/create_JSON.h \
  ../Core/Inc/../Inc/../periphery_io/Inc/data_process.h ../Core/Inc/main.h \
  ../Core/Inc/../Inc/../periphery_io/Inc/temperature_sensors.h \
+ ../Core/Inc/../Inc/../eth/Inc/eth_cmd.h \
  ../Core/Inc/../Inc/../dwt/Inc/delay.h \
  ../Core/Inc/../Inc/../../Core/fatfs/Inc/sd_cmd.h \
  ../Core/Inc/../Inc/../../Core/fatfs/Inc/spi_sd.h \
@@ -161,6 +162,8 @@ Core/fatfs/Src/sd_main.o: ../Core/fatfs/Src/sd_main.c \
 ../Core/Inc/main.h:
 
 ../Core/Inc/../Inc/../periphery_io/Inc/temperature_sensors.h:
+
+../Core/Inc/../Inc/../eth/Inc/eth_cmd.h:
 
 ../Core/Inc/../Inc/../dwt/Inc/delay.h:
 

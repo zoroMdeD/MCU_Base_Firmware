@@ -143,6 +143,20 @@ OR
 }
 char *json[] = "{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_TEMP_PROFILE\",\"SENSOR\":\"[0x28, 0x79, 0x0E, 0x95, 0x0C, 0x00, 0x00, 0x69]\",\"RANGE_TEMP_LOW\":\"+28\",\"RANGE_TEMP_HIGH\":\"+50\",\"D_OUT\":\"VIHOD1\",\"VAR_OUT\":\"1\"},\"TIME\":\"1122334455\"}";
 
+//---------------------------------------------------------------------КОНФИГУРАЦИЯ ПЕРЕД ОБНОВЛЕНИЕМ ПРОШИВКИ---------------------------------------------------------------------
+
+{
+	"INSTRUCTION":"UPDATE_FIRMWARE",
+	"COMMAND":
+			{
+				"NAME":"test_firmware",
+				"VERSION":"v.0.0.1",
+				"SIZE":"248"
+			},
+	"TIME":"1122334455"     
+}
+char *json[] = "{\"INSTRUCTION\":\"UPDATE_FIRMWARE\",\"COMMAND\":{\"NAME\":\"test_firmware\",\"VERSION\":\"v.0.0.1\",\"SIZE\":\"248\"},\"TIME\":\"1122334455\"}";
+
 
 //Запрос сервера:
 {
