@@ -43,7 +43,9 @@ extern "C" {
 #include "usart.h"
 #include "gpio.h"
 #include "rtc.h"
+#include "crc.h"
 #include "../gsm/Inc/gsm.h"
+#include "cmd.h"
 #include "com.h"
 #include "../rs485/Inc/rs485.h"
 #include "../lcd_interface/Inc/update_info.h"
@@ -93,7 +95,7 @@ extern "C" {
 //Settings firmware
 struct SettingsFirmware
 {
-	char *NAME;		//Имя файла прошивки
+	char *NAME;		//�?мя файла прошивки
 	char *VERSION;	//Версия прошивки
 	int SIZE;			//Размер файла прошивки в байтах
 }SetFW;
@@ -126,8 +128,8 @@ struct ScaningAIN_UpdateOCD
 //Configuration PWM output(Open Drain)
 struct UpdatePWM
 {
-	uint32_t PWM_Channel;	//канал генерации ШИМ
-	uint16_t D_CYCLE[1];	//коэффициент заполнения ШИМ
+	uint32_t PWM_Channel;	//канал генерации Ш�?М
+	uint16_t D_CYCLE[1];	//коэффициент заполнения Ш�?М
 	bool clrFlag;			//Флаг использования переменной
 }PWM[4];
 
@@ -291,8 +293,8 @@ void Error_Handler(void);
 #define CS2__GPIO_Port GPIOE
 /* USER CODE BEGIN Private defines */
 //------------------------UPD_Firmware------------------------
-#define FW_CRC16_OK		"OK"			//Контрольная сумма совпала, пакет данных цел
-#define FW_CRC16_ERR	"ERROR"			//Ошибка передачи пакета данных(необходимо повторить посылку пакета)
+#define FW_CRC32_OK		"OK"			//Контрольная сумма совпала, пакет данных цел
+#define FW_CRC32_ERR	"ERROR"			//Ошибка передачи пакета данных(необходимо повторить посылку пакета)
 #define FW_UPD_ERROR	"UPD_ERROR"		//Ошибка инициализации карты
 //------------------------------------------------------------
 //---------------------------RS-485---------------------------

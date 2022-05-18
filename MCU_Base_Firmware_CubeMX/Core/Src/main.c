@@ -20,6 +20,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "adc.h"
+#include "crc.h"
 #include "dma.h"
 #include "lwip.h"
 #include "rtc.h"
@@ -68,9 +69,9 @@ extern uint8_t d;
 
 ////----------------FATfs----------------------
 //volatile uint16_t Timer1=0;
-FATFS FATFS_Obj;	//Инициализация структуры описывающей инициализацию файловой системы
-FRESULT result;		//Инициализация структуры описывающей статусы работы карты памяти
-FIL MyFile;			//Инициализация структуры описывающей выбранный файл
+FATFS FATFS_Obj;	//�?нициализация структуры описывающей инициализацию файловой системы
+FRESULT result;		//�?нициализация структуры описывающей статусы работы карты памяти
+FIL MyFile;			//�?нициализация структуры описывающей выбранный файл
 uint32_t BytesToWrite = 0;	//Кол-во записанных байт
 int firmwareBytesToWrite = 0;	//Кол-во байт которые нужно записать(размер файла)
 int firmwareBytesCounter = 0;	//Счетчик полной почсылки (248 байт)
@@ -138,12 +139,14 @@ int main(void)
   MX_USART3_UART_Init();
   MX_LWIP_Init();
   MX_TIM4_Init();
-//  MX_RTC_Init();
+  MX_RTC_Init();
   MX_TIM6_Init();
+  MX_CRC_Init();
   /* USER CODE BEGIN 2 */
 
-	HAL_Delay(1000);
-	DWT_Init();
+	HAL_Delay(1000);	//Ждем загрузки данных на дисплее (примерная задержка)
+	DWT_Init();		//Инициализация микросекундных задержек
+	HAL_CRC_MspInit(&hcrc);		//Включаем тактирование аппаратного CRC
 
 	EN_Interrupt();		//Для дебага по USART3
 

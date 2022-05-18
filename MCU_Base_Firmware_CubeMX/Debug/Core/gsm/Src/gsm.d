@@ -21,6 +21,7 @@ Core/gsm/Src/gsm.o: ../Core/gsm/Src/gsm.c ../Core/gsm/Src/../Inc/gsm.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc_ex.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_crc.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_eth.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h \
@@ -35,8 +36,8 @@ Core/gsm/Src/gsm.o: ../Core/gsm/Src/gsm.c ../Core/gsm/Src/../Inc/gsm.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
  ../Core/Inc/adc.h ../Core/Inc/main.h ../Core/Inc/spi.h ../Core/Inc/tim.h \
  ../Core/Inc/usart.h ../Core/Inc/gpio.h ../Core/Inc/rtc.h \
- ../Core/Inc/../gsm/Inc/gsm.h ../Core/Inc/com.h \
- ../Core/Inc/../rs485/Inc/rs485.h \
+ ../Core/Inc/crc.h ../Core/Inc/../gsm/Inc/gsm.h ../Core/Inc/cmd.h \
+ ../Core/Inc/com.h ../Core/Inc/../rs485/Inc/rs485.h \
  ../Core/Inc/../lcd_interface/Inc/update_info.h ../Core/Inc/usart_ring.h \
  ../Core/Inc/../JSON/Inc/cJSON.h ../Core/Inc/../JSON/Inc/input_JSON.h \
  ../Core/Inc/../JSON/Inc/create_JSON.h \
@@ -100,6 +101,8 @@ Core/gsm/Src/gsm.o: ../Core/gsm/Src/gsm.c ../Core/gsm/Src/../Inc/gsm.h \
 
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc_ex.h:
 
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_crc.h:
+
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_eth.h:
 
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h:
@@ -138,7 +141,11 @@ Core/gsm/Src/gsm.o: ../Core/gsm/Src/gsm.c ../Core/gsm/Src/../Inc/gsm.h \
 
 ../Core/Inc/rtc.h:
 
+../Core/Inc/crc.h:
+
 ../Core/Inc/../gsm/Inc/gsm.h:
+
+../Core/Inc/cmd.h:
 
 ../Core/Inc/com.h:
 

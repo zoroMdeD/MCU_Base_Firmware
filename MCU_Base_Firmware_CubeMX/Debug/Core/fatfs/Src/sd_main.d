@@ -22,6 +22,7 @@ Core/fatfs/Src/sd_main.o: ../Core/fatfs/Src/sd_main.c \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc_ex.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_crc.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_eth.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h \
@@ -37,7 +38,8 @@ Core/fatfs/Src/sd_main.o: ../Core/fatfs/Src/sd_main.c \
  ../Core/Inc/../Inc/adc.h ../Core/Inc/../Inc/main.h \
  ../Core/Inc/../Inc/spi.h ../Core/Inc/../Inc/tim.h \
  ../Core/Inc/../Inc/usart.h ../Core/Inc/../Inc/gpio.h \
- ../Core/Inc/../Inc/rtc.h ../Core/Inc/../Inc/../gsm/Inc/gsm.h \
+ ../Core/Inc/../Inc/rtc.h ../Core/Inc/../Inc/crc.h \
+ ../Core/Inc/../Inc/../gsm/Inc/gsm.h ../Core/Inc/../Inc/cmd.h \
  ../Core/Inc/../Inc/com.h ../Core/Inc/../Inc/../rs485/Inc/rs485.h \
  ../Core/Inc/../Inc/../lcd_interface/Inc/update_info.h \
  ../Core/Inc/../Inc/usart_ring.h ../Core/Inc/../Inc/../JSON/Inc/cJSON.h \
@@ -103,6 +105,8 @@ Core/fatfs/Src/sd_main.o: ../Core/fatfs/Src/sd_main.c \
 
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc_ex.h:
 
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_crc.h:
+
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_eth.h:
 
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h:
@@ -141,7 +145,11 @@ Core/fatfs/Src/sd_main.o: ../Core/fatfs/Src/sd_main.c \
 
 ../Core/Inc/../Inc/rtc.h:
 
+../Core/Inc/../Inc/crc.h:
+
 ../Core/Inc/../Inc/../gsm/Inc/gsm.h:
+
+../Core/Inc/../Inc/cmd.h:
 
 ../Core/Inc/../Inc/com.h:
 

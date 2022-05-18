@@ -112,11 +112,11 @@ void my_write_file_json(char *path, char *text)
 }
 //Функция записи файла прошивки .bin на карту памяти
 //Принимает "path" - указатель на имя файла
-//Принимает "text" - указатель на данные, которые нужно сохранить
-char *my_write_file_firmware(char *path, char *data_bytes, uint32_t crc16)
+//Принимает "data_bytes" - указатель на буффер данных, которые нужно сохранить
+//Принимает "crc32" - контрольную сумму принимаемого пакеда данных
+//Возвращает статус контроля целостности данных
+char *my_write_file_firmware(char *path, char *data_bytes, uint32_t crc32)
 {
-	uint32_t crc16_t = 0;
-
 	if(!check_init)
 	{
 		if (f_mount(0, &FATFS_Obj) == FR_OK)
@@ -131,33 +131,37 @@ char *my_write_file_firmware(char *path, char *data_bytes, uint32_t crc16)
 	}
 	if(check_init)
 	{
-		result = f_lseek(&MyFile, MyFile.fsize);
+		result = f_lseek(&MyFile, MyFile.fsize);	//Поиск конца файла
 		if(result == FR_OK)
 		{
-			//Здесь необходимо проверить контрольную сумму
-			if(crc16 == crc16_t)
+			uint32_t crc32_t = HAL_CRC_Calculate(&hcrc, (uint32_t *)(data_bytes), 256);	//3-й параметр - указываем количество полных слов(0xFFFFFF)
+			if(crc32 == crc32_t)
 			{
-				if((SetFW.SIZE - firmwareBytesCounter) >= 248)
+				if((SetFW.SIZE - firmwareBytesCounter) >= 1024)	//default: 248
 				{
-					result = f_write(&MyFile, data_bytes, 248 , &WriteBytes);	//strlen(data_bytes)
-					firmwareBytesCounter += 248;
+					result = f_write(&MyFile, data_bytes, 1024, &WriteBytes);
+					firmwareBytesCounter += 1024;
 				}
 				else if (SetFW.SIZE != firmwareBytesCounter)
 				{
-					result = f_write(&MyFile, data_bytes, (SetFW.SIZE - firmwareBytesCounter) , &WriteBytes);	//strlen(data_bytes)
+					result = f_write(&MyFile, data_bytes, (SetFW.SIZE - firmwareBytesCounter) , &WriteBytes);
 					firmwareBytesCounter = SetFW.SIZE;
 				}
-				return FW_CRC16_OK;
+				return FW_CRC32_OK;
 			}
-			return FW_CRC16_ERR;
+			return FW_CRC32_ERR;
 		}
 	}
 	return FW_UPD_ERROR;
 }
+//Функция закрытия файла
 void fl_close(void)
 {
     f_close(&MyFile);
 }
+//Функция преобразования строки в строку шестнадцетиричных значений
+//Принимает "input" - указатель на преобразуемую строку
+//Принимает "output" - указатель на преобразованную строку
 void str2hexStr(char *input, char *output)
 {
 	int loop = 0, i = 0;

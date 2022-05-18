@@ -6,8 +6,8 @@ uint8_t ipaddr_dest[4];
 uint16_t port_dest;
 extern UART_HandleTypeDef huart3;
 USART_prop_ptr usartprop;
-char str_ethernet[256];		//104, default: 30
-char str_ethernet_msg[512];
+char str_ethernet[256];			//104, default: 30
+char str_ethernet_msg[1030];		//default: 512
 u8_t data[100];
 struct tcp_pcb *client_pcb;
 __IO uint32_t message_count=0;

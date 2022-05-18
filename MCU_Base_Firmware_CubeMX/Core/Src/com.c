@@ -136,7 +136,7 @@ void DEBUG_main(void)
 		}
 		else if(strcmp(DBG_buf,"BeginUPD") == 0)
 		{
-			json_input("{\"INSTRUCTION\":\"UPDATE_FIRMWARE\",\"COMMAND\":{\"TYPE\":\"SETTING_FIRMWARE\",\"NAME\":\"test_firmware\",\"VERSION\":\"v.0.0.1\",\"SIZE\":\"248\"},\"TIME\":\"1122334455\"}");
+			json_input("{\"INSTRUCTION\":\"UPDATE_FIRMWARE\",\"COMMAND\":{\"TYPE\":\"SETTING_FIRMWARE\",\"NAME\":\"test_firmware\",\"VERSION\":\"v.0.0.1\",\"SIZE\":\"1272\"},\"TIME\":\"1122334455\"}");
 			check_UPD_FW = true;
 			SEND_str("start\n");
 		}
@@ -145,13 +145,19 @@ void DEBUG_main(void)
 			check_UPD_FW = false;
 			fl_close();
 			SEND_str("end\n");
-			//В этом месте перезапускаем контроллер!
+			HAL_NVIC_SystemReset();		//Перезапускаем контроллер
 		}
 		else if(check_UPD_FW)
 		{
-			char tmp_crc16[9];
-			sprintf((char*)(tmp_crc16), "%02X%02X%02X%02X", DBG_buf[248], DBG_buf[249], DBG_buf[250] ,DBG_buf[251]);
-			SEND_str(my_write_file_firmware(SetFW.NAME, DBG_buf, atoi(tmp_crc16)));
+			//Запись посылки но 1024 байт, прикрепляем к концу посылки еще 4 байта контрольной суммы, итого 1028 байт в посылки каждый раз.
+			//Буфер можно попробовать увеличить
+			//Следующую посылку посылать с сервера только после получения обратного сообщения что контрольная сумма сошлась
+			//Если посылка последнего пакета байт получается не кратная 4 то ее необходимо дополнить системными единицами памяти(FFh), до 1024 байт + 4 байта CRC = 1028 байт
+			char tmp_crc32[9];
+			sprintf(tmp_crc32, "%02X%02X%02X%02X", DBG_buf[1024], DBG_buf[1025], DBG_buf[1026] ,DBG_buf[1027]);	//Вытаскиваем последние 4 байта(CRC16)
+			char *pEnd;
+			uint32_t crc32 = (uint32_t)(strtol(tmp_crc32, &pEnd, 16));
+			SEND_str(my_write_file_firmware(SetFW.NAME, DBG_buf, crc32));		//atoi(tmp_crc16)
 		}
 //		else	//тест для посылки строки через терминал
 //		{
