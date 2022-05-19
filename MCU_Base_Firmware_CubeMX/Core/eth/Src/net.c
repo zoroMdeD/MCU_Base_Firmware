@@ -6,8 +6,8 @@ uint8_t ipaddr_dest[4];
 uint16_t port_dest;
 extern UART_HandleTypeDef huart3;
 USART_prop_ptr usartprop;
-char str_ethernet[256];		//104, default: 30
-char str_ethernet_msg[512];
+char str_ethernet[256];			//104, default: 30
+char str_ethernet_msg[1030];		//default: 512
 u8_t data[100];
 struct tcp_pcb *client_pcb;
 __IO uint32_t message_count=0;
@@ -138,13 +138,19 @@ static err_t tcp_client_recv(void *arg, struct tcp_pcb *tpcb, struct pbuf *p, er
 		//HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
 //	    SEND_str("recived is good\n");
 		es->p_tx = p;	//Присваиваем указатель на буфер нашей структуре
-		strncpy(str_ethernet_msg,es->p_tx->payload,es->p_tx->len);	//Копируем содержимое буфера в строчный массив
+		strncpy(str_ethernet_msg, es->p_tx->payload, es->p_tx->len);	//Копируем содержимое буфера в строчный массив
 		str_ethernet_msg[es->p_tx->len] = '\0';		//Заканчиваем строку нулём
 
 		HAL_UART_Transmit(&huart3, (uint8_t*)str_ethernet_msg, strlen(str_ethernet_msg), 0x1000);
 		//char test = str_ethernet_msg;
 		//SEND_str(str_ethernet_msg);
-		json_input(str_ethernet_msg);	//здесь принимаем посылку и отправляем парситься
+
+		if(firmware.check_UPD)
+			sendstring(UPD_firmware(str_ethernet_msg));
+		else
+			json_input(str_ethernet_msg);		//здесь принимаем посылку и отправляем парситься
+
+
 //		if(strcmp(str_ethernet_msg,"control\n") == 0)
 //		{
 //			//char test[512] ="{\"INSTRUCTION\":\"SET_PERIPHERALS\",\"COMMAND\":{\"TYPE\":\"ANALOG\",\"SET\":\"[1,1,0,0,1,1,0,0]\"},\"TIME\":\"1122334455\"}";
@@ -379,7 +385,7 @@ void UART3_RxCpltCallback(void)
 	uint8_t b;
 	b = str_ethernet[0];
 	//если вдруг случайно превысим длину буфера
-	if (usartprop.usart_cnt>255)		//default: 101, usart.cnt>25
+	if (usartprop.usart_cnt>253)		//default: 101, usart.cnt>25
 	{
 		usartprop.usart_cnt=0;
 		HAL_UART_Receive_IT(&huart3,(uint8_t*)str_ethernet,1);

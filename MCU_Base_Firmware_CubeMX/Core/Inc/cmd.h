@@ -8,6 +8,6 @@
 #ifndef INC_CMD_H_
 #define INC_CMD_H_
 
-
+char *UPD_firmware(char *pack);
 
 #endif /* INC_CMD_H_ */

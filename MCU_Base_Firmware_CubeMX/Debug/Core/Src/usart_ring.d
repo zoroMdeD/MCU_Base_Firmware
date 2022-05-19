@@ -21,6 +21,7 @@ Core/Src/usart_ring.o: ../Core/Src/usart_ring.c ../Core/Inc/usart_ring.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc_ex.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_crc.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_eth.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h \
@@ -35,14 +36,15 @@ Core/Src/usart_ring.o: ../Core/Src/usart_ring.c ../Core/Inc/usart_ring.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
  ../Core/Inc/adc.h ../Core/Inc/spi.h ../Core/Inc/tim.h \
  ../Core/Inc/usart.h ../Core/Inc/gpio.h ../Core/Inc/rtc.h \
- ../Core/Inc/../gsm/Inc/gsm.h ../Core/Inc/com.h \
- ../Core/Inc/../rs485/Inc/rs485.h \
+ ../Core/Inc/crc.h ../Core/Inc/../gsm/Inc/gsm.h ../Core/Inc/cmd.h \
+ ../Core/Inc/com.h ../Core/Inc/../rs485/Inc/rs485.h \
  ../Core/Inc/../lcd_interface/Inc/update_info.h ../Core/Inc/usart_ring.h \
  ../Core/Inc/../JSON/Inc/cJSON.h ../Core/Inc/../JSON/Inc/input_JSON.h \
  ../Core/Inc/../JSON/Inc/create_JSON.h \
  ../Core/Inc/../periphery_io/Inc/data_process.h ../Core/Inc/main.h \
  ../Core/Inc/../periphery_io/Inc/temperature_sensors.h \
- ../Core/Inc/../dwt/Inc/delay.h ../Core/Inc/../../Core/fatfs/Inc/sd_cmd.h \
+ ../Core/Inc/../eth/Inc/eth_cmd.h ../Core/Inc/../dwt/Inc/delay.h \
+ ../Core/Inc/../../Core/fatfs/Inc/sd_cmd.h \
  ../Core/Inc/../../Core/fatfs/Inc/spi_sd.h \
  ../Core/Inc/../../Core/fatfs/Inc/diskio.h \
  ../Core/Inc/../../Core/fatfs/Inc/integer.h \
@@ -98,6 +100,8 @@ Core/Src/usart_ring.o: ../Core/Src/usart_ring.c ../Core/Inc/usart_ring.h \
 
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc_ex.h:
 
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_crc.h:
+
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_eth.h:
 
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h:
@@ -134,7 +138,11 @@ Core/Src/usart_ring.o: ../Core/Src/usart_ring.c ../Core/Inc/usart_ring.h \
 
 ../Core/Inc/rtc.h:
 
+../Core/Inc/crc.h:
+
 ../Core/Inc/../gsm/Inc/gsm.h:
+
+../Core/Inc/cmd.h:
 
 ../Core/Inc/com.h:
 
@@ -155,6 +163,8 @@ Core/Src/usart_ring.o: ../Core/Src/usart_ring.c ../Core/Inc/usart_ring.h \
 ../Core/Inc/main.h:
 
 ../Core/Inc/../periphery_io/Inc/temperature_sensors.h:
+
+../Core/Inc/../eth/Inc/eth_cmd.h:
 
 ../Core/Inc/../dwt/Inc/delay.h:
 

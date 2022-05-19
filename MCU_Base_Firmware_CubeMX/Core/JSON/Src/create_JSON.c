@@ -34,7 +34,7 @@ void test_create_json(void)
 	out = cJSON_Print(root);
 
 	SEND_str(out);
-	my_write_file("JSON_voltage.json", out);
+	my_write_file_json("JSON_voltage.json", out);
 
 	free(out);
 

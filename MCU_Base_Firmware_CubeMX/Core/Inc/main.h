@@ -43,7 +43,9 @@ extern "C" {
 #include "usart.h"
 #include "gpio.h"
 #include "rtc.h"
+#include "crc.h"
 #include "../gsm/Inc/gsm.h"
+#include "cmd.h"
 #include "com.h"
 #include "../rs485/Inc/rs485.h"
 #include "../lcd_interface/Inc/update_info.h"
@@ -53,6 +55,7 @@ extern "C" {
 #include "../JSON/Inc/create_JSON.h"
 #include "../periphery_io/Inc/data_process.h"
 #include "../periphery_io/Inc/temperature_sensors.h"
+#include "../eth/Inc/eth_cmd.h"
 //--------------------------delay_ns--------------------------
 #include "../dwt/Inc/delay.h"
 //#define DEMCR_TRCENA    0x01000000
@@ -89,6 +92,15 @@ extern "C" {
  * S4_Pin = 0 - Включено измерение тока на 6-ом канале измерения ADC1_IN6 || S4_Pin = 1 - Включено измерение напряжения на 6-ом канале измерения ADC1_IN6
  */
 
+//Settings firmware
+struct SettingsFirmware
+{
+	char *NAME;			//Имя файла прошивки
+	char *VERSION;		//Версия прошивки
+	int SIZE;			//Размер файла прошивки в байтах
+	bool check_UPD;		//Флаг готовности получения файла прошивки с сервера
+}firmware;
+
 //Digital Input(Discrete signals) Digital Output(Open Drain)
 struct ScaningDIN_UpdateOCD
 {
@@ -117,8 +129,8 @@ struct ScaningAIN_UpdateOCD
 //Configuration PWM output(Open Drain)
 struct UpdatePWM
 {
-	uint32_t PWM_Channel;	//канал генерации ШИМ
-	uint16_t D_CYCLE[1];	//коэффициент заполнения ШИМ
+	uint32_t PWM_Channel;	//канал генерации Ш�?М
+	uint16_t D_CYCLE[1];	//коэффициент заполнения Ш�?М
 	bool clrFlag;			//Флаг использования переменной
 }PWM[4];
 
@@ -281,6 +293,12 @@ void Error_Handler(void);
 #define CS2__Pin GPIO_PIN_1
 #define CS2__GPIO_Port GPIOE
 /* USER CODE BEGIN Private defines */
+//------------------------UPD_Firmware------------------------
+#define FW_CRC32_OK		"OK"			//Контрольная сумма совпала, пакет данных цел
+#define FW_CRC32_ERR	"ERROR"			//Ошибка передачи пакета данных(необходимо повторить посылку пакета)
+#define FW_UPD_ERROR	"UPD_ERROR"		//Ошибка инициализации карты
+#define FW_COMPLETE		"COMPLETE"		//Операция передачи файла и его записи на карту завершена
+//------------------------------------------------------------
 //---------------------------RS-485---------------------------
 #define RS485_Tx	GPIOD->ODR |= GPIO_ODR_ODR_4 | GPIO_ODR_ODR_7		//конфа на передачу DE = 1, RE# = 1;
 #define RS485_Rx	GPIOD->ODR &= ~(GPIO_ODR_ODR_4 | GPIO_ODR_ODR_7)	//конфа на прием DE = 0, RE# = 0;
