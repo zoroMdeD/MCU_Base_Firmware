@@ -4748,8 +4748,8 @@ Discarded input sections
                 0x0000000000000000       0xac Core/eth/Src/net.o
  .text.UART3_RxCpltCallback
                 0x0000000000000000       0x94 Core/eth/Src/net.o
- .debug_info    0x0000000000000000     0x34e4 Core/eth/Src/net.o
- .debug_abbrev  0x0000000000000000      0x33b Core/eth/Src/net.o
+ .debug_info    0x0000000000000000     0x34cd Core/eth/Src/net.o
+ .debug_abbrev  0x0000000000000000      0x31c Core/eth/Src/net.o
  .debug_aranges
                 0x0000000000000000       0x88 Core/eth/Src/net.o
  .debug_ranges  0x0000000000000000       0x78 Core/eth/Src/net.o

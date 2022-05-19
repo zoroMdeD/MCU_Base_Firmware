@@ -146,7 +146,7 @@ static err_t tcp_client_recv(void *arg, struct tcp_pcb *tpcb, struct pbuf *p, er
 		//SEND_str(str_ethernet_msg);
 
 		if(firmware.check_UPD)
-			sendstring(UPD_firmware(str_ethernet_msg));
+			string_parse(UPD_firmware(str_ethernet_msg));
 		else
 			json_input(str_ethernet_msg);		//здесь принимаем посылку и отправляем парситься
 

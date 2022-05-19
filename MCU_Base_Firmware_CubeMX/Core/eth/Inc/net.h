@@ -9,6 +9,7 @@
 #include "lwip/tcp.h"
 //-----------------------------------------------
 void net_ini(void);
+void string_parse(char* buf_str);
 void UART3_RxCpltCallback(void);
 //-----------------------------------------------
 typedef struct USART_prop{
