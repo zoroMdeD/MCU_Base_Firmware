@@ -15,9 +15,9 @@
 char DBG_buf[DBG_RX_BUFFER_SIZE] = {0,};
 char DBG_str[DBG_RX_BUFFER_SIZE] = {0,};
 
-extern bool check_UPD_FW;
-extern uint32_t firmwareBytesToWrite;
-extern uint32_t size_of_data;
+//extern bool check_UPD_FW;
+//extern uint32_t firmwareBytesToWrite;
+//extern uint32_t size_of_data;
 
 //Функция передачи байта по USART3
 //Принимает байт
@@ -126,6 +126,7 @@ void DEBUG_main(void)
 		{
 			json_input("{\"INSTRUCTION\":\"SET_PROGRAMM\",\"COMMAND\":{\"TYPE\":\"SET_TEMP_PROFILE\",\"ROM_RAW\":\"28790E950C000069\",\"RANGE_TEMP_LOW\":\"+28\",\"RANGE_TEMP_HIGH\":\"+50\",\"D_OUT\":\"VIHOD4\",\"VAR_OUT\":\"1\"},\"TIME\":\"1122334455\"}");
 		}
+		//--------------------------------------------End_TEMPERATURE-------------------------------------------
 		else if(strstr(DBG_buf, "READ_SD") != NULL)
 		{
 			my_read_file();
@@ -134,38 +135,40 @@ void DEBUG_main(void)
 		{
 //			save_periphery_data();
 		}
-		else if(strcmp(DBG_buf,"BeginUPD") == 0)
-		{
-			json_input("{\"INSTRUCTION\":\"UPDATE_FIRMWARE\",\"COMMAND\":{\"TYPE\":\"SETTING_FIRMWARE\",\"NAME\":\"test_firmware\",\"VERSION\":\"v.0.0.1\",\"SIZE\":\"1272\"},\"TIME\":\"1122334455\"}");
-			check_UPD_FW = true;
-			SEND_str("start\n");
-		}
-		else if(strcmp(DBG_buf,"EndUPD") == 0)
-		{
-			check_UPD_FW = false;
-			fl_close();
-			SEND_str("end\n");
-			HAL_NVIC_SystemReset();		//Перезапускаем контроллер
-		}
-		else if(check_UPD_FW)
-		{
-			//Запись посылки но 1024 байт, прикрепляем к концу посылки еще 4 байта контрольной суммы, итого 1028 байт в посылки каждый раз.
-			//Буфер можно попробовать увеличить
-			//Следующую посылку посылать с сервера только после получения обратного сообщения что контрольная сумма сошлась
-			//Если посылка последнего пакета байт получается не кратная 4 то ее необходимо дополнить системными единицами памяти(FFh), до 1024 байт + 4 байта CRC = 1028 байт
-			char tmp_crc32[9];
-			sprintf(tmp_crc32, "%02X%02X%02X%02X", DBG_buf[1024], DBG_buf[1025], DBG_buf[1026] ,DBG_buf[1027]);	//Вытаскиваем последние 4 байта(CRC16)
-			char *pEnd;
-			uint32_t crc32 = (uint32_t)(strtol(tmp_crc32, &pEnd, 16));
-			SEND_str(my_write_file_firmware(SetFW.NAME, DBG_buf, crc32));		//atoi(tmp_crc16)
-		}
+//		else if(strcmp(DBG_buf,"BeginUPD") == 0)
+//		{
+//			json_input("{\"INSTRUCTION\":\"UPDATE_FIRMWARE\",\"COMMAND\":{\"TYPE\":\"FILE_DOWNLOAD\",\"NAME\":\"test_firmware\",\"VERSION\":\"v.0.0.1\",\"SIZE\":\"1272\"},\"TIME\":\"1122334455\"}");
+//			firmware.check_UPD = true;
+//			SEND_str("start\n");
+//		}
+//		else if(strcmp(DBG_buf,"EndUPD") == 0)
+//		{
+//			firmware.check_UPD = false;
+//			fl_close();
+//			SEND_str("end\n");
+//
+//			//Нужно сохранить все данные перед перезагрузкой!!!
+//
+//			HAL_NVIC_SystemReset();		//Перезапускаем контроллер
+//		}
+//		else if(firmware.check_UPD)
+//		{
+//			//Запись посылки но 1024 байт, прикрепляем к концу посылки еще 4 байта контрольной суммы, итого 1028 байт в посылки каждый раз.
+//			//Буфер можно попробовать увеличить
+//			//Следующую посылку посылать с сервера только после получения обратного сообщения что контрольная сумма сошлась
+//			//Если посылка последнего пакета байт получается не кратная 4 то ее необходимо дополнить системными единицами памяти(FFh), до 1024 байт + 4 байта CRC = 1028 байт
+//			char tmp_crc32[9];
+//			sprintf(tmp_crc32, "%02X%02X%02X%02X", DBG_buf[1024], DBG_buf[1025], DBG_buf[1026] ,DBG_buf[1027]);	//Вытаскиваем последние 4 байта(CRC16)
+//			char *pEnd;
+//			uint32_t crc32 = (uint32_t)(strtol(tmp_crc32, &pEnd, 16));
+//			SEND_str(my_write_file_firmware(firmware.NAME, DBG_buf, crc32));		//atoi(tmp_crc16)
+//		}
 //		else	//тест для посылки строки через терминал
 //		{
 //			snprintf(DBG_str, DBG_RX_BUFFER_SIZE, "%s", DBG_buf);
 //			SEND_str(DBG_str);
 //			json_input(DBG_str);
 //		}
-		//--------------------------------------------End_TEMPERATURE-------------------------------------------
 		if(fdbg)
 		{
 			snprintf(DBG_str, DBG_RX_BUFFER_SIZE, "%s\n", DBG_buf);

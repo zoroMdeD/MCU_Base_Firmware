@@ -345,7 +345,7 @@ void json_input(char *text)
 			cJSON *sType = cJSON_GetObjectItem(cJSON_GetObjectItem(json, "COMMAND"), "TYPE");
 			TYPE = sType->valuestring;
 
-			if(strcmp(TYPE, "SETTING_FIRMWARE") == 0)
+			if(strcmp(TYPE, "FILE_DOWNLOAD") == 0)
 			{
 				cJSON *s1 = cJSON_GetObjectItem(cJSON_GetObjectItem(json, "COMMAND"), "NAME");
 				cJSON *s2 = cJSON_GetObjectItem(cJSON_GetObjectItem(json, "COMMAND"), "VERSION");
@@ -354,13 +354,10 @@ void json_input(char *text)
 				VERSION_FW = s2->valuestring;
 				SIZE_FW = s3->valuestring;
 
-//				for(int i = 0; i < strlen(NAME_FW); i++)
-//				{
-//					SetFW.NAME[i] = NAME_FW[i];
-//				}
-				SetFW.NAME = NAME_FW;
-				SetFW.VERSION = VERSION_FW;
-				SetFW.SIZE = atoi(SIZE_FW);
+				firmware.NAME = NAME_FW;
+				firmware.VERSION = VERSION_FW;
+				firmware.SIZE = atoi(SIZE_FW);
+				firmware.check_UPD = true;
 
 				cJSON_Delete(json);
 				free(stime);
@@ -369,6 +366,16 @@ void json_input(char *text)
 				free(s1);
 				free(s2);
 				free(s3);
+			}
+			else if(strcmp(TYPE, "RESET_MCU") == 0)
+			{
+				//Нужно сохранить все данные перед перезагрузкой!!!
+				cJSON_Delete(json);
+				free(stime);
+				free(sInstruction);
+				free(sType);
+
+				HAL_NVIC_SystemReset();		//Перезапускаем контроллер
 			}
 			else
 			{

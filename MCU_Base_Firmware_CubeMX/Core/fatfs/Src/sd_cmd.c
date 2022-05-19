@@ -115,13 +115,13 @@ void my_write_file_json(char *path, char *text)
 //Принимает "data_bytes" - указатель на буффер данных, которые нужно сохранить
 //Принимает "crc32" - контрольную сумму принимаемого пакеда данных
 //Возвращает статус контроля целостности данных
-char *my_write_file_firmware(char *path, char *data_bytes, uint32_t crc32)
+char *my_write_file_firmware(char *name, char *data_bytes, uint32_t crc32)
 {
 	if(!check_init)
 	{
 		if (f_mount(0, &FATFS_Obj) == FR_OK)
 		{
-			result = f_open(&MyFile, path + '\0', FA_CREATE_ALWAYS | FA_WRITE);
+			result = f_open(&MyFile, name + '\0', FA_CREATE_ALWAYS | FA_WRITE);
 			if(result == FR_OK)
 			{
 				check_init = true;
@@ -137,15 +137,24 @@ char *my_write_file_firmware(char *path, char *data_bytes, uint32_t crc32)
 			uint32_t crc32_t = HAL_CRC_Calculate(&hcrc, (uint32_t *)(data_bytes), 256);	//3-й параметр - указываем количество полных слов(0xFFFFFF)
 			if(crc32 == crc32_t)
 			{
-				if((SetFW.SIZE - firmwareBytesCounter) >= 1024)	//default: 248
+				if((firmware.SIZE - firmwareBytesCounter) >= 1024)	//default: 248
 				{
 					result = f_write(&MyFile, data_bytes, 1024, &WriteBytes);
 					firmwareBytesCounter += 1024;
+					if(firmwareBytesCounter == firmware.SIZE)
+					{
+					    f_close(&MyFile);
+						firmware.check_UPD = false;
+						return FW_COMPLETE;
+					}
 				}
-				else if (SetFW.SIZE != firmwareBytesCounter)
+				else if (firmware.SIZE != firmwareBytesCounter)
 				{
-					result = f_write(&MyFile, data_bytes, (SetFW.SIZE - firmwareBytesCounter) , &WriteBytes);
-					firmwareBytesCounter = SetFW.SIZE;
+					result = f_write(&MyFile, data_bytes, (firmware.SIZE - firmwareBytesCounter) , &WriteBytes);
+					firmwareBytesCounter = firmware.SIZE;
+				    f_close(&MyFile);
+					firmware.check_UPD = false;
+					return FW_COMPLETE;
 				}
 				return FW_CRC32_OK;
 			}

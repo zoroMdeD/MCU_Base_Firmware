@@ -95,10 +95,11 @@ extern "C" {
 //Settings firmware
 struct SettingsFirmware
 {
-	char *NAME;		//�?мя файла прошивки
-	char *VERSION;	//Версия прошивки
+	char *NAME;			//Имя файла прошивки
+	char *VERSION;		//Версия прошивки
 	int SIZE;			//Размер файла прошивки в байтах
-}SetFW;
+	bool check_UPD;		//Флаг готовности получения файла прошивки с сервера
+}firmware;
 
 //Digital Input(Discrete signals) Digital Output(Open Drain)
 struct ScaningDIN_UpdateOCD
@@ -296,6 +297,7 @@ void Error_Handler(void);
 #define FW_CRC32_OK		"OK"			//Контрольная сумма совпала, пакет данных цел
 #define FW_CRC32_ERR	"ERROR"			//Ошибка передачи пакета данных(необходимо повторить посылку пакета)
 #define FW_UPD_ERROR	"UPD_ERROR"		//Ошибка инициализации карты
+#define FW_COMPLETE		"COMPLETE"		//Операция передачи файла и его записи на карту завершена
 //------------------------------------------------------------
 //---------------------------RS-485---------------------------
 #define RS485_Tx	GPIOD->ODR |= GPIO_ODR_ODR_4 | GPIO_ODR_ODR_7		//конфа на передачу DE = 1, RE# = 1;

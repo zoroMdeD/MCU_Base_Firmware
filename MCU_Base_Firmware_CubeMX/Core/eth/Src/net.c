@@ -144,8 +144,11 @@ static err_t tcp_client_recv(void *arg, struct tcp_pcb *tpcb, struct pbuf *p, er
 		HAL_UART_Transmit(&huart3, (uint8_t*)str_ethernet_msg, strlen(str_ethernet_msg), 0x1000);
 		//char test = str_ethernet_msg;
 		//SEND_str(str_ethernet_msg);
-//		json_input(str_ethernet_msg);	//здесь принимаем посылку и отправляем парситься
 
+		if(firmware.check_UPD)
+			sendstring(UPD_firmware(str_ethernet_msg));
+		else
+			json_input(str_ethernet_msg);		//здесь принимаем посылку и отправляем парситься
 
 
 //		if(strcmp(str_ethernet_msg,"control\n") == 0)
