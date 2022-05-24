@@ -55,6 +55,13 @@ void DEBUG_main(void)
 			HAL_Delay(1);
 		}
 		clear_string(DBG_buf);
+		//-------------------------------------------UPD Firmware to USB----------------------------------------
+		if(firmware.check_UPD)
+			SEND_str(UPD_firmware(DBG_buf));
+		else
+			json_input(DBG_buf);		//здесь принимаем посылку и отправляем парситься
+		//-----------------------------------------END UPD Firmware to USB--------------------------------------
+		//---------------------------------------------Old function---------------------------------------------
 		if(strstr(DBG_buf, "test") != NULL)
 		{
 			SEND_str("respone\n");
@@ -71,6 +78,7 @@ void DEBUG_main(void)
 		{
 			json_input("{\"INSTRUCTION\":\"SET_PERIPHERALS\",\"COMMAND\":{\"TYPE\":\"OCD\",\"SET\":\"[0,1,1,0,0,1,1,0]\"},\"TIME\":\"1122334455\"}");
 		}
+		//-------------------------------------------End Old function-------------------------------------------
 		//------------------------------------------------Digital-----------------------------------------------
 		else if(strstr(DBG_buf, "SP1") != NULL)
 		{
